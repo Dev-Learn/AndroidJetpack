@@ -1,0 +1,3 @@
+<resources>
+    <integer name="animation_time_full">300</integer>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><!--https://github.com/81813780/AVLoadingIndicatorView
+?utm_source=android-arsenal.com&utm_medium=referral&utm_campaign=2686-->
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/progress_loading"
+        android:layout_width="@dimen/progress_width_height"
+        android:layout_height="@dimen/progress_width_height"
+        app:indicatorName="BallClipRotatePulseIndicator" />
+
+</layout>
+
