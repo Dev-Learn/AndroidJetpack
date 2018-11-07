@@ -16,7 +16,6 @@
 
 package tran.nam.core.view
 
-import android.content.Context
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
@@ -26,24 +25,8 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-
 import tran.nam.core.R
 
-/**
- * Abstract Fragment for all Fragments and child Fragments to extend. This contains some boilerplate
- * dependency injection code and activity [Context].
- *
- *
- * **DEPENDENCY INJECTION**
- * We could extend [dagger.android.DaggerFragment] so we can get the boilerplate
- * dagger code for free. However, we want to avoid inheritance (if possible and it is in this case)
- * so that we have to option to inherit from something else later on if needed.
- *
- *
- * **VIEW BINDING**
- * This fragment handles view bind and unbinding.
- */
-@Suppress("MemberVisibilityCanBePrivate")
 abstract class BaseFragment : Fragment() {
 
     protected var mIsCurrentScreen: Boolean = false
@@ -59,7 +42,7 @@ abstract class BaseFragment : Fragment() {
      * @return layout resource id
      */
     @LayoutRes
-    protected abstract fun  layoutId(): Int
+    protected abstract fun layoutId(): Int
 
     protected open fun isHaveAnimation(): Boolean{
         return true
@@ -70,35 +53,35 @@ abstract class BaseFragment : Fragment() {
     val isShouldSave: Boolean = true
 
     protected open fun pushExitAnimId(): Int{
-        return R.anim.slide_out_left
+        return R.anim.slide_left_out
     }
 
     protected open fun popEnterAnimId(): Int{
-        return R.anim.slide_in_left
+        return R.anim.slide_left_in
     }
 
     protected open fun popExitAnimId(): Int{
-        return R.anim.slide_out_right
+        return R.anim.slide_right_out
     }
 
     protected open fun pushEnterAnimId(): Int{
-        return R.anim.slide_in_right
+        return R.anim.slide_right_in
     }
 
     protected open fun leftInAnimId(): Int{
-        return  R.anim.slide_in_left
+        return  R.anim.slide_left_in
     }
 
     protected open fun rightInAnimId(): Int{
-        return R.anim.slide_in_right
+        return R.anim.slide_right_in
     }
 
     protected open fun leftOutAnimId(): Int{
-        return R.anim.slide_out_left
+        return R.anim.slide_left_out
     }
 
     protected open fun rightOutAnimId(): Int{
-        return R.anim.slide_out_right
+        return R.anim.slide_right_out
     }
 
     /*
@@ -188,7 +171,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        // This lifecycle method still gets called even if onCreateView returns a null view.
+//     This lifecycle method still gets called even if onCreateView returns a null view.
         mViewDestroyed = true
         isViewCreated = false
         onInVisible()

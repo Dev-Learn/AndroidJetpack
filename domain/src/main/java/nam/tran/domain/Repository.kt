@@ -1,15 +1,55 @@
 package nam.tran.domain
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import nam.tran.domain.entity.ComicEntity
+import nam.tran.domain.entity.state.Loading
+import nam.tran.domain.entity.state.Resource
+import nam.tran.domain.entity.state.Status
 import nam.tran.domain.executor.AppExecutors
+import nam.tran.domain.interactor.core.DataBoundResource
 import nam.tran.domain.mapper.DataEntityMapper
 import nam.tran.flatform.IApi
+import nam.tran.flatform.core.ApiResponse
 //import nam.tran.flatform.database.DbProvider
 import nam.tran.flatform.local.IPreference
+import nam.tran.flatform.model.response.Comic
 import javax.inject.Inject
 
 @Suppress("unused")
 class Repository @Inject
-internal constructor(private val appExecutors: AppExecutors, private val iPreference: IPreference, private val dataEntityMapper: DataEntityMapper, private val iApi: IApi/*, private val dbProvider: DbProvider*/) : IRepository {
+internal constructor(
+    private val appExecutors: AppExecutors,
+    private val iPreference: IPreference,
+    private val dataEntityMapper: DataEntityMapper,
+    private val iApi: IApi
+    /*, private val dbProvider: DbProvider*/
+) : IRepository {
+
+    override fun getComic(offset: Int, count: Int,typeLoading : Int): LiveData<Resource<List<ComicEntity>>> {
+        return object : DataBoundResource<List<ComicEntity>, List<Comic>>(appExecutors) {
+            override fun saveCallResult(item: List<Comic>) {
+
+            }
+
+            override fun shouldFetch(data: List<ComicEntity>?): Boolean {
+                return true
+            }
+
+            override fun loadFromDb(): LiveData<List<ComicEntity>> {
+                return MutableLiveData()
+            }
+
+            override fun createCall(): LiveData<ApiResponse<List<Comic>>> {
+                return iApi.getComic(offset,count)
+            }
+
+            override fun statusLoading(): Int {
+                return typeLoading
+            }
+
+        }.asLiveData()
+    }
 
 
 }

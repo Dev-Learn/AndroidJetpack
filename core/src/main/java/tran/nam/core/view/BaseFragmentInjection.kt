@@ -4,15 +4,26 @@ import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.support.v4.app.Fragment
-
-import javax.inject.Inject
-
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
-import tran.nam.core.Navigator
+import javax.inject.Inject
 
+/**
+ * Abstract Fragment for all Fragments and child Fragments to extend. This contains some boilerplate
+ * dependency injection code and activity [Context].
+ *
+ *
+ * **DEPENDENCY INJECTION**
+ * We could extend [dagger.android.DaggerFragment] so we can get the boilerplate
+ * dagger code for free. However, we want to avoid inheritance (if possible and it is in this case)
+ * so that we have to option to inherit from something else later on if needed.
+ *
+ *
+ * **VIEW BINDING**
+ * This fragment handles view bind and unbinding.
+ */
 @Suppress("DEPRECATION", "OverridingDeprecatedMember")
 abstract class BaseFragmentInjection : BaseFragment(), HasSupportFragmentInjector {
 
@@ -38,49 +49,5 @@ abstract class BaseFragmentInjection : BaseFragment(), HasSupportFragmentInjecto
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
         return childFragmentInjector
-    }
-
-    protected fun addFragmentFromActivity(fragment: BaseFragment) {
-        if (activity() != null && activity() is BaseActivityWithFragment && !activity()!!.isFinishing)
-            (activity() as BaseActivityWithFragment).addFragment(fragment)
-    }
-
-    protected fun showFragmentFromActivity(position: Int) {
-        if (activity() != null && activity() is BaseActivityWithFragment && !activity()!!.isFinishing)
-            (activity() as BaseActivityWithFragment).showFragment(position)
-    }
-
-    protected fun replaceFragmentFromActivity(fragment: BaseFragment) {
-        if (activity() != null && activity() is BaseActivityWithFragment && !activity()!!.isFinishing)
-            (activity() as BaseActivityWithFragment).replaceFragment(fragment)
-    }
-
-    protected fun popFragmentToRoot() {
-        if (activity() != null && activity() is BaseActivityWithFragment && !activity()!!.isFinishing)
-            (activity() as BaseActivityWithFragment).popToRoot()
-    }
-
-    protected fun addFragmentFromFragment(fragment: BaseFragment) {
-        if (parentFragment != null && parentFragment is BaseParentFragment) {
-            (parentFragment as BaseParentFragment).addChildFragment(fragment)
-        }
-    }
-
-    protected fun showFragmentFromFragment(position: Int) {
-        if (parentFragment != null && parentFragment is BaseParentFragment) {
-            (parentFragment as BaseParentFragment).showChildFragment(position)
-        }
-    }
-
-    protected fun replaceFragmentFromFragment(fragment: BaseFragment) {
-        if (parentFragment != null && parentFragment is BaseParentFragment) {
-            (parentFragment as BaseParentFragment).replaceChildFragment(fragment)
-        }
-    }
-
-    protected open fun popChildFragmentToRoot() {
-        if (parentFragment != null && parentFragment is BaseParentFragment) {
-            (parentFragment as BaseParentFragment).popChildFragmentToRoot()
-        }
     }
 }

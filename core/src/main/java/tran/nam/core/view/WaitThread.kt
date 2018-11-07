@@ -13,9 +13,9 @@ class WaitThread(fragment: BaseFragment) : Thread() {
     }
 
     override fun run() {
-        val fragment = fragmentWeak!!.get()
-        if (fragment != null) {
-            while (!fragment.isViewCreated && !isStopped) {
+        val fragment = fragmentWeak?.get()
+        fragment?.let { it ->
+            while (!it.isViewCreated && !isStopped) {
                 try {
                     synchronized(mObject) {
                         mObject.wait()
@@ -29,13 +29,13 @@ class WaitThread(fragment: BaseFragment) : Thread() {
             if (isStopped)
                 return
 
-            val finalFragment = fragmentWeak!!.get()
-            if (finalFragment != null) {
-                finalFragment.activity!!.runOnUiThread {
-                    if (finalFragment.isInitialized)
-                        finalFragment.initialized()
+            val finalFragment = fragmentWeak?.get()
+            finalFragment?.let {
+                it.activity!!.runOnUiThread {
+                    if (it.isInitialized)
+                        it.initialized()
                     else
-                        finalFragment.handleAfterVisible()
+                        it.handleAfterVisible()
                 }
             }
         }

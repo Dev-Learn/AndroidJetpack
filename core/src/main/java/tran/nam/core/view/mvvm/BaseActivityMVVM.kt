@@ -24,7 +24,6 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.EditText
 import android.widget.Toast
-import tran.nam.core.Navigator
 import tran.nam.core.view.BaseActivityInjection
 import tran.nam.core.viewmodel.BaseActivityViewModel
 import tran.nam.core.viewmodel.IViewModel

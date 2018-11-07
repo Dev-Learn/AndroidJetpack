@@ -33,7 +33,7 @@ interface Constant {
     }
 
     companion object {
-        val API_URL = "https://api.football-data.org"
+        val API_URL = "http://127.0.0.1:5000"
         val EMPTY = ""
     }
 }

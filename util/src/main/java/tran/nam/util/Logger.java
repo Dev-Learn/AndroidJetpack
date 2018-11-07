@@ -15,7 +15,7 @@ public final class Logger {
     private static StackTraceElement getMethodName() {
         StackTraceElement[] tracks = Thread.currentThread().getStackTrace();
         int STACK_TRACE_LEVELS_UP = 4;
-        if (tracks != null && tracks.length > STACK_TRACE_LEVELS_UP) {
+        if (tracks.length > STACK_TRACE_LEVELS_UP) {
             return tracks[STACK_TRACE_LEVELS_UP];
         }
         return null;

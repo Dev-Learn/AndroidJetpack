@@ -64,6 +64,3 @@ dependencies {
     implementation project(':util')
 
 }
-repositories {
-    mavenCentral()
-}

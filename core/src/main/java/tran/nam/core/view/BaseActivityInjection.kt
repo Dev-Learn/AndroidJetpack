@@ -1,14 +1,11 @@
 package tran.nam.core.view
 
 import android.support.v4.app.Fragment
-
-import javax.inject.Inject
-
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import tran.nam.core.Navigator
+import javax.inject.Inject
 
 /**
  * Abstract Activity for all Activities to extend.
@@ -19,7 +16,7 @@ import tran.nam.core.Navigator
  * dagger code for free. However, we want to avoid inheritance (if possible and it is in this case)
  * so that we have to option to inherit from something else later on if needed.
  */
-abstract class BaseActivityInjection: BaseActivity(), HasSupportFragmentInjector {
+abstract class BaseActivityInjection : BaseActivity(), HasSupportFragmentInjector {
 
     var fragmentInjector: DispatchingAndroidInjector<Fragment>? = null
         @Inject set

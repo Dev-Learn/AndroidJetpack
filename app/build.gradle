@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
@@ -13,6 +15,12 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
+    }
+
+    dataBinding {
+        enabled = true
     }
 
     buildTypes {
@@ -26,6 +34,14 @@ android {
         sourceCompatibility rootProject.java_version
         targetCompatibility rootProject.java_version
     }
+
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+}
+
+kapt {
+    generateStubs = true
 }
 
 dependencies {
@@ -38,6 +54,19 @@ dependencies {
     implementation "com.android.support:design:$rootProject.android_support"
     implementation "com.android.support.constraint:constraint-layout:$rootProject.constraint_layout"
     implementation "com.android.support:support-vector-drawable:$rootProject.android_support"
+
+    implementation "android.arch.navigation:navigation-fragment-ktx:$rootProject.navigation"
+    implementation "android.arch.navigation:navigation-ui-ktx:$rootProject.navigation"
+
+    kapt "com.google.dagger:dagger-compiler:$rootProject.dagger"
+    kapt "com.google.dagger:dagger-android-processor:$rootProject.dagger"
+    kapt "android.arch.lifecycle:compiler:$rootProject.lifecycle"
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+
+    implementation 'com.android.support:multidex:1.0.3'
+
     implementation project(':core')
     implementation project(':domain')
     implementation project(':flatform')

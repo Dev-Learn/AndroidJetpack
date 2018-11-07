@@ -4,7 +4,7 @@ buildscript {
     // Define versions in a single place
     ext {
         android = '3.2.1'
-        kotlin_version = '1.2.71'
+        kotlin_version = '1.3.0'
 
         compileSdkVersion = 28
         minSdkVersion = 19
@@ -13,7 +13,7 @@ buildscript {
         android_support = '28.0.0'
         constraint_layout = '1.1.3'
 
-        dagger = '2.15'
+        dagger = '2.18'
         lifecycle = '1.1.1'
         room = '1.1.1'
 
@@ -23,6 +23,10 @@ buildscript {
         okhttp3 = '3.9.0'
 
         progress_loading = '2.1.3'
+
+        multidex = '1.0.3'
+
+        navigation = '1.0.0-alpha07'
 
         java_version = JavaVersion.VERSION_1_8
     }

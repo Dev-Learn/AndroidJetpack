@@ -29,10 +29,6 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
-
-    packagingOptions {
-        exclude 'META-INF/rxjava.properties'
-    }
 }
 
 kapt {
@@ -48,6 +44,8 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:$rootProject.constraint_layout"
     implementation "com.android.support:appcompat-v7:$rootProject.android_support"
     implementation "com.android.support:recyclerview-v7:$rootProject.android_support"
+
+    api "com.android.support:multidex:$rootProject.multidex"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 

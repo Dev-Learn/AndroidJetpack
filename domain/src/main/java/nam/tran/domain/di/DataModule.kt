@@ -4,8 +4,6 @@ import dagger.Binds
 import dagger.Module
 import nam.tran.domain.IRepository
 import nam.tran.domain.Repository
-import nam.tran.domain.executor.AppSchedulerProvider
-import nam.tran.domain.executor.SchedulerProvider
 import nam.tran.flatform.di.DbModule
 import nam.tran.flatform.di.NetModule
 import nam.tran.flatform.di.PreferenceModule
@@ -19,7 +17,7 @@ abstract class DataModule {
     @Singleton
     internal abstract fun provideRepository(repository: Repository): IRepository
 
-    @Binds
-    @Singleton
-    internal abstract fun provideSchedulerProvider(schedulerProvider: AppSchedulerProvider): SchedulerProvider
+//    @Binds
+//    @Singleton
+//    internal abstract fun provideSchedulerProvider(schedulerProvider: AppSchedulerProvider): SchedulerProvider
 }

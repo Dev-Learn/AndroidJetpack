@@ -11,4 +11,9 @@
         <item name="android:windowExitAnimation">@anim/dialog_out</item>
     </style>
 
+    <style name="AppThemeLight.NoActionBar" parent="Theme.AppCompat.Light">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 </resources>

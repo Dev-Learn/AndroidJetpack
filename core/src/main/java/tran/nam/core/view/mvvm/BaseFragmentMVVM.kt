@@ -52,8 +52,7 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseFragmentViewModel>
         mViewModel?.onAttach(this)
     }
 
-    override fun initialized() {
-        super.initialized()
+    override fun onVisible() {
         mViewModel?.onInitialized()
     }
 
@@ -78,6 +77,6 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseFragmentViewModel>
 
     override fun onShowDialogError(message: String?) {
         hideDialogLoading()
-        Toast.makeText(activity(), "Error Dialog", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Error Dialog", Toast.LENGTH_SHORT).show()
     }
 }
