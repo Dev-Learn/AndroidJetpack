@@ -3,9 +3,9 @@ package nam.tran.android.helper.view.main
 import android.os.Bundle
 import androidx.navigation.Navigation
 import nam.tran.android.helper.R
-import tran.nam.core.view.BaseActivity
+import tran.nam.core.view.BaseActivityInjection
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivityInjection() {
 
     override fun layoutId(): Int {
         return R.layout.activity_main

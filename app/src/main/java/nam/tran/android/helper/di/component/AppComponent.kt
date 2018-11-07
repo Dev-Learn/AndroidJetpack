@@ -9,7 +9,7 @@ import nam.tran.android.helper.di.module.AppModule
 import nam.tran.android.helper.view.AppState
 
 @Singleton
-@Component(modules = arrayOf(AppModule::class))
+@Component(modules = [AppModule::class])
 interface AppComponent : AndroidInjector<AppState> {
 
     @Component.Builder

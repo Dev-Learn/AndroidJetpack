@@ -14,7 +14,7 @@ import nam.tran.android.helper.di.component.DaggerAppComponent
 import javax.inject.Inject
 
 
-class AppState : MultiDexApplication(), Application.ActivityLifecycleCallbacks, HasActivityInjector {
+class AppState : Application(), Application.ActivityLifecycleCallbacks, HasActivityInjector {
 
     var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>? = null
         @Inject set

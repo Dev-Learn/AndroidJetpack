@@ -8,15 +8,13 @@ import nam.tran.android.helper.view.main.home.viewmodel.IHomeViewModel
 import nam.tran.android.helper.view.main.home.viewmodel.HomeViewModel
 
 import nam.tran.android.helper.databinding.FragmentHomeBinding
+import nam.tran.android.helper.model.ComicModel
+import nam.tran.domain.entity.ComicEntity
 
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
+import tran.nam.util.Logger
 
 class HomeFragment : BaseFragmentMVVM<FragmentHomeBinding, HomeViewModel>(), IHomeViewModel {
-
-    companion object {
-        @JvmStatic
-        fun newInstance(): HomeFragment = HomeFragment()
-    }
 
     override fun initViewModel(factory: ViewModelProvider.Factory?) {
         mViewModel = ViewModelProviders.of(this, factory).get(HomeViewModel::class.java)
@@ -27,6 +25,15 @@ class HomeFragment : BaseFragmentMVVM<FragmentHomeBinding, HomeViewModel>(), IHo
     }
 
     override fun onVisible() {
+        super.onVisible()
         mViewDataBinding.viewModel = mViewModel
+    }
+
+    override fun updateData(data: List<ComicModel>) {
+       Logger.debug(data)
+    }
+
+    override fun updateView() {
+        Logger.debug("Update View")
     }
 }

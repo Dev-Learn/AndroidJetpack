@@ -6,14 +6,18 @@ import javax.inject.Singleton
 
 import dagger.Binds
 import dagger.Module
+import dagger.android.ContributesAndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import nam.tran.android.helper.view.AppState
+import nam.tran.android.helper.view.main.MainActivity
+import nam.tran.android.helper.view.main.MainActivityModule
 import nam.tran.domain.di.DataModule
+import tran.nam.core.di.inject.PerActivity
 
 /**
  * Provides application-wide dependencies.
  */
-@Module(includes = arrayOf(AndroidSupportInjectionModule::class, ViewModelModule::class, DataModule::class))
+@Module(includes = [AndroidSupportInjectionModule::class, ViewModelModule::class, DataModule::class])
 abstract class AppModule {
 
     @Binds
@@ -27,4 +31,12 @@ abstract class AppModule {
      * at what is being provided in order to understand its scope.
      */
     internal abstract fun application(app: AppState): Application
+
+    /**
+     * Provides the injector for the [MainActivityModule], which has access to the dependencies
+     * provided by this application instance (singleton scoped objects).
+     */
+    @PerActivity
+    @ContributesAndroidInjector(modules = [MainActivityModule::class])
+    internal abstract fun injectorMainActivity(): MainActivity
 }

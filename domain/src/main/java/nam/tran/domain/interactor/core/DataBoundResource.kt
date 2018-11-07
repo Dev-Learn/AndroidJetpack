@@ -125,6 +125,5 @@ abstract class DataBoundResource<ResultType, RequestType>
     @MainThread
     protected abstract fun createCall(): LiveData<ApiResponse<RequestType>>
 
-    @Loading
     protected abstract fun statusLoading(): Int
 }
