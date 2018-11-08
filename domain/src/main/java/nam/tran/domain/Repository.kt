@@ -7,6 +7,7 @@ import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.entity.state.Status
 import nam.tran.domain.executor.AppExecutors
+import nam.tran.domain.interactor.core.DataBoundNetwork
 import nam.tran.domain.interactor.core.DataBoundResource
 import nam.tran.domain.mapper.DataEntityMapper
 import nam.tran.flatform.IApi
@@ -14,6 +15,7 @@ import nam.tran.flatform.core.ApiResponse
 //import nam.tran.flatform.database.DbProvider
 import nam.tran.flatform.local.IPreference
 import nam.tran.flatform.model.response.Comic
+import nam.tran.flatform.model.response.ComicResponse
 import javax.inject.Inject
 
 @Suppress("unused")
@@ -27,25 +29,17 @@ internal constructor(
 ) : IRepository {
 
     override fun getComic(offset: Int, count: Int,typeLoading : Int): LiveData<Resource<List<ComicEntity>>> {
-        return object : DataBoundResource<List<ComicEntity>, List<Comic>>(appExecutors) {
-            override fun saveCallResult(item: List<Comic>) {
-
-            }
-
-            override fun shouldFetch(data: List<ComicEntity>?): Boolean {
-                return true
-            }
-
-            override fun loadFromDb(): LiveData<List<ComicEntity>> {
-                return MutableLiveData()
-            }
-
-            override fun createCall(): LiveData<ApiResponse<List<Comic>>> {
-                return iApi.getComic(offset,count)
+        return object : DataBoundNetwork<List<ComicEntity>, ComicResponse>(appExecutors) {
+            override fun convertData(body: ComicResponse?): List<ComicEntity>? {
+                return dataEntityMapper.comicEntityMapper.transform(body?.result)
             }
 
             override fun statusLoading(): Int {
                 return typeLoading
+            }
+
+            override fun createCall(): LiveData<ApiResponse<ComicResponse>> {
+                return iApi.getComic(offset,count)
             }
 
         }.asLiveData()

@@ -28,6 +28,8 @@ buildscript {
 
         navigation = '1.0.0-alpha07'
 
+        paging = "1.0.0-beta1"
+
         java_version = JavaVersion.VERSION_1_8
     }
 

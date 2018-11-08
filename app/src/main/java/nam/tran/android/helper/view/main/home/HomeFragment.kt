@@ -34,6 +34,7 @@ class HomeFragment : BaseFragmentMVVM<FragmentHomeBinding, HomeViewModel>(), IHo
     }
 
     override fun updateView() {
-        Logger.debug("Update View")
+        mViewDataBinding.viewModel = mViewModel
+        mViewDataBinding.executePendingBindings()
     }
 }

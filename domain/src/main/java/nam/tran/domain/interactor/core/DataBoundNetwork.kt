@@ -36,62 +36,36 @@ import nam.tran.flatform.core.ApiSuccessResponse
  * @param <RequestType>
 </RequestType></ResultType> */
 @Suppress("LeakingThis")
-abstract class DataBoundResource<ResultType, RequestType>
-@MainThread constructor(private val appExecutors: AppExecutors) : IDataBoundResource<RequestType> {
+abstract class DataBoundNetwork<ResultType, RequestType>
+@MainThread constructor(private val appExecutors: AppExecutors):IDataBoundResource<RequestType> {
 
-    private val result = MediatorLiveData<Resource<ResultType>>()
+    val result = MediatorLiveData<Resource<ResultType>>()
 
     init {
         result.value = Resource.loading(null, statusLoading())
-        val dbSource = loadFromDb()
-        result.addSource(dbSource) { data ->
-            result.removeSource(dbSource)
-            if (shouldFetch(data)) {
-                fetchFromNetwork(dbSource)
-            } else {
-                result.addSource(dbSource) { newData ->
-                    setValue(Resource.success(newData, statusLoading()))
-                }
-            }
-        }
+        fetchFromNetwork()
     }
 
-    private fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
+    private fun fetchFromNetwork() {
         val apiResponse = createCall()
-        // we re-attach dbSource as a new source, it will dispatch its latest value quickly
-        result.addSource(dbSource) { newData ->
-            setValue(Resource.loading(newData, statusLoading()))
-        }
         result.addSource(apiResponse) { response ->
             result.removeSource(apiResponse)
-            result.removeSource(dbSource)
             when (response) {
                 is ApiSuccessResponse -> {
                     appExecutors.diskIO().execute {
-                        saveCallResult(processResponse(response))
                         appExecutors.mainThread().execute {
-                            // we specially request a new live data,
-                            // otherwise we will get immediately last cached value,
-                            // which may not be updated with latest results received from network.
-                            result.addSource(loadFromDb()) { newData ->
-                                setValue(Resource.success(newData, statusLoading()))
-                            }
+                            setValue(Resource.success(convertData(response.body), statusLoading()))
                         }
                     }
                 }
                 is ApiEmptyResponse -> {
                     appExecutors.mainThread().execute {
-                        // reload from disk whatever we had
-                        result.addSource(loadFromDb()) { newData ->
-                            setValue(Resource.success(newData, statusLoading()))
-                        }
+                        setValue(Resource.loading(null, statusLoading()))
                     }
                 }
                 is ApiErrorResponse -> {
                     onFetchFailed()
-                    result.addSource(dbSource) { newData ->
-                        setValue(Resource.error(response.errorMessage, newData, statusLoading()))
-                    }
+                    setValue(Resource.error(response.errorMessage, null, statusLoading()))
                 }
             }
         }
@@ -108,15 +82,5 @@ abstract class DataBoundResource<ResultType, RequestType>
 
     protected open fun onFetchFailed() {}
 
-    @WorkerThread
-    protected open fun processResponse(response: ApiSuccessResponse<RequestType>) = response.body
-
-    @WorkerThread
-    protected abstract fun saveCallResult(item: RequestType)
-
-    @MainThread
-    protected abstract fun shouldFetch(data: ResultType?): Boolean
-
-    @MainThread
-    protected abstract fun loadFromDb(): LiveData<ResultType>
+    abstract fun convertData(body: RequestType?): ResultType?
 }
