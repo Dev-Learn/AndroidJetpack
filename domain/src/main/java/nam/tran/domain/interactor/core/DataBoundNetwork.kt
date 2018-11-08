@@ -60,7 +60,7 @@ abstract class DataBoundNetwork<ResultType, RequestType>
                 }
                 is ApiEmptyResponse -> {
                     appExecutors.mainThread().execute {
-                        setValue(Resource.loading(null, statusLoading()))
+                        setValue(Resource.success(null, statusLoading()))
                     }
                 }
                 is ApiErrorResponse -> {

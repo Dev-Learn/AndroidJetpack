@@ -30,6 +30,8 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+    implementation "android.arch.paging:runtime:$rootProject.paging"
+
     api project(':flatform')
     implementation project(':util')
 }
