@@ -52,7 +52,8 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseFragmentViewModel>
         mViewModel?.onAttach(this)
     }
 
-    override fun onVisible() {
+    override fun initialized() {
+        super.initialized()
         mViewModel?.onInitialized()
     }
 

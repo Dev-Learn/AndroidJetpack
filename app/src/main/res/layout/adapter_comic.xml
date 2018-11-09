@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+                name="comic"
+                type="nam.tran.android.helper.model.ComicModel"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+    android:padding="@dimen/positive_10dp">
+
+        <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/positive_100dp"
+                android:layout_height="@dimen/positive_100dp"
+                android:id="@+id/iv_comic"
+                loadImageNetwork="@{comic.image}"/>
+
+        <android.support.v7.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_name"
+                android:text="@{comic.title}"
+                android:textSize="@dimen/text_size_10sp"
+                android:textStyle="bold"
+                android:layout_marginStart="@dimen/positive_10dp"
+                app:layout_constraintStart_toEndOf="@+id/iv_comic"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="0.5" app:layout_constraintBottom_toTopOf="@+id/tv_genre"/>
+
+        <android.support.v7.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_genre"
+                android:text="@{comic.listGenre}"
+                android:textSize="@dimen/text_size_8sp"
+                android:textStyle="italic"
+                android:layout_marginStart="@dimen/positive_10dp"
+                app:layout_constraintStart_toEndOf="@+id/iv_comic"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/tv_name"
+                app:layout_constraintHorizontal_bias="0.5" app:layout_constraintBottom_toTopOf="@+id/tv_description"/>
+
+        <android.support.v7.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_description"
+                android:text="@{comic.description.trim()}"
+                android:maxLines="3"
+                android:ellipsize="end"
+                app:layout_constraintTop_toBottomOf="@+id/iv_comic"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="@dimen/positive_5dp"/>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

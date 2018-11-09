@@ -30,6 +30,8 @@ buildscript {
 
         paging = "1.0.0-beta1"
 
+        glide = "4.8.0"
+
         java_version = JavaVersion.VERSION_1_8
     }
 
