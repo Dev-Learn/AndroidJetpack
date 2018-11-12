@@ -7,6 +7,6 @@ import nam.tran.domain.entity.state.Resource
 
 interface IRepository {
 
-    fun getComic(offset : Int, count : Int,typeLoading : Int): LiveData<Resource<PagedList<ComicEntity>>>
+    fun getComic(offset : Int, count : Int,typeLoading : Int): LiveData<Resource<List<ComicEntity>>>
 
 }

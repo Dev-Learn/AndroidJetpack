@@ -28,7 +28,7 @@ buildscript {
 
         navigation = '1.0.0-alpha07'
 
-        paging = "1.0.0-beta1"
+        paging = "1.0.1"
 
         glide = "4.8.0"
 

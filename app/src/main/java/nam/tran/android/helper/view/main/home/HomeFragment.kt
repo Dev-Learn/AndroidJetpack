@@ -20,9 +20,6 @@ import tran.nam.util.Logger
 
 class HomeFragment : BaseFragmentMVVM<FragmentHomeBinding, HomeViewModel>(), IHomeViewModel {
 
-    private val dataBindingComponent = FragmentDataBindingComponent(this)
-    private var adapter by autoCleared<ComicAdapter>()
-
     override fun initViewModel(factory: ViewModelProvider.Factory?) {
         mViewModel = ViewModelProviders.of(this, factory).get(HomeViewModel::class.java)
     }
@@ -34,14 +31,12 @@ class HomeFragment : BaseFragmentMVVM<FragmentHomeBinding, HomeViewModel>(), IHo
     override fun onVisible() {
         mViewDataBinding.viewModel = mViewModel
 
-        adapter = ComicAdapter(dataBindingComponent)
-
         binding.rvComic.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
-        binding.rvComic.adapter = adapter
+
     }
 
     override fun updateData(data: List<ComicModel>) {
-        adapter.replace(data)
+
     }
 
     override fun updateView() {
