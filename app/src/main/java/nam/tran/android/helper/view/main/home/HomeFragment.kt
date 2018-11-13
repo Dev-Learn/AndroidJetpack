@@ -1,9 +1,9 @@
 package nam.tran.android.helper.view.main.home;
 
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import nam.tran.android.helper.R
 
 import nam.tran.android.helper.view.main.home.viewmodel.IHomeViewModel
@@ -36,7 +36,7 @@ class HomeFragment : BaseFragmentMVVM<FragmentHomeBinding, HomeViewModel>(), IHo
 
         adapter = ComicAdapter(dataBindingComponent)
 
-        binding.rvComic.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+        binding.rvComic.addItemDecoration(DividerItemDecoration(context, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL))
         binding.rvComic.adapter = adapter
     }
 

@@ -7,18 +7,18 @@
                 type="nam.tran.android.helper.model.ComicModel"/>
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
     android:padding="@dimen/positive_10dp">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="@dimen/positive_100dp"
                 android:layout_height="@dimen/positive_100dp"
                 android:id="@+id/iv_comic"
                 loadImageNetwork="@{comic.image}"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_name"
@@ -30,7 +30,7 @@
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintHorizontal_bias="0.5" app:layout_constraintBottom_toTopOf="@+id/tv_genre"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_genre"
@@ -42,7 +42,7 @@
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/tv_name"
                 app:layout_constraintHorizontal_bias="0.5" app:layout_constraintBottom_toTopOf="@+id/tv_description"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_description"
@@ -54,5 +54,5 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_margin="@dimen/positive_5dp"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

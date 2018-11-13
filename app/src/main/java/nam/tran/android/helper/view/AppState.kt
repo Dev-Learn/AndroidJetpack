@@ -4,7 +4,7 @@ package nam.tran.android.helper.view
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector

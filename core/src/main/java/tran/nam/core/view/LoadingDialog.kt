@@ -2,8 +2,8 @@ package tran.nam.core.view
 
 import android.app.Activity
 import android.app.Dialog
-import android.databinding.DataBindingUtil
-import android.support.v7.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater

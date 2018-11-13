@@ -1,7 +1,7 @@
 package nam.tran.domain.interactor.core
 
-import android.arch.lifecycle.LiveData
-import android.support.annotation.MainThread
+import androidx.lifecycle.LiveData
+import androidx.annotation.MainThread
 import nam.tran.flatform.core.ApiResponse
 
 interface IDataBoundResource<RequestType>{

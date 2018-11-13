@@ -1,6 +1,6 @@
 package nam.tran.flatform
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import nam.tran.flatform.core.ApiResponse
 import nam.tran.flatform.model.response.Comic
 import nam.tran.flatform.model.response.ComicResponse

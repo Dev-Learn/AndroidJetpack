@@ -1,6 +1,6 @@
 package tran.nam.core.viewmodel
 
-import android.arch.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleOwner
 
 import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Status

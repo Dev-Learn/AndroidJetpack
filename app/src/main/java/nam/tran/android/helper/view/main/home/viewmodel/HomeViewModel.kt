@@ -1,8 +1,8 @@
 package nam.tran.android.helper.view.main.home.viewmodel;
 
 import android.app.Application
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import nam.tran.android.helper.mapper.DataMapper
 import nam.tran.android.helper.model.ComicModel
 import nam.tran.domain.entity.state.Loading

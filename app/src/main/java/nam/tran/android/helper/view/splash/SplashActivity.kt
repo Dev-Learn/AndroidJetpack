@@ -1,7 +1,7 @@
 package nam.tran.android.helper.view.splash
 
 import android.content.Intent
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import nam.tran.android.helper.view.main.MainActivity
 import nam.tran.android.helper.R

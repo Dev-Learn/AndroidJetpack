@@ -17,8 +17,8 @@
 package tran.nam.core.view
 
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.v4.app.Fragment
+import androidx.annotation.LayoutRes
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +27,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import tran.nam.core.R
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment : androidx.fragment.app.Fragment() {
 
     protected var mIsCurrentScreen: Boolean = false
     private var mIsInLeft: Boolean = false

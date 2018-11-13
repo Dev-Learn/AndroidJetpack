@@ -1,6 +1,6 @@
 package tran.nam.core.view
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -18,14 +18,14 @@ import javax.inject.Inject
  */
 abstract class BaseActivityInjection : BaseActivity(), HasSupportFragmentInjector {
 
-    var fragmentInjector: DispatchingAndroidInjector<Fragment>? = null
+    var fragmentInjector: DispatchingAndroidInjector<androidx.fragment.app.Fragment>? = null
         @Inject set
 
     override fun inject() {
         AndroidInjection.inject(this)
     }
 
-    override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
+    override fun supportFragmentInjector(): AndroidInjector<androidx.fragment.app.Fragment>? {
         return fragmentInjector
     }
 }

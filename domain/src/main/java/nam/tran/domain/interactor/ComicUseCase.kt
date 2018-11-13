@@ -1,6 +1,6 @@
 package nam.tran.domain.interactor
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import nam.tran.domain.IRepository
 import nam.tran.domain.entity.ComicEntity
 import nam.tran.domain.entity.state.Resource

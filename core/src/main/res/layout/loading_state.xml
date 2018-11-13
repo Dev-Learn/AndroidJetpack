@@ -24,7 +24,7 @@
             type="tran.nam.core.viewmodel.IProgressViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -41,7 +41,7 @@
             app:indicatorColor="@android:color/black"
             app:visibleProgress="@{iProgress}" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/error_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,6 +52,6 @@
             app:visibleError="@{iProgress}"
             tools:text="@string/unknown_error" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

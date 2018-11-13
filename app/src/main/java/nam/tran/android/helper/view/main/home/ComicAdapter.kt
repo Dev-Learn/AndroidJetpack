@@ -1,7 +1,7 @@
 package nam.tran.android.helper.view.main.home
 
-import android.databinding.DataBindingComponent
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingComponent
+import androidx.databinding.DataBindingUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import nam.tran.android.helper.R

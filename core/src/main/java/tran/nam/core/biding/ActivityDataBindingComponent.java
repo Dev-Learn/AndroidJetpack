@@ -16,8 +16,8 @@
 
 package tran.nam.core.biding;
 
-import android.databinding.DataBindingComponent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.databinding.DataBindingComponent;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * A Data Binding Component implementation for activity.

@@ -2,9 +2,9 @@ package tran.nam.core.view
 
 import android.content.Context
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.app.AppCompatDelegate
+import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import android.view.inputmethod.InputMethodManager
 
 abstract class BaseActivity : AppCompatActivity() {

@@ -16,7 +16,7 @@
 
 package tran.nam.common
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 
 /**
  * A LiveData class that has `null` value.

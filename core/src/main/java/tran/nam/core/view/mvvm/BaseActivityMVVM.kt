@@ -16,9 +16,9 @@
 
 package tran.nam.core.view.mvvm
 
-import android.arch.lifecycle.ViewModelProvider
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
+import androidx.lifecycle.ViewModelProvider
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.MotionEvent

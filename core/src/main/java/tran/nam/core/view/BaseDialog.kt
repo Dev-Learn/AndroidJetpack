@@ -1,18 +1,18 @@
 package tran.nam.core.view
 
 import android.app.Dialog
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import android.graphics.Point
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.v4.app.DialogFragment
+import androidx.annotation.LayoutRes
+import androidx.fragment.app.DialogFragment
 import android.view.*
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import tran.nam.core.R
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-abstract class BaseDialog<T : ViewDataBinding> : DialogFragment() {
+abstract class BaseDialog<T : ViewDataBinding> : androidx.fragment.app.DialogFragment() {
 
     protected abstract fun bidingData(biding: T)
 

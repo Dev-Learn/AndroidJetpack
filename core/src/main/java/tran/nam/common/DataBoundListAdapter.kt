@@ -17,11 +17,11 @@
 package tran.nam.common
 
 import android.annotation.SuppressLint
-import android.databinding.ViewDataBinding
+import androidx.databinding.ViewDataBinding
 import android.os.AsyncTask
-import android.support.annotation.MainThread
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.MainThread
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 
 /**
@@ -30,7 +30,7 @@ import android.view.ViewGroup
  * @param <T> Type of the items in the list
  * @param <V> The type of the ViewDataBinding
 </V></T> */
-abstract class DataBoundListAdapter<T, V : ViewDataBinding> : RecyclerView.Adapter<DataBoundViewHolder<V>>() {
+abstract class DataBoundListAdapter<T, V : ViewDataBinding> : androidx.recyclerview.widget.RecyclerView.Adapter<DataBoundViewHolder<V>>() {
 
     protected var items: List<T>? = null
     // each time data is set, we update this variable so that if DiffUtil calculation returns

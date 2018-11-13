@@ -1,6 +1,6 @@
 package nam.tran.android.helper.view.main.home
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 
 import dagger.Binds
 import dagger.Module
@@ -14,5 +14,5 @@ abstract class HomeFragmentModule {
 
     @Binds
     @PerFragment
-    internal abstract fun fragmentInject(fragment: HomeFragment): Fragment
+    internal abstract fun fragmentInject(fragment: HomeFragment): androidx.fragment.app.Fragment
 }

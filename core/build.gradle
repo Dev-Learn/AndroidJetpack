@@ -11,7 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
     dataBinding {
@@ -42,14 +42,14 @@ kapt {
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 
-    implementation "com.android.support.constraint:constraint-layout:$rootProject.constraint_layout"
-    implementation "com.android.support:appcompat-v7:$rootProject.android_support"
-    implementation "com.android.support:recyclerview-v7:$rootProject.android_support"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
-    api "com.android.support:multidex:$rootProject.multidex"
+    api 'androidx.multidex:multidex:2.0.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
@@ -61,9 +61,9 @@ dependencies {
     api "com.google.dagger:dagger-android-support:$rootProject.dagger"
 
     //lifecycle
-    api "android.arch.lifecycle:runtime:$rootProject.lifecycle"
-    api "android.arch.lifecycle:extensions:$rootProject.lifecycle"
-    kapt "android.arch.lifecycle:compiler:$rootProject.lifecycle"
+    api 'androidx.lifecycle:lifecycle-runtime:2.0.0'
+    api 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'
 
     api "com.github.bumptech.glide:glide:$rootProject.glide"
     kapt "com.github.bumptech.glide:compiler:$rootProject.glide"

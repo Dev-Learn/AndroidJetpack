@@ -1,7 +1,7 @@
 package nam.tran.domain
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import nam.tran.domain.entity.ComicEntity
 import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Resource
