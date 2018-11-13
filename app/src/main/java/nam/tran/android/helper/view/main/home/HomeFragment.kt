@@ -5,18 +5,13 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import nam.tran.android.helper.R
-
-import nam.tran.android.helper.view.main.home.viewmodel.IHomeViewModel
-import nam.tran.android.helper.view.main.home.viewmodel.HomeViewModel
-
 import nam.tran.android.helper.databinding.FragmentHomeBinding
 import nam.tran.android.helper.model.ComicModel
-import nam.tran.domain.entity.ComicEntity
+import nam.tran.android.helper.view.main.home.viewmodel.HomeViewModel
+import nam.tran.android.helper.view.main.home.viewmodel.IHomeViewModel
 import tran.nam.common.autoCleared
 import tran.nam.core.biding.FragmentDataBindingComponent
-
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
-import tran.nam.util.Logger
 
 class HomeFragment : BaseFragmentMVVM<FragmentHomeBinding, HomeViewModel>(), IHomeViewModel {
 
@@ -36,7 +31,12 @@ class HomeFragment : BaseFragmentMVVM<FragmentHomeBinding, HomeViewModel>(), IHo
 
         adapter = ComicAdapter(dataBindingComponent)
 
-        binding.rvComic.addItemDecoration(DividerItemDecoration(context, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL))
+        binding.rvComic.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                LinearLayoutManager.VERTICAL
+            )
+        )
         binding.rvComic.adapter = adapter
     }
 

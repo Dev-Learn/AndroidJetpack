@@ -13,7 +13,6 @@ import nam.tran.flatform.local.IPreference
 import nam.tran.flatform.model.response.ComicResponse
 import javax.inject.Inject
 
-@Suppress("unused")
 class Repository @Inject
 internal constructor(
     private val appExecutors: AppExecutors,

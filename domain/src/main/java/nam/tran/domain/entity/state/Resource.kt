@@ -16,9 +16,7 @@
 
 package nam.tran.domain.entity.state
 
-import nam.tran.domain.entity.state.Status.ERROR
-import nam.tran.domain.entity.state.Status.LOADING
-import nam.tran.domain.entity.state.Status.SUCCESS
+import nam.tran.domain.entity.state.Status.*
 import tran.nam.util.Constant.Companion.EMPTY
 
 /**

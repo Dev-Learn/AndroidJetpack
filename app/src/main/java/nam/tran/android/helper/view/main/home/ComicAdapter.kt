@@ -5,24 +5,24 @@ import androidx.databinding.DataBindingUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import nam.tran.android.helper.R
-import nam.tran.android.helper.databinding.AdapterComicBinding
+import nam.tran.android.helper.databinding.AdapterComicItemBinding
 import nam.tran.android.helper.model.ComicModel
 import tran.nam.common.DataBoundListAdapter
 
 class ComicAdapter(private val dataBindingComponent: DataBindingComponent) :
-    DataBoundListAdapter<ComicModel, AdapterComicBinding>() {
+    DataBoundListAdapter<ComicModel, AdapterComicItemBinding>() {
 
-    override fun createBinding(parent: ViewGroup): AdapterComicBinding {
+    override fun createBinding(parent: ViewGroup): AdapterComicItemBinding {
         return DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.adapter_comic,
+            R.layout.adapter_comic_item,
             parent,
             false,
             dataBindingComponent
         )
     }
 
-    override fun bind(binding: AdapterComicBinding, item: ComicModel) {
+    override fun bind(binding: AdapterComicItemBinding, item: ComicModel) {
         binding.comic = item
     }
 
