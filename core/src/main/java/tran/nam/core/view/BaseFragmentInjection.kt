@@ -47,7 +47,7 @@ abstract class BaseFragmentInjection : BaseFragment(), HasSupportFragmentInjecto
         super.onAttach(context)
     }
 
-    override fun supportFragmentInjector(): AndroidInjector<androidx.fragment.app.Fragment>? {
+    override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
         return childFragmentInjector
     }
 }

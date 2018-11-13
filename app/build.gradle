@@ -71,6 +71,9 @@ dependencies {
 
     implementation 'androidx.multidex:multidex:2.0.0'
 
+    kapt 'com.android.tools.build.jetifier:jetifier-core:1.0.0-beta02'
+    annotationProcessor 'com.android.tools.build.jetifier:jetifier-core:1.0.0-beta02'
+
     implementation project(':core')
     implementation project(':domain')
     implementation project(':flatform')

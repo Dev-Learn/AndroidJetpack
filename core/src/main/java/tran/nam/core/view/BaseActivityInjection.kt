@@ -25,7 +25,7 @@ abstract class BaseActivityInjection : BaseActivity(), HasSupportFragmentInjecto
         AndroidInjection.inject(this)
     }
 
-    override fun supportFragmentInjector(): AndroidInjector<androidx.fragment.app.Fragment>? {
+    override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
         return fragmentInjector
     }
 }

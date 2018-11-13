@@ -71,6 +71,9 @@ dependencies {
     //loading
     api "com.wang.avi:library:$rootProject.progress_loading"
 
+    kapt 'com.android.tools.build.jetifier:jetifier-core:1.0.0-beta02'
+    annotationProcessor 'com.android.tools.build.jetifier:jetifier-core:1.0.0-beta02'
+
     implementation project(':domain')
     implementation project(':util')
     application project(':app')
