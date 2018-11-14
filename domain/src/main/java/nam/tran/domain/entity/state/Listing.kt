@@ -22,9 +22,9 @@ import androidx.paging.PagedList
 /**
  * Data class that is necessary for a UI to show a listing and interact w/ the rest of the system
  */
-data class Listing<T>(
+data class Listing<Any>(
     // the LiveData of paged lists for the UI to observe
-    val pagedList: LiveData<PagedList<T>>,
+    val pagedList: LiveData<PagedList<Any>>,
     // represents the network request status to show to the user
     val networkState: LiveData<NetworkState>,
     // represents the refresh status to show to the user. Separate from networkState, this

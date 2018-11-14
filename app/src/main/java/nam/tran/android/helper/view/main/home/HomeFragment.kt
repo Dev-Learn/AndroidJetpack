@@ -1,7 +1,11 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package nam.tran.android.helper.view.main.home;
 
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import nam.tran.android.helper.R
@@ -16,7 +20,7 @@ import tran.nam.core.view.mvvm.BaseFragmentMVVM
 class HomeFragment : BaseFragmentMVVM<FragmentHomeBinding, HomeViewModel>(), IHomeViewModel {
 
     private val dataBindingComponent = FragmentDataBindingComponent(this)
-    private var adapter by autoCleared<ComicAdapter>()
+//    private var adapter by autoCleared<ComicAdapter>()
 
     override fun initViewModel(factory: ViewModelProvider.Factory?) {
         mViewModel = ViewModelProviders.of(this, factory).get(HomeViewModel::class.java)
@@ -29,7 +33,9 @@ class HomeFragment : BaseFragmentMVVM<FragmentHomeBinding, HomeViewModel>(), IHo
     override fun onVisible() {
         mViewDataBinding.viewModel = mViewModel
 
-        adapter = ComicAdapter(dataBindingComponent)
+        val adapter = ComicAdapterPaging(dataBindingComponent)
+
+//        adapter = ComicAdapter(dataBindingComponent)
 
         binding.rvComic.addItemDecoration(
             DividerItemDecoration(
@@ -38,14 +44,22 @@ class HomeFragment : BaseFragmentMVVM<FragmentHomeBinding, HomeViewModel>(), IHo
             )
         )
         binding.rvComic.adapter = adapter
+
+        mViewModel?.posts?.observe(this, Observer {
+            adapter.submitList(it as PagedList<ComicModel>)
+        })
+
+        mViewModel?.networkState?.observe(this, Observer {
+            adapter.setNetworkState(it)
+        })
     }
 
     override fun updateData(data: List<ComicModel>) {
-        adapter.replace(data)
+//        adapter.replace(data)
     }
 
     override fun updateView() {
-        mViewDataBinding.viewModel = mViewModel
-        mViewDataBinding.executePendingBindings()
+//        mViewDataBinding.viewModel = mViewModel
+//        mViewDataBinding.executePendingBindings()
     }
 }

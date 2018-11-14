@@ -1,10 +1,13 @@
 package nam.tran.android.helper.view.main.home.viewmodel;
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.Transformations
 import nam.tran.android.helper.mapper.DataMapper
 import nam.tran.android.helper.model.ComicModel
+import nam.tran.domain.entity.state.Listing
 import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.interactor.ComicUseCase
@@ -20,20 +23,21 @@ class HomeViewModel @Inject internal constructor(
     BaseFragmentViewModel(application),
     IProgressViewModel {
 
-    companion object {
-        const val COUNT: Int = 10
+    private val results = MutableLiveData<Resource<List<ComicModel>>>()
+    private var repoResult = comicUseCase.getComic(){
+        mDataMapper.comicModelMapper.transform(it)
     }
 
-    var OFFSET = 0
-
-    private val results = MutableLiveData<Resource<List<ComicModel>>>()
+    val posts = Transformations.switchMap(repoResult, { it.pagedList })
+    val networkState = Transformations.switchMap(repoResult, { it.networkState })
 
     override fun resource(): Resource<*>? {
         return results.value
     }
 
     override fun onInitialized() {
-        getComic(OFFSET, COUNT)
+//        getComic(0, 10)
+
     }
 
     fun getComic(offset: Int, count: Int){

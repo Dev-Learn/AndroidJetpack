@@ -50,7 +50,7 @@ class ComicModelMapper @Inject constructor(val genreModelMapper: GenreModelMappe
      * @param datas Objects to be transformed.
      * @return List of [ComicModel].
      */
-    private fun transform(datas: List<ComicEntity>?): List<ComicModel> {
+    fun transform(datas: List<ComicEntity>?): List<ComicModel> {
         val dataModels: MutableList<ComicModel>
 
         if (datas != null && !datas.isEmpty()) {

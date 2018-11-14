@@ -2,15 +2,21 @@ package nam.tran.domain
 
 //import nam.tran.flatform.database.DbProvider
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.paging.toLiveData
 import nam.tran.domain.entity.ComicEntity
+import nam.tran.domain.entity.state.Listing
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.executor.AppExecutors
+import nam.tran.domain.interactor.ComicDataSourceFactory
 import nam.tran.domain.interactor.core.DataBoundNetwork
 import nam.tran.domain.mapper.DataEntityMapper
 import nam.tran.flatform.IApi
 import nam.tran.flatform.core.ApiResponse
 import nam.tran.flatform.local.IPreference
 import nam.tran.flatform.model.response.ComicResponse
+import tran.nam.util.Logger
 import javax.inject.Inject
 
 class Repository @Inject
@@ -39,5 +45,33 @@ internal constructor(
         }.asLiveData()
     }
 
+    override fun getComic(convert: (List<ComicEntity>) -> List<Any>): LiveData<Listing<Any>> {
+        Logger.debug("Paging Learn","Repository - getComic")
+        val sourceFactory = ComicDataSourceFactory(iApi, dataEntityMapper, appExecutors.networkIO(), convert)
+        // We use toLiveData Kotlin extension function here, you could also use LivePagedListBuilder
+        val livePagedList = sourceFactory.toLiveData(
+                pageSize = 10,
+            // provide custom executor for network requests, otherwise it will default to
+            // Arch Components' IO pool which is also used for disk access
+            fetchExecutor = appExecutors.networkIO()
+        )
+        val result = MutableLiveData<Listing<Any>>()
+        result.postValue(Listing(
+            pagedList = livePagedList,
+            networkState = Transformations.switchMap(sourceFactory.sourceLiveData) {
+                it.networkState
+            },
+            retry = {
+                sourceFactory.sourceLiveData.value?.retryAllFailed()
+            },
+            refresh = {
+                sourceFactory.sourceLiveData.value?.invalidate()
+            },
+            refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
+                it.initialLoad
+            }
+        ))
+        return result
+    }
 
 }
