@@ -62,4 +62,9 @@ class HomeViewModel @Inject internal constructor(
 
         return results
     }
+
+    fun retry() {
+        val retry = repoResult.value
+        retry?.retry?.invoke()
+    }
 }

@@ -13,7 +13,7 @@ import nam.tran.android.helper.databinding.NetworkStateItemBinding
 import nam.tran.android.helper.model.ComicModel
 import nam.tran.domain.entity.state.NetworkState
 
-class ComicAdapterPaging(private val dataBindingComponent: DataBindingComponent):
+class ComicAdapterPaging(private val dataBindingComponent: DataBindingComponent,private val retryCallback: () -> Unit):
     PagedListAdapter<ComicModel, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<ComicModel>() {
         override fun areItemsTheSame(p0: ComicModel, p1: ComicModel): Boolean {
             return p0.id == p1.id
@@ -35,15 +35,21 @@ class ComicAdapterPaging(private val dataBindingComponent: DataBindingComponent)
                 false,
                 dataBindingComponent
             ))
-            R.layout.network_state_item -> NetworkStateItemViewHolder(
-                DataBindingUtil.inflate(
-                    LayoutInflater.from(parent.context),
-                    R.layout.network_state_item,
-                    parent,
-                    false,
-                    dataBindingComponent
+            R.layout.network_state_item -> {
+                val holder = NetworkStateItemViewHolder(
+                    DataBindingUtil.inflate(
+                        LayoutInflater.from(parent.context),
+                        R.layout.network_state_item,
+                        parent,
+                        false,
+                        dataBindingComponent
+                    )
                 )
-            )
+                holder.binding.retryButton.setOnClickListener {
+                    retryCallback()
+                }
+                return holder
+            }
             else -> throw IllegalArgumentException("unknown view type $viewType")
         }
     }

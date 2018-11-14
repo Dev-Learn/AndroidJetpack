@@ -33,7 +33,9 @@ class HomeFragment : BaseFragmentMVVM<FragmentHomeBinding, HomeViewModel>(), IHo
     override fun onVisible() {
         mViewDataBinding.viewModel = mViewModel
 
-        val adapter = ComicAdapterPaging(dataBindingComponent)
+        val adapter = ComicAdapterPaging(dataBindingComponent){
+            mViewModel?.retry()
+        }
 
 //        adapter = ComicAdapter(dataBindingComponent)
 

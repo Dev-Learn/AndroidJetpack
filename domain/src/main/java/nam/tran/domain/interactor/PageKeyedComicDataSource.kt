@@ -44,7 +44,7 @@ class PageKeyedComicDataSource(
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Any>) {
         Logger.debug("Paging Learn","loadInitial")
         networkState.postValue(NetworkState.LOADING)
-        val request = iApi.getComicPaging(0, params.requestedLoadSize)
+        val request = iApi.getComicPaging(0, 20)
         try {
             val response = request.execute()
             val data = response.body()?.result
