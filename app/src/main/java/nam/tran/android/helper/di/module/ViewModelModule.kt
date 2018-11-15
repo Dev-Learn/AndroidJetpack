@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import nam.tran.android.helper.view.main.detail.viewmodel.DetailComicViewModel
 import nam.tran.android.helper.view.main.home.viewmodel.HomeViewModel
 import tran.nam.core.di.ViewModelFactory
 import tran.nam.core.di.inject.ViewModelKey
@@ -19,4 +20,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(HomeViewModel::class)
     internal abstract fun bindHomeViewModel(model: HomeViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DetailComicViewModel::class)
+    internal abstract fun bindDetailComicViewModel(model: DetailComicViewModel): ViewModel
 }

@@ -2,7 +2,9 @@ package nam.tran.domain.interactor
 
 import androidx.lifecycle.LiveData
 import nam.tran.domain.IRepository
+import nam.tran.domain.entity.BaseItemKey
 import nam.tran.domain.entity.ComicEntity
+import nam.tran.domain.entity.LinkComicEntity
 import nam.tran.domain.entity.state.Listing
 import nam.tran.domain.entity.state.Resource
 import javax.inject.Inject
@@ -13,8 +15,18 @@ class ComicUseCase @Inject internal constructor(val iRepository: IRepository) {
         return iRepository.getComic(offset,count,typeLoading = typeLoading)
     }
 
-    fun getComic(convert: (List<ComicEntity>) -> List<Any>): LiveData<Listing<Any>>{
-        return iRepository.getComic(convert)
+    fun getComicPage(convert: (List<ComicEntity>) -> List<Any>): LiveData<Listing<Any>>{
+        return iRepository.getComicPage(convert)
     }
 
+    fun getComicItem(convert: (List<ComicEntity>) -> List<BaseItemKey>): LiveData<Listing<BaseItemKey>>{
+        return iRepository.getComicItem(convert)
+    }
+
+    fun getLinkComicItem(
+        idComic: Int,
+        convert: (List<LinkComicEntity>) -> List<BaseItemKey>
+    ): Listing<BaseItemKey>{
+        return iRepository.getLinkComicItem(idComic,convert)
+    }
 }

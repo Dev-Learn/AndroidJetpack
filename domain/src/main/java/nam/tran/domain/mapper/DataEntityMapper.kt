@@ -5,4 +5,4 @@ import javax.inject.Singleton
 
 @Singleton
 class DataEntityMapper @Inject
-internal constructor(val mPreferenceEntityMapper: PreferenceEntityMapper,val comicEntityMapper: ComicEntityMapper)
+internal constructor(val mPreferenceEntityMapper: PreferenceEntityMapper,val comicEntityMapper: ComicEntityMapper,val linkComicEntityMapper: LinkComicEntityMapper)

@@ -5,4 +5,4 @@ import javax.inject.Singleton
 
 @Singleton
 class DataMapper @Inject
-internal constructor(val preferenceMapper: PreferenceMapper,val comicModelMapper: ComicModelMapper)
+internal constructor(val preferenceMapper: PreferenceMapper,val comicModelMapper: ComicModelMapper,val linkComicModelMapper: LinkComicModelMapper)

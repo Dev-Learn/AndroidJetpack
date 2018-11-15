@@ -1,7 +1,8 @@
 package nam.tran.domain.interactor
 
 import androidx.lifecycle.MutableLiveData
-import androidx.paging.PageKeyedDataSource
+import androidx.paging.ItemKeyedDataSource
+import nam.tran.domain.entity.BaseItemKey
 import nam.tran.domain.entity.ComicEntity
 import nam.tran.domain.entity.state.NetworkState
 import nam.tran.domain.mapper.DataEntityMapper
@@ -11,15 +12,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import tran.nam.util.Logger
-import java.lang.Exception
 import java.util.concurrent.Executor
 
-class PageKeyedComicDataSource(
+class ItemKeyedComicDataSource(
     private val iApi: IApi,
     private val dataEntityMapper: DataEntityMapper,
     private val retryExecutor: Executor,
-    private val convert: (List<ComicEntity>) -> List<Any>
-) : PageKeyedDataSource<Int, Any>() {
+    private val convert: (List<ComicEntity>) -> List<BaseItemKey>
+) : ItemKeyedDataSource<Int, BaseItemKey>() {
 
     // keep a function reference for the retry event
     private var retry: (() -> Any)? = null
@@ -41,17 +41,27 @@ class PageKeyedComicDataSource(
         }
     }
 
-    override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Any>) {
-        Logger.debug("Paging Learn PageKeyed","loadInitial")
+    override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<BaseItemKey>) {
+        Logger.debug("Paging Learn ItemKeyed", "loadInitial")
         networkState.postValue(NetworkState.LOADING)
-        val request = iApi.getComicPaging(0, 20)
+        val request = iApi.getComicPaging2(limit = params.requestedLoadSize)
         try {
             val response = request.execute()
-            val data = response.body()?.result
-            retry = null
-            networkState.postValue(NetworkState.LOADED)
-            callback.onResult(convert(dataEntityMapper.comicEntityMapper.transform(data)), 0,params.requestedLoadSize)
-        }catch (e : Exception){
+            val result = response.body()
+            if (result?.success!!){
+                val data = result.result
+                retry = null
+                networkState.postValue(NetworkState.LOADED)
+                callback.onResult(convert(dataEntityMapper.comicEntityMapper.transform(data)))
+            }else{
+                retry = {
+                    loadInitial(params, callback)
+                }
+                networkState.postValue(
+                    NetworkState.error("error code: ${result.message}")
+                )
+            }
+        } catch (e: Exception) {
             retry = {
                 loadInitial(params, callback)
             }
@@ -61,10 +71,10 @@ class PageKeyedComicDataSource(
         }
     }
 
-    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Any>) {
-        Logger.debug("Paging Learn PageKeyed","loadAfter")
+    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<BaseItemKey>) {
+        Logger.debug("Paging Learn ItemKeyed", "loadAfter")
         networkState.postValue(NetworkState.LOADING)
-        iApi.getComicPaging(params.key, params.requestedLoadSize).enqueue(object : Callback<ComicResponse> {
+        iApi.getComicPaging2(params.key, params.requestedLoadSize).enqueue(object : Callback<ComicResponse> {
             override fun onFailure(call: Call<ComicResponse>, t: Throwable) {
                 retry = {
                     loadAfter(params, callback)
@@ -77,10 +87,20 @@ class PageKeyedComicDataSource(
                 response: Response<ComicResponse>
             ) {
                 if (response.isSuccessful) {
-                    val data = response.body()?.result
-                    retry = null
-                    networkState.postValue(NetworkState.LOADED)
-                    callback.onResult(convert(dataEntityMapper.comicEntityMapper.transform(data)), params.key + params.requestedLoadSize)
+                    val result = response.body()
+                    if (result?.success!!){
+                        val data = result.result
+                        retry = null
+                        networkState.postValue(NetworkState.LOADED)
+                        callback.onResult(convert(dataEntityMapper.comicEntityMapper.transform(data)))
+                    }else{
+                        retry = {
+                            loadAfter(params, callback)
+                        }
+                        networkState.postValue(
+                            NetworkState.error("error code: ${result.message}")
+                        )
+                    }
                 } else {
                     retry = {
                         loadAfter(params, callback)
@@ -94,9 +114,12 @@ class PageKeyedComicDataSource(
         })
     }
 
-    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Any>) {
+    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<BaseItemKey>) {
         // ignored, since we only ever append to our initial load
-        Logger.debug("Paging Learn PageKeyed","loadBefore")
+        Logger.debug("Paging Learn ItemKeyed","loadBefore")
     }
 
+    override fun getKey(item: BaseItemKey): Int {
+        return item.idKey
+    }
 }

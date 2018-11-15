@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -16,7 +17,8 @@
                 android:layout_width="@dimen/positive_100dp"
                 android:layout_height="@dimen/positive_100dp"
                 android:id="@+id/iv_comic"
-                loadImageNetwork="@{comic.image}"/>
+                loadImageNetwork="@{comic.image}"
+        tools:src="@drawable/splash_icon"/>
 
         <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="0dp"
@@ -30,7 +32,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintBottom_toTopOf="@+id/tv_genre"/>
+                app:layout_constraintBottom_toTopOf="@+id/tv_genre"
+        tools:text="Kantai Collection - Gift and Promises"/>
 
         <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="0dp"
@@ -44,7 +47,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintBottom_toTopOf="@+id/tv_description"/>
+                app:layout_constraintBottom_toTopOf="@+id/tv_description"
+        tools:text="Doujinshi, Historical, One shot, Drama"/>
 
         <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="0dp"
@@ -56,7 +60,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/iv_comic"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_margin="@dimen/positive_5dp"/>
+                android:layout_margin="@dimen/positive_5dp"
+        tools:text="Một doujinshi One Shot về Hibiki và chị em của mình thuộc Hải đội khu trục 6 trong Kancolle. Truyện được dịch bởi nhóm XXX-Inc. Thấy trong này chưa ai đăng nên ta đăng thôi, xem như chỗ lưu lại truyện."/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

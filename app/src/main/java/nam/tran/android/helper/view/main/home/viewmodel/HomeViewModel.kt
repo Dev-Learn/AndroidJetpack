@@ -24,7 +24,11 @@ class HomeViewModel @Inject internal constructor(
     IProgressViewModel {
 
     private val results = MutableLiveData<Resource<List<ComicModel>>>()
-    private var repoResult = comicUseCase.getComic(){
+//    private var repoResult = comicUseCase.getComicPage{
+//        mDataMapper.comicModelMapper.transform(it)
+//    }
+
+    private var repoResult = comicUseCase.getComicItem{
         mDataMapper.comicModelMapper.transform(it)
     }
 

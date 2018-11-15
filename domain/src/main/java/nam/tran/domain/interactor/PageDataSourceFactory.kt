@@ -8,7 +8,7 @@ import nam.tran.flatform.IApi
 import tran.nam.util.Logger
 import java.util.concurrent.Executor
 
-class ComicDataSourceFactory(
+class PageDataSourceFactory(
     private val iApi: IApi,
     private val dataEntityMapper: DataEntityMapper,
     private val retryExecutor: Executor,
@@ -18,7 +18,7 @@ class ComicDataSourceFactory(
     val sourceLiveData = MutableLiveData<PageKeyedComicDataSource>()
 
     override fun create(): DataSource<Int, Any> {
-        Logger.debug("Paging Learn","ComicDataSourceFactory - create()")
+        Logger.debug("Paging Learn","PageDataSourceFactory - create()")
         val source = PageKeyedComicDataSource(iApi, dataEntityMapper, retryExecutor,convert)
         sourceLiveData.postValue(source)
         return source

@@ -1,6 +1,9 @@
 package nam.tran.android.helper.model
 
-data class ComicModel(var id : Int, var title : String, var description : String, var image : String, var genre : ArrayList<GenreModel>){
+import nam.tran.domain.entity.BaseItemKey
+import java.io.Serializable
+
+data class ComicModel(var id : Int, var title : String, var description : String, var image : String, var genre : ArrayList<GenreModel>) : BaseItemKey(id),Serializable{
 
     val listGenre: String
         get() {
@@ -13,4 +16,10 @@ data class ComicModel(var id : Int, var title : String, var description : String
             }
             return data
         }
+
+    override fun toString(): String {
+        return "ComicModel(id=$id, title='$title', description='$description', image='$image', genre=$genre)"
+    }
+
+
 }
