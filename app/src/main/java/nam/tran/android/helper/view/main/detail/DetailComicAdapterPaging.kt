@@ -11,11 +11,10 @@ import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.AdapterLinkComicItemBinding
 import nam.tran.android.helper.databinding.NetworkStateItemBinding
 import nam.tran.android.helper.model.LinkComicModel
-import nam.tran.domain.entity.state.NetworkState
+import nam.tran.domain.entity.state.Resource
 
 class DetailComicAdapterPaging(
-    private val dataBindingComponent: DataBindingComponent,
-    private val retryCallback: () -> Unit
+    private val dataBindingComponent: DataBindingComponent
 ) : PagedListAdapter<LinkComicModel, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<LinkComicModel>() {
     override fun areItemsTheSame(p0: LinkComicModel, p1: LinkComicModel): Boolean {
         return p0.id == p1.id
@@ -26,7 +25,7 @@ class DetailComicAdapterPaging(
     }
 }) {
 
-    private var networkState: NetworkState? = null
+    private var networkState: Resource<*>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -49,9 +48,6 @@ class DetailComicAdapterPaging(
                         dataBindingComponent
                     )
                 )
-                holder.binding.retryButton.setOnClickListener {
-                    retryCallback()
-                }
                 return holder
             }
             else -> throw IllegalArgumentException("unknown view type $viewType")
@@ -82,13 +78,13 @@ class DetailComicAdapterPaging(
         }
     }
 
-    private fun hasExtraRow() = networkState != null && networkState != NetworkState.LOADED
+    private fun hasExtraRow() = networkState != null && !networkState!!.isSuccess()
 
     override fun getItemCount(): Int {
         return super.getItemCount() + if (hasExtraRow()) 1 else 0
     }
 
-    fun setNetworkState(newNetworkState: NetworkState?) {
+    fun setNetworkState(newNetworkState: Resource<*>?) {
         val previousState = this.networkState
         val hadExtraRow = hasExtraRow()
         this.networkState = newNetworkState
@@ -106,8 +102,8 @@ class DetailComicAdapterPaging(
 
     class NetworkStateItemViewHolder(val binding: NetworkStateItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(state: NetworkState?) {
-            binding.state = state
+        fun bind(state: Resource<*>?) {
+            binding.resource = state
             binding.executePendingBindings()
         }
     }

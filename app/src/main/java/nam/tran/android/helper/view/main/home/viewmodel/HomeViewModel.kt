@@ -17,13 +17,16 @@ import javax.inject.Inject
 
 class HomeViewModel @Inject internal constructor(
     application: Application,
-    private val comicUseCase: ComicUseCase,
+    comicUseCase: ComicUseCase,
     private val mDataMapper: DataMapper
 ) :
     BaseFragmentViewModel(application),
     IProgressViewModel {
 
-    private val results = MutableLiveData<Resource<List<ComicModel>>>()
+//    val results = Transformations.map(comicUseCase.getComic(0,20,Loading.LOADING_NORMAL)){
+//        mDataMapper.comicModelMapper.transform(it)
+//    }
+
 //    private var repoResult = comicUseCase.getComicPage{
 //        mDataMapper.comicModelMapper.transform(it)
 //    }
@@ -33,42 +36,9 @@ class HomeViewModel @Inject internal constructor(
     }
 
     val posts = Transformations.switchMap(repoResult, { it.pagedList })
-    val networkState = Transformations.switchMap(repoResult, { it.networkState })
+    val results = Transformations.switchMap(repoResult, { it.networkState })
 
     override fun resource(): Resource<*>? {
         return results.value
-    }
-
-    override fun onInitialized() {
-//        getComic(0, 10)
-
-    }
-
-    fun getComic(offset: Int, count: Int){
-        val view: IHomeViewModel? = view()
-        view?.let { it ->
-            getComic(it, offset, count).observe(it, Observer {
-                if (it?.data != null && it.data!!.isNotEmpty()) {
-                    view.updateData(it.data!!)
-                }
-                view.updateView()
-            })
-        }
-    }
-
-    fun getComic(view: IHomeViewModel, offset: Int, count: Int): MutableLiveData<Resource<List<ComicModel>>> {
-        comicUseCase.getComic(offset, count, if (offset == 0) Loading.LOADING_NORMAL else Loading.LOADING_NONE)
-            .observe(view, Observer { it ->
-                it?.let {
-                    results.value = mDataMapper.comicModelMapper.transform(it)
-                }
-            })
-
-        return results
-    }
-
-    fun retry() {
-        val retry = repoResult.value
-        retry?.retry?.invoke()
     }
 }

@@ -24,7 +24,11 @@ import tran.nam.util.Constant.Companion.EMPTY
  *
  * @param <T>
 </T> */
-class Resource<T>(@Status val status: Int, val data: T?, val message: String?, @Loading var loading: Int) {
+class Resource<T>(@Status val status: Int, val data: T?, val message: String?, @Loading var loading: Int,
+                  val retry: (() -> Unit)?
+) {
+
+    var initial = true
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -75,21 +79,46 @@ class Resource<T>(@Status val status: Int, val data: T?, val message: String?, @
         return EMPTY
     }
 
+    fun isSuccess():Boolean{
+        return status == Status.SUCCESS
+    }
+
     companion object {
 
         @JvmStatic
         fun <T> success(data: T?, loading: Int): Resource<T> {
-            return Resource(SUCCESS, data, null, loading)
+            return Resource(SUCCESS, data, null, loading,null)
         }
 
         @JvmStatic
-        fun <T> error(msg: String?, data: T?, loading: Int): Resource<T> {
-            return Resource(ERROR, data, msg, loading)
+        fun <T> successPaging(data: T?, loading: Int): Resource<T> {
+            val resource = Resource(SUCCESS, data, null, loading,null)
+            resource.initial = false
+            return resource
+        }
+
+        @JvmStatic
+        fun <T> error(msg: String?, data: T?, loading: Int,retry: () -> Unit): Resource<T> {
+            return Resource(ERROR, data, msg, loading,retry)
+        }
+
+        @JvmStatic
+        fun <T> errorPaging(msg: String?, data: T?, loading: Int,retry: () -> Unit): Resource<T> {
+            val resource = Resource(ERROR, data, msg, loading,retry)
+            resource.initial = false
+            return resource
         }
 
         @JvmStatic
         fun <T> loading(data: T?, @Loading loading: Int): Resource<T> {
-            return Resource(LOADING, data, null, loading)
+            return Resource(LOADING, data, null, loading,null)
+        }
+
+        @JvmStatic
+        fun <T> loadingPaging(data: T?, @Loading loading: Int): Resource<T> {
+            val resource = Resource(LOADING, data, null, loading,null)
+            resource.initial = false
+            return resource
         }
     }
 }

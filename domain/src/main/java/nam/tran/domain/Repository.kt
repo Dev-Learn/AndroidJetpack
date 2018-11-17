@@ -61,11 +61,12 @@ internal constructor(
             fetchExecutor = appExecutors.networkIO()
         )
         val result = MutableLiveData<Listing<Any>>()
-        result.postValue(Listing(
-            pagedList = livePagedList,
-            networkState = Transformations.switchMap(sourceFactory.sourceLiveData) {
-                it.networkState
-            },
+        result.postValue(
+            Listing(
+                pagedList = livePagedList,
+                networkState = Transformations.switchMap(sourceFactory.sourceLiveData) {
+                    it.networkState
+                }/*,
             retry = {
                 sourceFactory.sourceLiveData.value?.retryAllFailed()
             },
@@ -74,8 +75,9 @@ internal constructor(
             },
             refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
                 it.initialLoad
-            }
-        ))
+            }*/
+            )
+        )
         return result
     }
 
@@ -94,11 +96,12 @@ internal constructor(
             fetchExecutor = appExecutors.networkIO()
         )
         val result = MutableLiveData<Listing<BaseItemKey>>()
-        result.postValue(Listing(
-            pagedList = livePagedList,
-            networkState = Transformations.switchMap(sourceFactory.sourceLiveData) {
-                it.networkState
-            },
+        result.postValue(
+            Listing(
+                pagedList = livePagedList,
+                networkState = Transformations.switchMap(sourceFactory.sourceLiveData) {
+                    it.networkState
+                }/*,
             retry = {
                 sourceFactory.sourceLiveData.value?.retryAllFailed()
             },
@@ -107,8 +110,9 @@ internal constructor(
             },
             refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
                 it.initialLoad
-            }
-        ))
+            }*/
+            )
+        )
         return result
     }
 
@@ -132,7 +136,7 @@ internal constructor(
             pagedList = livePagedList,
             networkState = Transformations.switchMap(sourceFactory.sourceLiveData) {
                 it.networkState
-            },
+            }/*,
             retry = {
                 sourceFactory.sourceLiveData.value?.retryAllFailed()
             },
@@ -141,7 +145,7 @@ internal constructor(
             },
             refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
                 it.initialLoad
-            }
+            }*/
         )
     }
 

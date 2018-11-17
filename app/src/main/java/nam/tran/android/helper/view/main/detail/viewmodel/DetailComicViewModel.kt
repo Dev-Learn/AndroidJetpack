@@ -16,27 +16,22 @@ import javax.inject.Inject
 class DetailComicViewModel @Inject internal constructor(application: Application,val comicUseCase: ComicUseCase,val dataMapper: DataMapper) : BaseFragmentViewModel(application),
     IProgressViewModel {
 
-    private val results = MutableLiveData<Resource<String>>()
+
 
     private var repoResult = MutableLiveData<Listing<BaseItemKey>>()
 
     val posts = Transformations.switchMap(repoResult, { it.pagedList })
-    val networkState = Transformations.switchMap(repoResult, { it.networkState })
+    val results = Transformations.switchMap(repoResult, { it.networkState })
 
     override fun resource(): Resource<*>? {
         return results.value
     }
 
     fun getData(comicModel: ComicModel?) {
-        comicModel?.let {
+        comicModel?.let { it ->
             repoResult.postValue(comicUseCase.getLinkComicItem(it.id){
                 dataMapper.linkComicModelMapper.transform(it)
             })
         }
-    }
-
-    fun retry() {
-        val retry = repoResult.value
-        retry?.retry?.invoke()
     }
 }

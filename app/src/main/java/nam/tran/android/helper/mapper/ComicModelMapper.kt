@@ -14,14 +14,11 @@
  */
 package nam.tran.android.helper.mapper
 
+
 import nam.tran.android.helper.model.ComicModel
 import nam.tran.domain.entity.ComicEntity
 import nam.tran.domain.entity.state.Resource
-
-
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 /**
  * Mapper class used to transform [ComicEntity] (in the  in domain layer)
@@ -41,7 +38,13 @@ class ComicModelMapper @Inject constructor(val genreModelMapper: GenreModelMappe
             throw IllegalArgumentException("Cannot transform a null value")
         }
 
-        return ComicModel(data.id,data.title,data.description,data.image, ArrayList(genreModelMapper.transform(data.genre)))
+        return ComicModel(
+            data.id,
+            data.title,
+            data.description,
+            data.image,
+            ArrayList(genreModelMapper.transform(data.genre))
+        )
     }
 
     /**
@@ -66,6 +69,6 @@ class ComicModelMapper @Inject constructor(val genreModelMapper: GenreModelMappe
     }
 
     fun transform(data: Resource<List<ComicEntity>>): Resource<List<ComicModel>> {
-        return Resource(data.status, transform(data.data), data.message, data.loading)
+        return Resource(data.status, transform(data.data), data.message, data.loading, data.retry)
     }
 }

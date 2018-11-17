@@ -4,7 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.ItemKeyedDataSource
 import nam.tran.domain.entity.BaseItemKey
 import nam.tran.domain.entity.LinkComicEntity
-import nam.tran.domain.entity.state.NetworkState
+import nam.tran.domain.entity.state.Loading
+import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.mapper.DataEntityMapper
 import nam.tran.flatform.IApi
 import nam.tran.flatform.model.response.LinkComicResponse
@@ -23,65 +24,33 @@ class ItemKeyedComicLinkDataSource(
 ) : ItemKeyedDataSource<Int, BaseItemKey>() {
 
     // keep a function reference for the retry event
-    private var retry: (() -> Any)? = null
+//    private var retry: (() -> Any)? = null
 
     /**
      * There is no sync on the state because paging will always call loadInitial first then wait
      * for it to return some success value before calling loadAfter.
      */
-    val networkState = MutableLiveData<NetworkState>()
-    val initialLoad = MutableLiveData<NetworkState>()
+    val networkState = MutableLiveData<Resource<BaseItemKey>>()
 
-    fun retryAllFailed() {
-        val prevRetry = retry
-        retry = null
-        prevRetry?.let {
-            retryExecutor.execute {
-                it.invoke()
-            }
-        }
-    }
+//    fun retryAllFailed() {
+//        val prevRetry = retry
+//        retry = null
+//        prevRetry?.let {
+//            retryExecutor.execute {
+//                it.invoke()
+//            }
+//        }
+//    }
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<BaseItemKey>) {
         Logger.debug("Paging Learn ItemKeyed", "loadInitial")
-        networkState.postValue(NetworkState.LOADING)
-        val request = iApi.getLinkComicPaging(limit = params.requestedLoadSize, idComic = idComic)
-        try {
-            val response = request.execute()
-            val result = response.body()
-            if (result?.success!!) {
-                val data = result.result
-                retry = null
-                networkState.postValue(NetworkState.LOADED)
-                callback.onResult(convert(dataEntityMapper.linkComicEntityMapper.transform(data)))
-            } else {
-                retry = {
-                    loadInitial(params, callback)
-                }
-                networkState.postValue(
-                    NetworkState.error("error code: ${result.message}")
-                )
-            }
-        } catch (e: Exception) {
-            retry = {
-                loadInitial(params, callback)
-            }
-            networkState.postValue(
-                NetworkState.error("error code: ${e.message}")
-            )
-        }
-    }
-
-    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<BaseItemKey>) {
-        Logger.debug("Paging Learn ItemKeyed", "loadAfter")
-        networkState.postValue(NetworkState.LOADING)
-        iApi.getLinkComicPaging(params.key, params.requestedLoadSize, idComic)
+        networkState.postValue(Resource.loading(null, Loading.LOADING_NORMAL))
+        iApi.getLinkComicPaging(limit = params.requestedLoadSize, idComic = idComic)
             .enqueue(object : Callback<LinkComicResponse> {
                 override fun onFailure(call: Call<LinkComicResponse>, t: Throwable) {
-                    retry = {
-                        loadAfter(params, callback)
-                    }
-                    networkState.postValue(NetworkState.error(t.message ?: "unknown err"))
+                    networkState.postValue(Resource.error(t.message ?: "unknown err",null,Loading.LOADING_NORMAL,retry = {
+                        loadInitial(params, callback)
+                    }))
                 }
 
                 override fun onResponse(
@@ -92,23 +61,62 @@ class ItemKeyedComicLinkDataSource(
                         val result = response.body()
                         if (result?.success!!) {
                             val data = result.result
-                            retry = null
-                            networkState.postValue(NetworkState.LOADED)
+//                            retry = null
+                            networkState.postValue(Resource.success(null, Loading.LOADING_NORMAL))
                             callback.onResult(convert(dataEntityMapper.linkComicEntityMapper.transform(data)))
                         } else {
-                            retry = {
-                                loadAfter(params, callback)
-                            }
                             networkState.postValue(
-                                NetworkState.error("error code: ${result.message}")
+                                Resource.error("error code: ${result.message}",null,Loading.LOADING_NORMAL,retry = {
+                                    loadInitial(params, callback)
+                                })
                             )
                         }
                     } else {
-                        retry = {
-                            loadAfter(params, callback)
-                        }
                         networkState.postValue(
-                            NetworkState.error("error code: ${response.code()}")
+                            Resource.error("error code: ${response.code()}",null,Loading.LOADING_NORMAL,retry = {
+                                loadInitial(params, callback)
+                            })
+                        )
+                    }
+                }
+
+            })
+    }
+
+    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<BaseItemKey>) {
+        Logger.debug("Paging Learn ItemKeyed", "loadAfter")
+        networkState.postValue(Resource.loadingPaging(null, Loading.LOADING_NORMAL))
+        iApi.getLinkComicPaging(params.key, params.requestedLoadSize, idComic)
+            .enqueue(object : Callback<LinkComicResponse> {
+                override fun onFailure(call: Call<LinkComicResponse>, t: Throwable) {
+                    networkState.postValue(Resource.errorPaging(t.message ?: "unknown err",null,Loading.LOADING_NORMAL,retry = {
+                        loadAfter(params, callback)
+                    }))
+                }
+
+                override fun onResponse(
+                    call: Call<LinkComicResponse>,
+                    response: Response<LinkComicResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val result = response.body()
+                        if (result?.success!!) {
+                            val data = result.result
+//                            retry = null
+                            networkState.postValue(Resource.successPaging(null, Loading.LOADING_NORMAL))
+                            callback.onResult(convert(dataEntityMapper.linkComicEntityMapper.transform(data)))
+                        } else {
+                            networkState.postValue(
+                                Resource.errorPaging("error code: ${result.message}",null,Loading.LOADING_NORMAL,retry = {
+                                    loadAfter(params, callback)
+                                })
+                            )
+                        }
+                    } else {
+                        networkState.postValue(
+                            Resource.errorPaging("error code: ${response.code()}",null,Loading.LOADING_NORMAL,retry = {
+                                loadAfter(params, callback)
+                            })
                         )
                     }
                 }

@@ -19,8 +19,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="state"
-                  type="nam.tran.domain.entity.state.NetworkState"/>
+        <variable name="resource"
+                  type="nam.tran.domain.entity.state.Resource"/>
 
         <import type="nam.tran.domain.entity.state.Status"/>
         <import type="android.view.View"/>
@@ -38,8 +38,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:visibility="@{state.msg != null ? View.VISIBLE : View.GONE}"
-                android:text="@{state.msg ?? ``}"
+                android:visibility="@{resource.message != null ? View.VISIBLE : View.GONE}"
+                android:text="@{resource.message ?? ``}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/progress"
-                android:visibility="@{state.status == Status.LOADING ? View.VISIBLE : View.GONE}"
+                android:visibility="@{resource.status == Status.LOADING ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/error_msg"/>
@@ -60,7 +60,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Retry"
-                android:visibility="@{state.status == Status.ERROR ? View.VISIBLE : View.GONE}"
+                android:onClick="@{() -> resource.retry.invoke()}"
+                android:visibility="@{resource.status == Status.ERROR ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/progress"/>

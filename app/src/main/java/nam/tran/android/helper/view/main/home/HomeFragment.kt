@@ -13,7 +13,6 @@ import nam.tran.android.helper.databinding.FragmentHomeBinding
 import nam.tran.android.helper.model.ComicModel
 import nam.tran.android.helper.view.main.home.viewmodel.HomeViewModel
 import nam.tran.android.helper.view.main.home.viewmodel.IHomeViewModel
-import tran.nam.common.autoCleared
 import tran.nam.core.biding.FragmentDataBindingComponent
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 
@@ -33,9 +32,7 @@ class HomeFragment : BaseFragmentMVVM<FragmentHomeBinding, HomeViewModel>(), IHo
     override fun onVisible() {
         mViewDataBinding.viewModel = mViewModel
 
-        val adapter = ComicAdapterPaging(dataBindingComponent){
-            mViewModel?.retry()
-        }
+        val adapter = ComicAdapterPaging(dataBindingComponent)
 
 //        adapter = ComicAdapter(dataBindingComponent)
 
@@ -47,21 +44,27 @@ class HomeFragment : BaseFragmentMVVM<FragmentHomeBinding, HomeViewModel>(), IHo
         )
         binding.rvComic.adapter = adapter
 
+//        mViewModel?.results?.observe(this, Observer {
+//            if (it?.data != null && it.data!!.isNotEmpty()) {
+//                adapter.replace(it.data!!)
+//            }
+//        mViewDataBinding.viewModel = mViewModel
+//        mViewDataBinding.executePendingBindings()
+//        })
+
         mViewModel?.posts?.observe(this, Observer {
             adapter.submitList(it as PagedList<ComicModel>)
         })
 
-        mViewModel?.networkState?.observe(this, Observer {
-            adapter.setNetworkState(it)
+        mViewModel?.results?.observe(this, Observer { it ->
+            it?.let {
+                if (it.initial) {
+                    mViewDataBinding.viewModel = mViewModel
+                    mViewDataBinding.executePendingBindings()
+                } else {
+                    adapter.setNetworkState(it)
+                }
+            }
         })
-    }
-
-    override fun updateData(data: List<ComicModel>) {
-//        adapter.replace(data)
-    }
-
-    override fun updateView() {
-//        mViewDataBinding.viewModel = mViewModel
-//        mViewDataBinding.executePendingBindings()
     }
 }

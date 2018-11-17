@@ -4,6 +4,7 @@ package tran.nam.core.biding
 
 import androidx.databinding.BindingAdapter
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import nam.tran.domain.entity.state.Loading
@@ -62,27 +63,6 @@ object BidingCommon {
     }
 
     @JvmStatic
-    @BindingAdapter("visibleError")
-    fun visibleError(textView: TextView, iProgress: IProgressViewModel?) {
-        val resource = iProgress?.resource()
-        resource?.let {
-            when (it.status) {
-                Status.ERROR -> when (it.loading) {
-                    Loading.LOADING_DIALOG -> {
-                    }
-                    Loading.LOADING_NONE -> {
-                    }
-                    Loading.LOADING_NORMAL -> {
-                        textView.visibility = View.VISIBLE
-                        textView.text = it.message
-                    }
-                }
-                Status.LOADING, Status.SUCCESS -> textView.visibility = View.GONE
-            }
-        }
-    }
-
-    @JvmStatic
     @BindingAdapter("visibleView")
     fun visibleView(view: View, iProgress: IProgressViewModel?) {
         val resource = iProgress?.resource()
@@ -102,14 +82,39 @@ object BidingCommon {
     }
 
     @JvmStatic
-    @BindingAdapter("textError")
-    fun textError(text: TextView, iProgress: IProgressViewModel?) {
+    @BindingAdapter("visibleTextError")
+    fun visibleTextError(text: TextView, iProgress: IProgressViewModel?) {
         val resource = iProgress?.resource()
         resource?.let {
             when (it.status) {
-                Status.ERROR -> text.text = it.message
-                Status.LOADING, Status.SUCCESS -> {
+                Status.ERROR -> when (it.loading) {
+                    Loading.LOADING_DIALOG -> {
+                    }
+                    Loading.LOADING_NONE -> {
+                    }
+                    Loading.LOADING_NORMAL -> {
+                        text.visibility = View.VISIBLE
+                        text.text = it.message
+                    }
                 }
+                Status.LOADING, Status.SUCCESS -> text.visibility = View.GONE
+            }
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("visibleButtonError")
+    fun visibleButtonError(bt: Button, iProgress: IProgressViewModel?) {
+        val resource = iProgress?.resource()
+        resource?.let {
+            when (it.status) {
+                Status.ERROR -> {
+                    bt.visibility = View.VISIBLE
+                    bt.setOnClickListener {
+                        resource.retry?.invoke()
+                    }
+                }
+                Status.LOADING, Status.SUCCESS -> bt.visibility = View.GONE
             }
         }
     }

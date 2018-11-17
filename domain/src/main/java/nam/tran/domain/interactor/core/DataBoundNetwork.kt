@@ -16,10 +16,9 @@
 
 package nam.tran.domain.interactor.core
 
+import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.annotation.MainThread
-import androidx.annotation.WorkerThread
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.executor.AppExecutors
 import nam.tran.flatform.core.ApiEmptyResponse
@@ -37,7 +36,7 @@ import nam.tran.flatform.core.ApiSuccessResponse
 </RequestType></ResultType> */
 @Suppress("LeakingThis")
 abstract class DataBoundNetwork<ResultType, RequestType>
-@MainThread constructor(private val appExecutors: AppExecutors):IDataBoundResource<RequestType> {
+@MainThread constructor(private val appExecutors: AppExecutors) : IDataBoundResource<RequestType> {
 
     val result = MediatorLiveData<Resource<ResultType>>()
 
@@ -65,7 +64,9 @@ abstract class DataBoundNetwork<ResultType, RequestType>
                 }
                 is ApiErrorResponse -> {
                     onFetchFailed()
-                    setValue(Resource.error(response.errorMessage, null, statusLoading()))
+                    setValue(Resource.error(response.errorMessage, null, statusLoading(), retry = {
+                        fetchFromNetwork()
+                    }))
                 }
             }
         }

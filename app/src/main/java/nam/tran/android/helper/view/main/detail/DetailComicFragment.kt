@@ -34,9 +34,7 @@ class DetailComicFragment : BaseFragmentMVVM<FragmentDetailComicBinding, DetailC
     override fun onVisible() {
         mViewDataBinding.viewModel = mViewModel
 
-        val adapter = DetailComicAdapterPaging(dataBindingComponent){
-            mViewModel?.retry()
-        }
+        val adapter = DetailComicAdapterPaging(dataBindingComponent)
 
         binding.rvLinkComic.addItemDecoration(
             DividerItemDecoration(
@@ -46,14 +44,21 @@ class DetailComicFragment : BaseFragmentMVVM<FragmentDetailComicBinding, DetailC
         )
         binding.rvLinkComic.adapter = adapter
 
+        mViewModel?.getData(arguments?.get("comic") as ComicModel)
+
         mViewModel?.posts?.observe(this, Observer {
             adapter.submitList(it as PagedList<LinkComicModel>)
         })
 
-        mViewModel?.networkState?.observe(this, Observer {
-            adapter.setNetworkState(it)
+        mViewModel?.results?.observe(this, Observer { it ->
+            it?.let {
+                if (it.initial) {
+                    mViewDataBinding.viewModel = mViewModel
+                    mViewDataBinding.executePendingBindings()
+                } else {
+                    adapter.setNetworkState(it)
+                }
+            }
         })
-
-        mViewModel?.getData(arguments?.get("comic") as ComicModel)
     }
 }
