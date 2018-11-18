@@ -63,7 +63,7 @@ class PageKeyedComicDataSource(
 //                        retry = null
                         networkState.postValue(Resource.success(null, Loading.LOADING_NORMAL))
                         callback.onResult(
-                            convert(dataEntityMapper.comicEntityMapper.transform(data)),
+                            convert(dataEntityMapper.comicEntityMapper.transformEntity(data)),
                             0,
                             params.requestedLoadSize
                         )
@@ -113,7 +113,7 @@ class PageKeyedComicDataSource(
 //                        retry = null
                         networkState.postValue(Resource.success(null, Loading.LOADING_NORMAL))
                         callback.onResult(
-                            convert(dataEntityMapper.comicEntityMapper.transform(data)),
+                            convert(dataEntityMapper.comicEntityMapper.transformEntity(data)),
                             params.key + params.requestedLoadSize
                         )
                     } else {

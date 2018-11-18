@@ -4,7 +4,6 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import nam.tran.flatform.model.response.Genre
-import java.util.*
 
 
 class ConvertData {
@@ -12,12 +11,12 @@ class ConvertData {
     var gson = Gson()
 
     @TypeConverter
-    fun stringToSomeObjectList(data: String?): List<Genre> {
+    fun stringToObject(data: String?): ArrayList<Genre> {
         if (data == null) {
-            return Collections.emptyList()
+            return ArrayList()
         }
 
-        val listType = object : TypeToken<List<Genre>>() {
+        val listType = object : TypeToken<ArrayList<Genre>>() {
 
         }.getType()
 
@@ -25,7 +24,7 @@ class ConvertData {
     }
 
     @TypeConverter
-    fun someObjectListToString(someObjects: List<Genre>): String {
+    fun objectToString(someObjects: ArrayList<Genre>): String {
         return gson.toJson(someObjects)
     }
 }

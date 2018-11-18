@@ -16,16 +16,14 @@ package nam.tran.domain.mapper
 
 import nam.tran.domain.entity.ComicEntity
 import nam.tran.flatform.model.response.Comic
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 /**
  * Mapper class used to transform [Comic] (in the  in flatform layer)
  * to [ComicEntity] in the
  *  domain layer .
  */
-class ComicEntityMapper @Inject constructor(val genreEntityMapper: GenreEntityMapper) {
+class ComicEntityMapper @Inject constructor(private val genreEntityMapper: GenreEntityMapper) {
 
     /**
      * Transform a [Comic] into an [ComicEntity].
@@ -38,7 +36,13 @@ class ComicEntityMapper @Inject constructor(val genreEntityMapper: GenreEntityMa
             throw IllegalArgumentException("Cannot transform a null value")
         }
 
-        return ComicEntity(data.id,data.title,data.description,data.image, ArrayList(genreEntityMapper.transform(data.genre)))
+        return ComicEntity(
+            data.id,
+            data.title,
+            data.description,
+            data.image,
+            ArrayList(genreEntityMapper.transformEntity(data.genre))
+        )
     }
 
     /**
@@ -47,7 +51,7 @@ class ComicEntityMapper @Inject constructor(val genreEntityMapper: GenreEntityMa
      * @param datas Objects to be transformed.
      * @return List of [ComicEntity].
      */
-    fun transform(datas: List<Comic>?): List<ComicEntity> {
+    fun transformEntity(datas: List<Comic>?): List<ComicEntity> {
         val dataEntitys: MutableList<ComicEntity>
 
         if (datas != null && !datas.isEmpty()) {
@@ -60,5 +64,46 @@ class ComicEntityMapper @Inject constructor(val genreEntityMapper: GenreEntityMa
         }
 
         return dataEntitys
+    }
+
+    /**
+     * Transform a [Comic] into an [Comic].
+     *
+     * @param data Object to be transformed.
+     * @return [Comic].
+     */
+    fun transform(data: ComicEntity?): Comic {
+        if (data == null) {
+            throw IllegalArgumentException("Cannot transform a null value")
+        }
+
+        return Comic(
+            data.id,
+            data.title,
+            data.description,
+            data.image,
+            ArrayList(genreEntityMapper.transform(data.genre))
+        )
+    }
+
+    /**
+     * Transform a Collection of [ComicEntity] into a Collection of [Comic].
+     *
+     * @param datas Objects to be transformed.
+     * @return List of [Comic].
+     */
+    fun transform(datas: List<ComicEntity>?): List<Comic> {
+        val data: MutableList<Comic>
+
+        if (datas != null && !datas.isEmpty()) {
+            data = ArrayList()
+            for (dataItem in datas) {
+                data.add(transform(dataItem))
+            }
+        } else {
+            data = ArrayList()
+        }
+
+        return data
     }
 }

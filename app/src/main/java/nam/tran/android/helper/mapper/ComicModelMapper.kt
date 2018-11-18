@@ -38,13 +38,15 @@ class ComicModelMapper @Inject constructor(val genreModelMapper: GenreModelMappe
             throw IllegalArgumentException("Cannot transform a null value")
         }
 
-        return ComicModel(
+        val result = ComicModel(
             data.id,
             data.title,
             data.description,
             data.image,
             ArrayList(genreModelMapper.transform(data.genre))
         )
+        result.isLike = data.isLike
+        return result
     }
 
     /**
@@ -58,13 +60,15 @@ class ComicModelMapper @Inject constructor(val genreModelMapper: GenreModelMappe
             throw IllegalArgumentException("Cannot transform a null value")
         }
 
-        return ComicEntity(
+        val result = ComicEntity(
             data.id,
             data.title,
             data.description,
             data.image,
             ArrayList(genreModelMapper.transformEntity(data.genre))
         )
+        result.isLike = data.isLike
+        return result
     }
 
     /**

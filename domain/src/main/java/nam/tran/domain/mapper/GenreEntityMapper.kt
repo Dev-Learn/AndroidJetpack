@@ -46,7 +46,7 @@ class GenreEntityMapper @Inject constructor() {
      * @param datas Objects to be transformed.
      * @return List of [GenreEntity].
      */
-    fun transform(datas: List<Genre>?): List<GenreEntity> {
+    fun transformEntity(datas: List<Genre>?): List<GenreEntity> {
         val dataEntitys: MutableList<GenreEntity>
 
         if (datas != null && !datas.isEmpty()) {
@@ -59,5 +59,40 @@ class GenreEntityMapper @Inject constructor() {
         }
 
         return dataEntitys
+    }
+
+    /**
+     * Transform a [GenreEntity] into an [Genre].
+     *
+     * @param data Object to be transformed.
+     * @return [Genre].
+     */
+    fun transform(data: GenreEntity?): Genre {
+        if (data == null) {
+            throw IllegalArgumentException("Cannot transform a null value")
+        }
+
+        return Genre(data.genre)
+    }
+
+    /**
+     * Transform a Collection of [GenreEntity] into a Collection of [Genre].
+     *
+     * @param datas Objects to be transformed.
+     * @return List of [Genre].
+     */
+    fun transform(datas: List<GenreEntity>?): List<Genre> {
+        val data: MutableList<Genre>
+
+        if (datas != null && !datas.isEmpty()) {
+            data = ArrayList()
+            for (dataItem in datas) {
+                data.add(transform(dataItem))
+            }
+        } else {
+            data = ArrayList()
+        }
+
+        return data
     }
 }

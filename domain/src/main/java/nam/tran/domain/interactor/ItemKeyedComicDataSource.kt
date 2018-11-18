@@ -8,6 +8,7 @@ import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.mapper.DataEntityMapper
 import nam.tran.flatform.IApi
+import nam.tran.flatform.database.DbProvider
 import nam.tran.flatform.model.response.ComicResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,6 +19,8 @@ import java.util.concurrent.Executor
 class ItemKeyedComicDataSource(
     private val iApi: IApi,
     private val dataEntityMapper: DataEntityMapper,
+    private val dbProvider: DbProvider,
+    private val appExecutors: Executor,
     private val convert: (List<ComicEntity>) -> List<BaseItemKey>
 ) : ItemKeyedDataSource<Int, BaseItemKey>() {
 
@@ -46,7 +49,7 @@ class ItemKeyedComicDataSource(
         iApi.getComicPaging2(limit = params.requestedLoadSize).enqueue(object : Callback<ComicResponse> {
             override fun onFailure(call: Call<ComicResponse>, t: Throwable) {
                 networkState.postValue(
-                    Resource.error(t.message ?: "unknown err",null,Loading.LOADING_NORMAL,retry = {
+                    Resource.error(t.message ?: "unknown err", null, Loading.LOADING_NORMAL, retry = {
                         loadInitial(params, callback)
                     })
                 )
@@ -59,20 +62,32 @@ class ItemKeyedComicDataSource(
                 if (response.isSuccessful) {
                     val result = response.body()
                     if (result?.success!!) {
-                        val data = result.result
+                        appExecutors.execute {
+                            val data = result.result
+                            val result = dataEntityMapper.comicEntityMapper.transformEntity(data)
+                            val dataDb = dbProvider.comicDao().loadComic(limit = params.requestedLoadSize)
+                            if (dataDb.isNotEmpty()) {
+                                val dbResult = dataEntityMapper.comicEntityMapper.transformEntity(dataDb)
+                                for (item in result) {
+                                    if (dbResult.contains(item)) {
+                                        item.isLike = true
+                                    }
+                                }
+                            }
 //                        retry = null
-                        networkState.postValue(Resource.success(null, Loading.LOADING_NORMAL))
-                        callback.onResult(convert(dataEntityMapper.comicEntityMapper.transform(data)))
+                            networkState.postValue(Resource.success(null, Loading.LOADING_NORMAL))
+                            callback.onResult(convert(result))
+                        }
                     } else {
                         networkState.postValue(
-                            Resource.error("error code: ${result.message}",null,Loading.LOADING_NORMAL,retry = {
+                            Resource.error("error code: ${result.message}", null, Loading.LOADING_NORMAL, retry = {
                                 loadInitial(params, callback)
                             })
                         )
                     }
                 } else {
                     networkState.postValue(
-                        Resource.error("error code: ${response.code()}",null,Loading.LOADING_NORMAL,retry = {
+                        Resource.error("error code: ${response.code()}", null, Loading.LOADING_NORMAL, retry = {
                             loadInitial(params, callback)
                         })
                     )
@@ -87,9 +102,15 @@ class ItemKeyedComicDataSource(
         networkState.postValue(Resource.loadingPaging(null, Loading.LOADING_NORMAL))
         iApi.getComicPaging2(params.key, params.requestedLoadSize).enqueue(object : Callback<ComicResponse> {
             override fun onFailure(call: Call<ComicResponse>, t: Throwable) {
-                networkState.postValue(Resource.errorPaging(t.message ?: "unknown err",null,Loading.LOADING_NORMAL,retry = {
-                    loadAfter(params, callback)
-                }))
+                networkState.postValue(
+                    Resource.errorPaging(
+                        t.message ?: "unknown err",
+                        null,
+                        Loading.LOADING_NORMAL,
+                        retry = {
+                            loadAfter(params, callback)
+                        })
+                )
             }
 
             override fun onResponse(
@@ -99,20 +120,36 @@ class ItemKeyedComicDataSource(
                 if (response.isSuccessful) {
                     val result = response.body()
                     if (result?.success!!) {
-                        val data = result.result
+                        appExecutors.execute {
+                            val data = result.result
+                            val result = dataEntityMapper.comicEntityMapper.transformEntity(data)
+                            val dataDb = dbProvider.comicDao().loadComic(params.key, params.requestedLoadSize)
+                            if (dataDb.isNotEmpty()) {
+                                val dbResult = dataEntityMapper.comicEntityMapper.transformEntity(dataDb)
+                                for (item in result) {
+                                    if (dbResult.contains(item)) {
+                                        item.isLike = true
+                                    }
+                                }
+                            }
 //                        retry = null
-                        networkState.postValue(Resource.successPaging(null, Loading.LOADING_NORMAL))
-                        callback.onResult(convert(dataEntityMapper.comicEntityMapper.transform(data)))
+                            networkState.postValue(Resource.successPaging(null, Loading.LOADING_NORMAL))
+                            callback.onResult(convert(result))
+                        }
                     } else {
                         networkState.postValue(
-                            Resource.errorPaging("error code: ${result.message}",null,Loading.LOADING_NORMAL,retry = {
-                                loadAfter(params, callback)
-                            })
+                            Resource.errorPaging(
+                                "error code: ${result.message}",
+                                null,
+                                Loading.LOADING_NORMAL,
+                                retry = {
+                                    loadAfter(params, callback)
+                                })
                         )
                     }
                 } else {
                     networkState.postValue(
-                        Resource.errorPaging("error code: ${response.code()}",null,Loading.LOADING_NORMAL,retry = {
+                        Resource.errorPaging("error code: ${response.code()}", null, Loading.LOADING_NORMAL, retry = {
                             loadAfter(params, callback)
                         })
                     )

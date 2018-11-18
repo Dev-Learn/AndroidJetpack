@@ -2,7 +2,6 @@ package nam.tran.domain
 
 //import nam.tran.flatform.database.DbProvider
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.Config
@@ -11,7 +10,6 @@ import nam.tran.domain.entity.BaseItemKey
 import nam.tran.domain.entity.ComicEntity
 import nam.tran.domain.entity.LinkComicEntity
 import nam.tran.domain.entity.state.Listing
-import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.executor.AppExecutors
 import nam.tran.domain.interactor.ItemComicDataSourceFactory
@@ -39,7 +37,7 @@ internal constructor(
     override fun getComic(offset: Int, count: Int, typeLoading: Int): LiveData<Resource<List<ComicEntity>>> {
         return object : DataBoundNetwork<List<ComicEntity>, ComicResponse>(appExecutors) {
             override fun convertData(body: ComicResponse?): List<ComicEntity>? {
-                return dataEntityMapper.comicEntityMapper.transform(body?.result)
+                return dataEntityMapper.comicEntityMapper.transformEntity(body?.result)
             }
 
             override fun statusLoading(): Int {
@@ -87,7 +85,7 @@ internal constructor(
     override fun getComicItem(convert: (List<ComicEntity>) -> List<BaseItemKey>): LiveData<Listing<BaseItemKey>> {
         Logger.debug("Paging Learn Page", "Repository - getComic")
 
-        val sourceFactory = ItemComicDataSourceFactory(iApi, dataEntityMapper, convert)
+        val sourceFactory = ItemComicDataSourceFactory(iApi, dataEntityMapper, dbProvider, appExecutors.networkIO(), convert)
         // We use toLiveData Kotlin extension function here, you could also use LivePagedListBuilder
         val livePagedList = sourceFactory.toLiveData(
             // we use Config Kotlin ext. function here, could also use PagedList.Config.Builder
@@ -153,8 +151,13 @@ internal constructor(
     }
 
     override fun likeComic(entity: ComicEntity) {
-        appExecutors.networkIO().execute{
-            dbProvider.comicDao()
+        appExecutors.networkIO().execute {
+            if (entity.isLike) {
+                dbProvider.comicDao().insert(dataEntityMapper.comicEntityMapper.transform(entity))
+            } else {
+                dbProvider.comicDao().delete(dataEntityMapper.comicEntityMapper.transform(entity))
+            }
+
         }
     }
 

@@ -6,4 +6,10 @@ data class ComicEntity(
     var description: String,
     var image: String,
     var genre: ArrayList<GenreEntity>
-) : BaseItemKey(id)
+) : BaseItemKey(id){
+    var isLike = false
+
+    override fun equals(other: Any?): Boolean {
+        return other is ComicEntity && other.id == id
+    }
+}
