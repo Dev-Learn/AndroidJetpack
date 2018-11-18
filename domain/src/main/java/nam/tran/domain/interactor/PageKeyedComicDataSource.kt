@@ -17,7 +17,6 @@ import java.util.concurrent.Executor
 class PageKeyedComicDataSource(
     private val iApi: IApi,
     private val dataEntityMapper: DataEntityMapper,
-    private val retryExecutor: Executor,
     private val convert: (List<ComicEntity>) -> List<Any>
 ) : PageKeyedDataSource<Int, Any>() {
 

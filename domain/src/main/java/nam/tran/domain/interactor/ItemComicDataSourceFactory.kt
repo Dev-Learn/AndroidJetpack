@@ -12,7 +12,6 @@ import java.util.concurrent.Executor
 class ItemComicDataSourceFactory(
     private val iApi: IApi,
     private val dataEntityMapper: DataEntityMapper,
-    private val retryExecutor: Executor,
     private val convert: (List<ComicEntity>) -> List<BaseItemKey>
 ) : DataSource.Factory<Int, BaseItemKey>() {
 
@@ -20,7 +19,7 @@ class ItemComicDataSourceFactory(
 
     override fun create(): DataSource<Int, BaseItemKey> {
         Logger.debug("Paging Learn","PageDataSourceFactory - create()")
-        val source = ItemKeyedComicDataSource(iApi, dataEntityMapper, retryExecutor,convert)
+        val source = ItemKeyedComicDataSource(iApi, dataEntityMapper,convert)
         sourceLiveData.postValue(source)
         return source
     }

@@ -13,7 +13,6 @@ class ItemLinkComicDataSourceFactory(
     private val idComic: Int,
     private val iApi: IApi,
     private val dataEntityMapper: DataEntityMapper,
-    private val retryExecutor: Executor,
     private val convert: (List<LinkComicEntity>) -> List<BaseItemKey>
 ) : DataSource.Factory<Int, BaseItemKey>() {
 
@@ -21,7 +20,7 @@ class ItemLinkComicDataSourceFactory(
 
     override fun create(): DataSource<Int, BaseItemKey> {
         Logger.debug("Paging Learn", "PageDataSourceFactory - create()")
-        val source = ItemKeyedComicLinkDataSource(idComic, iApi, dataEntityMapper, retryExecutor, convert)
+        val source = ItemKeyedComicLinkDataSource(idComic, iApi, dataEntityMapper, convert)
         sourceLiveData.postValue(source)
         return source
     }

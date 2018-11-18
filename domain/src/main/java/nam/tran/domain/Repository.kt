@@ -52,7 +52,7 @@ internal constructor(
 
     override fun getComicPage(convert: (List<ComicEntity>) -> List<Any>): LiveData<Listing<Any>> {
         Logger.debug("Paging Learn Page", "Repository - getComic")
-        val sourceFactory = PageDataSourceFactory(iApi, dataEntityMapper, appExecutors.networkIO(), convert)
+        val sourceFactory = PageDataSourceFactory(iApi, dataEntityMapper, convert)
         // We use toLiveData Kotlin extension function here, you could also use LivePagedListBuilder
         val livePagedList = sourceFactory.toLiveData(
             pageSize = 10,
@@ -84,7 +84,7 @@ internal constructor(
     override fun getComicItem(convert: (List<ComicEntity>) -> List<BaseItemKey>): LiveData<Listing<BaseItemKey>> {
         Logger.debug("Paging Learn Page", "Repository - getComic")
 
-        val sourceFactory = ItemComicDataSourceFactory(iApi, dataEntityMapper, appExecutors.networkIO(), convert)
+        val sourceFactory = ItemComicDataSourceFactory(iApi, dataEntityMapper, convert)
         // We use toLiveData Kotlin extension function here, you could also use LivePagedListBuilder
         val livePagedList = sourceFactory.toLiveData(
             // we use Config Kotlin ext. function here, could also use PagedList.Config.Builder
@@ -121,7 +121,7 @@ internal constructor(
         convert: (List<LinkComicEntity>) -> List<BaseItemKey>
     ): Listing<BaseItemKey> {
         val sourceFactory =
-            ItemLinkComicDataSourceFactory(idComic, iApi, dataEntityMapper, appExecutors.networkIO(), convert)
+            ItemLinkComicDataSourceFactory(idComic, iApi, dataEntityMapper, convert)
         // We use toLiveData Kotlin extension function here, you could also use LivePagedListBuilder
         val livePagedList = sourceFactory.toLiveData(
             // we use Config Kotlin ext. function here, could also use PagedList.Config.Builder

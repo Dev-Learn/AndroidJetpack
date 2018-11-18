@@ -11,7 +11,6 @@ import java.util.concurrent.Executor
 class PageDataSourceFactory(
     private val iApi: IApi,
     private val dataEntityMapper: DataEntityMapper,
-    private val retryExecutor: Executor,
     private val convert: (List<ComicEntity>) -> List<Any>
 ) : DataSource.Factory<Int, Any>() {
 
@@ -19,7 +18,7 @@ class PageDataSourceFactory(
 
     override fun create(): DataSource<Int, Any> {
         Logger.debug("Paging Learn","PageDataSourceFactory - create()")
-        val source = PageKeyedComicDataSource(iApi, dataEntityMapper, retryExecutor,convert)
+        val source = PageKeyedComicDataSource(iApi, dataEntityMapper, convert)
         sourceLiveData.postValue(source)
         return source
     }

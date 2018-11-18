@@ -19,7 +19,6 @@ class ItemKeyedComicLinkDataSource(
     private val idComic: Int,
     private val iApi: IApi,
     private val dataEntityMapper: DataEntityMapper,
-    private val retryExecutor: Executor,
     private val convert: (List<LinkComicEntity>) -> List<BaseItemKey>
 ) : ItemKeyedDataSource<Int, BaseItemKey>() {
 
