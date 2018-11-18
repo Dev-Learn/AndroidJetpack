@@ -5,6 +5,8 @@ import java.io.Serializable
 
 data class ComicModel(var id : Int, var title : String, var description : String, var image : String, var genre : ArrayList<GenreModel>) : BaseItemKey(id),Serializable{
 
+    var isLike = false
+
     val listGenre: String
         get() {
             var data : String = ""

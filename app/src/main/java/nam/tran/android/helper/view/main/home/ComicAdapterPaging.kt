@@ -14,9 +14,11 @@ import nam.tran.android.helper.databinding.AdapterComicItemBinding
 import nam.tran.android.helper.databinding.NetworkStateItemBinding
 import nam.tran.android.helper.model.ComicModel
 import nam.tran.domain.entity.state.Resource
+import tran.nam.util.Logger
 
 class ComicAdapterPaging(
-    private val dataBindingComponent: DataBindingComponent
+    private val dataBindingComponent: DataBindingComponent,
+    private val like:(ComicModel?) -> Unit
 ) :
     PagedListAdapter<ComicModel, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<ComicModel>() {
         override fun areItemsTheSame(p0: ComicModel, p1: ComicModel): Boolean {
@@ -32,30 +34,34 @@ class ComicAdapterPaging(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            R.layout.adapter_comic_item -> ComicItemViewHolder(
-                DataBindingUtil.inflate(
-                    LayoutInflater.from(parent.context),
-                    R.layout.adapter_comic_item,
-                    parent,
-                    false,
-                    dataBindingComponent
-                )
-            )
-            R.layout.network_state_item -> {
-                val holder = NetworkStateItemViewHolder(
+            R.layout.adapter_comic_item -> {
+                val holder = ComicItemViewHolder(
                     DataBindingUtil.inflate(
                         LayoutInflater.from(parent.context),
-                        R.layout.network_state_item,
+                        R.layout.adapter_comic_item,
                         parent,
                         false,
                         dataBindingComponent
                     )
                 )
-//                holder.binding.retryButton.setOnClickListener {
-//
-//                }
+                holder.binding.ckbLike.setOnCheckedChangeListener { buttonView, isChecked ->
+                    run {
+                        Logger.debug("setOnCheckedChangeListener : $isChecked")
+                        holder.binding.comic?.isLike = isChecked
+                        like(holder.binding.comic)
+                    }
+                }
                 return holder
             }
+            R.layout.network_state_item -> NetworkStateItemViewHolder(
+                DataBindingUtil.inflate(
+                    LayoutInflater.from(parent.context),
+                    R.layout.network_state_item,
+                    parent,
+                    false,
+                    dataBindingComponent
+                )
+            )
             else -> throw IllegalArgumentException("unknown view type $viewType")
         }
     }

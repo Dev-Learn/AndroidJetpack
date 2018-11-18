@@ -29,4 +29,8 @@ class ComicUseCase @Inject internal constructor(val iRepository: IRepository) {
     ): Listing<BaseItemKey>{
         return iRepository.getLinkComicItem(idComic,convert)
     }
+
+    fun likeComic(entity: ComicEntity) {
+        return iRepository.likeComic(entity)
+    }
 }

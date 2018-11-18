@@ -18,7 +18,7 @@
                 android:layout_height="@dimen/positive_100dp"
                 android:id="@+id/iv_comic"
                 loadImageNetwork="@{comic.image}"
-        tools:src="@drawable/splash_icon"/>
+                tools:src="@drawable/splash_icon"/>
 
         <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="0dp"
@@ -29,11 +29,9 @@
                 android:textStyle="bold"
                 android:layout_marginStart="@dimen/positive_10dp"
                 app:layout_constraintStart_toEndOf="@+id/iv_comic"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintBottom_toTopOf="@+id/tv_genre"
-        tools:text="Kantai Collection - Gift and Promises"/>
+                tools:text="Kantai Collection - Gift and Promises"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toTopOf="@+id/tv_genre"
+        />
 
         <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="0dp"
@@ -44,11 +42,9 @@
                 android:textStyle="italic"
                 android:layout_marginStart="@dimen/positive_10dp"
                 app:layout_constraintStart_toEndOf="@+id/iv_comic"
-                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="Doujinshi, Historical, One shot, Drama"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintBottom_toTopOf="@+id/tv_description"
-        tools:text="Doujinshi, Historical, One shot, Drama"/>
+                app:layout_constraintBottom_toTopOf="@+id/tv_description"/>
 
         <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="0dp"
@@ -61,7 +57,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_margin="@dimen/positive_5dp"
-        tools:text="Một doujinshi One Shot về Hibiki và chị em của mình thuộc Hải đội khu trục 6 trong Kancolle. Truyện được dịch bởi nhóm XXX-Inc. Thấy trong này chưa ai đăng nên ta đăng thôi, xem như chỗ lưu lại truyện."/>
+                tools:text="Một doujinshi One Shot về Hibiki và chị em của mình thuộc Hải đội khu trục 6 trong Kancolle. Truyện được dịch bởi nhóm XXX-Inc. Thấy trong này chưa ai đăng nên ta đăng thôi, xem như chỗ lưu lại truyện."/>
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:gravity="center"
+                android:button="@drawable/like_selector"
+                android:id="@+id/ckb_like"
+                android:layout_marginEnd="@dimen/positive_5dp"
+                android:layout_marginBottom="@dimen/positive_5dp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_description"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

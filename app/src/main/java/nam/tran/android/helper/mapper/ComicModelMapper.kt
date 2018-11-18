@@ -48,6 +48,26 @@ class ComicModelMapper @Inject constructor(val genreModelMapper: GenreModelMappe
     }
 
     /**
+     * Transform a [ComicModel] into an [ComicEntity].
+     *
+     * @param data Object to be transformed.
+     * @return [ComicEntity].
+     */
+    fun transformEntity(data: ComicModel?): ComicEntity {
+        if (data == null) {
+            throw IllegalArgumentException("Cannot transform a null value")
+        }
+
+        return ComicEntity(
+            data.id,
+            data.title,
+            data.description,
+            data.image,
+            ArrayList(genreModelMapper.transformEntity(data.genre))
+        )
+    }
+
+    /**
      * Transform a Collection of [ComicEntity] into a Collection of [ComicModel].
      *
      * @param datas Objects to be transformed.

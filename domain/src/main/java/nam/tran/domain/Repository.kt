@@ -2,6 +2,7 @@ package nam.tran.domain
 
 //import nam.tran.flatform.database.DbProvider
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.Config
@@ -10,6 +11,7 @@ import nam.tran.domain.entity.BaseItemKey
 import nam.tran.domain.entity.ComicEntity
 import nam.tran.domain.entity.LinkComicEntity
 import nam.tran.domain.entity.state.Listing
+import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.executor.AppExecutors
 import nam.tran.domain.interactor.ItemComicDataSourceFactory
@@ -19,6 +21,7 @@ import nam.tran.domain.interactor.core.DataBoundNetwork
 import nam.tran.domain.mapper.DataEntityMapper
 import nam.tran.flatform.IApi
 import nam.tran.flatform.core.ApiResponse
+import nam.tran.flatform.database.DbProvider
 import nam.tran.flatform.local.IPreference
 import nam.tran.flatform.model.response.ComicResponse
 import tran.nam.util.Logger
@@ -30,7 +33,7 @@ internal constructor(
     private val iPreference: IPreference,
     private val dataEntityMapper: DataEntityMapper,
     private val iApi: IApi
-    /*, private val dbProvider: DbProvider*/
+    , private val dbProvider: DbProvider
 ) : IRepository {
 
     override fun getComic(offset: Int, count: Int, typeLoading: Int): LiveData<Resource<List<ComicEntity>>> {
@@ -147,6 +150,12 @@ internal constructor(
                 it.initialLoad
             }*/
         )
+    }
+
+    override fun likeComic(entity: ComicEntity) {
+        appExecutors.networkIO().execute{
+            dbProvider.comicDao()
+        }
     }
 
 }

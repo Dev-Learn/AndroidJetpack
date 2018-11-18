@@ -19,4 +19,6 @@ interface IRepository {
         idComic: Int,
         convert: (List<LinkComicEntity>) -> List<BaseItemKey>
     ): Listing<BaseItemKey>
+
+    fun likeComic(entity: ComicEntity)
 }

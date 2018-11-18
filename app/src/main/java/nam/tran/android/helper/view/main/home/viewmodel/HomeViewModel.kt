@@ -2,13 +2,9 @@ package nam.tran.android.helper.view.main.home.viewmodel;
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import nam.tran.android.helper.mapper.DataMapper
 import nam.tran.android.helper.model.ComicModel
-import nam.tran.domain.entity.state.Listing
-import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.interactor.ComicUseCase
 import tran.nam.core.viewmodel.BaseFragmentViewModel
@@ -17,7 +13,7 @@ import javax.inject.Inject
 
 class HomeViewModel @Inject internal constructor(
     application: Application,
-    comicUseCase: ComicUseCase,
+    private val comicUseCase: ComicUseCase,
     private val mDataMapper: DataMapper
 ) :
     BaseFragmentViewModel(application),
@@ -31,7 +27,7 @@ class HomeViewModel @Inject internal constructor(
 //        mDataMapper.comicModelMapper.transform(it)
 //    }
 
-    private var repoResult = comicUseCase.getComicItem{
+    private var repoResult = comicUseCase.getComicItem {
         mDataMapper.comicModelMapper.transform(it)
     }
 
@@ -40,5 +36,9 @@ class HomeViewModel @Inject internal constructor(
 
     override fun resource(): Resource<*>? {
         return results.value
+    }
+
+    fun like(it: ComicModel?) {
+        return comicUseCase.likeComic(mDataMapper.comicModelMapper.transformEntity(it))
     }
 }
