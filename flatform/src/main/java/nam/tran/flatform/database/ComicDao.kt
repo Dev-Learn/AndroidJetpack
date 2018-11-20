@@ -10,6 +10,9 @@ import nam.tran.flatform.model.response.Comic
 @Dao
 interface ComicDao{
 
+    @Query("SELECT * FROM comic")
+    fun loadComic() : LiveData<List<Comic>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(season: Comic)
 

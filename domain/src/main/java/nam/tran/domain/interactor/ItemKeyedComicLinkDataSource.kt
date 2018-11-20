@@ -13,7 +13,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import tran.nam.util.Logger
-import java.util.concurrent.Executor
 
 class ItemKeyedComicLinkDataSource(
     private val idComic: Int,
@@ -44,12 +43,18 @@ class ItemKeyedComicLinkDataSource(
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<BaseItemKey>) {
         Logger.debug("Paging Learn ItemKeyed", "loadInitial")
         networkState.postValue(Resource.loading(null, Loading.LOADING_NORMAL))
-        iApi.getLinkComicPaging(limit = params.requestedLoadSize, idComic = idComic)
+        iApi.getLinkComicPaging(limit = params.requestedLoadSize, id = idComic)
             .enqueue(object : Callback<LinkComicResponse> {
                 override fun onFailure(call: Call<LinkComicResponse>, t: Throwable) {
-                    networkState.postValue(Resource.error(t.message ?: "unknown err",null,Loading.LOADING_NORMAL,retry = {
-                        loadInitial(params, callback)
-                    }))
+                    networkState.postValue(
+                        Resource.error(
+                            t.message ?: "unknown err",
+                            null,
+                            Loading.LOADING_NORMAL,
+                            retry = {
+                                loadInitial(params, callback)
+                            })
+                    )
                 }
 
                 override fun onResponse(
@@ -65,14 +70,14 @@ class ItemKeyedComicLinkDataSource(
                             callback.onResult(convert(dataEntityMapper.linkComicEntityMapper.transform(data)))
                         } else {
                             networkState.postValue(
-                                Resource.error("error code: ${result.message}",null,Loading.LOADING_NORMAL,retry = {
+                                Resource.error("error code: ${result.message}", null, Loading.LOADING_NORMAL, retry = {
                                     loadInitial(params, callback)
                                 })
                             )
                         }
                     } else {
                         networkState.postValue(
-                            Resource.error("error code: ${response.code()}",null,Loading.LOADING_NORMAL,retry = {
+                            Resource.error("error code: ${response.code()}", null, Loading.LOADING_NORMAL, retry = {
                                 loadInitial(params, callback)
                             })
                         )
@@ -85,12 +90,18 @@ class ItemKeyedComicLinkDataSource(
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<BaseItemKey>) {
         Logger.debug("Paging Learn ItemKeyed", "loadAfter")
         networkState.postValue(Resource.loadingPaging(null, Loading.LOADING_NORMAL))
-        iApi.getLinkComicPaging(params.key, params.requestedLoadSize, idComic)
+        iApi.getLinkComicPaging(idComic, params.key, params.requestedLoadSize)
             .enqueue(object : Callback<LinkComicResponse> {
                 override fun onFailure(call: Call<LinkComicResponse>, t: Throwable) {
-                    networkState.postValue(Resource.errorPaging(t.message ?: "unknown err",null,Loading.LOADING_NORMAL,retry = {
-                        loadAfter(params, callback)
-                    }))
+                    networkState.postValue(
+                        Resource.errorPaging(
+                            t.message ?: "unknown err",
+                            null,
+                            Loading.LOADING_NORMAL,
+                            retry = {
+                                loadAfter(params, callback)
+                            })
+                    )
                 }
 
                 override fun onResponse(
@@ -106,16 +117,24 @@ class ItemKeyedComicLinkDataSource(
                             callback.onResult(convert(dataEntityMapper.linkComicEntityMapper.transform(data)))
                         } else {
                             networkState.postValue(
-                                Resource.errorPaging("error code: ${result.message}",null,Loading.LOADING_NORMAL,retry = {
-                                    loadAfter(params, callback)
-                                })
+                                Resource.errorPaging(
+                                    "error code: ${result.message}",
+                                    null,
+                                    Loading.LOADING_NORMAL,
+                                    retry = {
+                                        loadAfter(params, callback)
+                                    })
                             )
                         }
                     } else {
                         networkState.postValue(
-                            Resource.errorPaging("error code: ${response.code()}",null,Loading.LOADING_NORMAL,retry = {
-                                loadAfter(params, callback)
-                            })
+                            Resource.errorPaging(
+                                "error code: ${response.code()}",
+                                null,
+                                Loading.LOADING_NORMAL,
+                                retry = {
+                                    loadAfter(params, callback)
+                                })
                         )
                     }
                 }

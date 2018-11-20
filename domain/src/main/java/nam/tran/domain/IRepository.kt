@@ -21,4 +21,6 @@ interface IRepository {
     ): Listing<BaseItemKey>
 
     fun likeComic(entity: ComicEntity)
+
+    fun loadComicLike(): LiveData<Resource<List<ComicEntity>>>
 }

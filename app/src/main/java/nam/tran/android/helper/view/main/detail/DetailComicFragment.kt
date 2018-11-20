@@ -1,6 +1,5 @@
 package nam.tran.android.helper.view.main.detail;
 
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -13,7 +12,6 @@ import nam.tran.android.helper.model.ComicModel
 import nam.tran.android.helper.model.LinkComicModel
 import nam.tran.android.helper.view.main.detail.viewmodel.DetailComicViewModel
 import nam.tran.android.helper.view.main.detail.viewmodel.IDetailComicViewModel
-import nam.tran.android.helper.view.main.home.ComicAdapterPaging
 import tran.nam.core.biding.FragmentDataBindingComponent
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 

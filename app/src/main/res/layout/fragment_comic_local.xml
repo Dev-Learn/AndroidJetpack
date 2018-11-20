@@ -6,19 +6,19 @@
     <data>
         <variable
                 name="viewModel"
-                type="nam.tran.android.helper.view.main.home.viewmodel.HomeViewModel"/>
+                type="nam.tran.android.helper.view.main.local.viewmodel.ComicLocalViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".view.main.home.HomeFragment">
+            tools:context="nam.tran.android.helper.view.main.local.ComicLocalFragment">
 
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:id="@+id/rv_comic"
+                android:id="@+id/rv_comic_local"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:visibleView="@{viewModel}"
                 tools:listitem="@layout/adapter_comic_item"/>

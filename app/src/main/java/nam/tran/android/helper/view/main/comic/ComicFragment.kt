@@ -1,42 +1,46 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package nam.tran.android.helper.view.main.home;
+package nam.tran.android.helper.view.main.comic;
 
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import nam.tran.android.helper.R
-import nam.tran.android.helper.databinding.FragmentHomeBinding
+import nam.tran.android.helper.databinding.FragmentComicBinding
 import nam.tran.android.helper.model.ComicModel
-import nam.tran.android.helper.view.main.home.viewmodel.HomeViewModel
-import nam.tran.android.helper.view.main.home.viewmodel.IHomeViewModel
+import nam.tran.android.helper.view.main.comic.viewmodel.ComicViewModel
+import nam.tran.android.helper.view.main.comic.viewmodel.IHomeViewModel
 import tran.nam.core.biding.FragmentDataBindingComponent
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 
-class HomeFragment : BaseFragmentMVVM<FragmentHomeBinding, HomeViewModel>(), IHomeViewModel {
+class ComicFragment : BaseFragmentMVVM<FragmentComicBinding, ComicViewModel>(), IHomeViewModel {
 
     private val dataBindingComponent = FragmentDataBindingComponent(this)
-//    private var adapter by autoCleared<ComicAdapter>()
 
     override fun initViewModel(factory: ViewModelProvider.Factory?) {
-        mViewModel = ViewModelProviders.of(this, factory).get(HomeViewModel::class.java)
+        mViewModel = ViewModelProviders.of(this, factory).get(ComicViewModel::class.java)
     }
 
     override fun layoutId(): Int {
-        return R.layout.fragment_home
+        return R.layout.fragment_comic
     }
 
     override fun onVisible() {
         mViewDataBinding.viewModel = mViewModel
 
-        val adapter = ComicAdapterPaging(dataBindingComponent){
+        val adapter = ComicAdapterPaging(dataBindingComponent) {
             mViewModel?.like(it)
         }
 
-//        adapter = ComicAdapter(dataBindingComponent)
+//
+
+        binding.fab.setOnClickListener {
+            it.findNavController().navigate(R.id.localComicFragment)
+        }
 
         binding.rvComic.addItemDecoration(
             DividerItemDecoration(

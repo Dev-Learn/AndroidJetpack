@@ -33,4 +33,8 @@ class ComicUseCase @Inject internal constructor(val iRepository: IRepository) {
     fun likeComic(entity: ComicEntity) {
         return iRepository.likeComic(entity)
     }
+
+    fun loadComicLike(): LiveData<Resource<List<ComicEntity>>>{
+        return iRepository.loadComicLike()
+    }
 }

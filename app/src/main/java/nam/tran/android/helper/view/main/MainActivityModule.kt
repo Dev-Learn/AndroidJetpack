@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import nam.tran.android.helper.view.main.local.ComicLocalFragment
 import nam.tran.android.helper.view.main.detail.DetailComicFragment
 import nam.tran.android.helper.view.main.detail.DetailComicFragmentModule
-import nam.tran.android.helper.view.main.home.HomeFragment
-import nam.tran.android.helper.view.main.home.HomeFragmentModule
+import nam.tran.android.helper.view.main.comic.ComicFragment
+import nam.tran.android.helper.view.main.comic.ComicFragmentModule
+import nam.tran.android.helper.view.main.local.ComicLocalFragmentModule
 import tran.nam.core.di.inject.PerActivity
 import tran.nam.core.di.inject.PerFragment
 
@@ -18,12 +20,20 @@ import tran.nam.core.di.inject.PerFragment
 abstract class MainActivityModule {
 
     /**
-     * Provides the injector for the [HomeFragmentModule], which has access to the dependencies
+     * Provides the injector for the [ComicFragmentModule], which has access to the dependencies
      * provided by this application instance (singleton scoped objects).
      */
     @PerFragment
-    @ContributesAndroidInjector(modules = [HomeFragmentModule::class])
-    internal abstract fun injectorHomeFragment(): HomeFragment
+    @ContributesAndroidInjector(modules = [ComicFragmentModule::class])
+    internal abstract fun injectorHomeFragment(): ComicFragment
+
+    /**
+     * Provides the injector for the [ComicLocalFragmentModule], which has access to the dependencies
+     * provided by this application instance (singleton scoped objects).
+     */
+    @PerFragment
+    @ContributesAndroidInjector(modules = [ComicLocalFragmentModule::class])
+    internal abstract fun injectorComicLocalFragment(): ComicLocalFragment
 
     /**
     * Provides the injector for the [DetailComicFragmentModule], which has access to the dependencies

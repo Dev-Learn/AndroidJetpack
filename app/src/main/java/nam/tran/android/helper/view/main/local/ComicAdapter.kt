@@ -1,8 +1,9 @@
-package nam.tran.android.helper.view.main.home
+package nam.tran.android.helper.view.main.local
 
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.AdapterComicItemBinding
@@ -24,6 +25,7 @@ class ComicAdapter(private val dataBindingComponent: DataBindingComponent) :
 
     override fun bind(binding: AdapterComicItemBinding, item: ComicModel) {
         binding.comic = item
+        binding.ckbLike.visibility = View.GONE
     }
 
     override fun areItemsTheSame(oldItem: ComicModel, newItem: ComicModel): Boolean {

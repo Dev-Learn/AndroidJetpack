@@ -2,6 +2,7 @@ package nam.tran.domain
 
 //import nam.tran.flatform.database.DbProvider
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.Config
@@ -10,6 +11,7 @@ import nam.tran.domain.entity.BaseItemKey
 import nam.tran.domain.entity.ComicEntity
 import nam.tran.domain.entity.LinkComicEntity
 import nam.tran.domain.entity.state.Listing
+import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.executor.AppExecutors
 import nam.tran.domain.interactor.ItemComicDataSourceFactory
@@ -159,6 +161,15 @@ internal constructor(
             }
 
         }
+    }
+
+    override fun loadComicLike(): LiveData<Resource<List<ComicEntity>>> {
+        val result = MediatorLiveData<Resource<List<ComicEntity>>>()
+        result.value = Resource.loading(null, Loading.LOADING_NORMAL)
+        result.addSource(dbProvider.comicDao().loadComic()){
+            result.value = Resource.success(dataEntityMapper.comicEntityMapper.transformEntity(it),Loading.LOADING_NORMAL)
+        }
+        return result
     }
 
 }

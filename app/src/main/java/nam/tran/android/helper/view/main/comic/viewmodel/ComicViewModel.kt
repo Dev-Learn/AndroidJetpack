@@ -1,7 +1,6 @@
-package nam.tran.android.helper.view.main.home.viewmodel;
+package nam.tran.android.helper.view.main.comic.viewmodel;
 
 import android.app.Application
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import nam.tran.android.helper.mapper.DataMapper
 import nam.tran.android.helper.model.ComicModel
@@ -11,7 +10,7 @@ import tran.nam.core.viewmodel.BaseFragmentViewModel
 import tran.nam.core.viewmodel.IProgressViewModel
 import javax.inject.Inject
 
-class HomeViewModel @Inject internal constructor(
+class ComicViewModel @Inject internal constructor(
     application: Application,
     private val comicUseCase: ComicUseCase,
     private val mDataMapper: DataMapper

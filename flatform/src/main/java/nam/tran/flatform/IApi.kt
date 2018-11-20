@@ -5,10 +5,7 @@ import nam.tran.flatform.core.ApiResponse
 import nam.tran.flatform.model.response.ComicResponse
 import nam.tran.flatform.model.response.LinkComicResponse
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface IApi {
 
@@ -21,7 +18,7 @@ interface IApi {
     @GET("/getComic")
     fun getComicPaging2(@Query("after") after: Int? = null, @Query("limit") limit: Int): Call<ComicResponse>
 
-    @POST("/getComicImage")
-    fun getLinkComicPaging(@Query("after") after: Int? = null, @Query("limit") limit: Int, @Body idComic: Int): Call<LinkComicResponse>
+    @GET("/getComicImage/{id}")
+    fun getLinkComicPaging(@Path("id") id:Int,@Query("after") after: Int? = null, @Query("limit") limit: Int): Call<LinkComicResponse>
 
 }

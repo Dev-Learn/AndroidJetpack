@@ -1,4 +1,4 @@
-package nam.tran.android.helper.view.main.home
+package nam.tran.android.helper.view.main.comic
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -7,17 +7,24 @@
         app:startDestination="@id/homeFragment">
 
 
-    <fragment android:id="@+id/homeFragment"
-              android:name="nam.tran.android.helper.view.main.home.HomeFragment"
-              android:label="HomeFragment"
-              tools:layout="@layout/fragment_home">
+    <fragment
+            android:id="@+id/homeFragment"
+            android:name="nam.tran.android.helper.view.main.comic.ComicFragment"
+            android:label="HomeFragment"
+            tools:layout="@layout/fragment_comic">
         <action android:id="@+id/action_homeFragment_to_detailComicFragment"
                 app:destination="@id/detailComicFragment"/>
     </fragment>
 
-    <fragment android:id="@+id/detailComicFragment"
-              android:name="nam.tran.android.helper.view.main.detail.DetailComicFragment"
-              android:label="DetailComicFragment">
+    <fragment
+            android:id="@+id/detailComicFragment"
+            android:name="nam.tran.android.helper.view.main.detail.DetailComicFragment"
+            android:label="DetailComicFragment">
         <argument android:name="comic"/>
     </fragment>
+
+    <fragment
+            android:id="@+id/localComicFragment"
+            android:name="nam.tran.android.helper.view.main.local.ComicLocalFragment"
+            android:label="ComicLocalFragment"/>
 </navigation>
