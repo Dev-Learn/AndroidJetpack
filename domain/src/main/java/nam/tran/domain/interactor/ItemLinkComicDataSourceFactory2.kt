@@ -1,28 +1,27 @@
 package nam.tran.domain.interactor
 
 import androidx.lifecycle.MutableLiveData
-import androidx.paging.ItemKeyedDataSource
+import androidx.paging.PagedList
 import nam.tran.flatform.model.response.BaseItemKey
-import nam.tran.domain.entity.LinkComicEntity
 import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Resource
-import nam.tran.domain.mapper.DataEntityMapper
 import nam.tran.flatform.IApi
+import nam.tran.flatform.database.DbProvider
+import nam.tran.flatform.model.response.LinkComic
 import nam.tran.flatform.model.response.LinkComicResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import tran.nam.util.Logger
+import java.util.concurrent.Executor
 
-class ItemKeyedComicLinkDataSource(
+class ItemLinkComicDataSourceFactory2(
     private val idComic: Int,
     private val iApi: IApi,
-    private val dataEntityMapper: DataEntityMapper,
-    private val convert: (List<LinkComicEntity>) -> List<BaseItemKey>
-) : ItemKeyedDataSource<Int, BaseItemKey>() {
-
-    // keep a function reference for the retry event
-//    private var retry: (() -> Any)? = null
+    private val ioExecutor: Executor,
+    private val pageSize: Int,
+    private val dbProvider: DbProvider
+    ) : PagedList.BoundaryCallback<BaseItemKey>() {
 
     /**
      * There is no sync on the state because paging will always call loadInitial first then wait
@@ -30,20 +29,10 @@ class ItemKeyedComicLinkDataSource(
      */
     val networkState = MutableLiveData<Resource<BaseItemKey>>()
 
-//    fun retryAllFailed() {
-//        val prevRetry = retry
-//        retry = null
-//        prevRetry?.let {
-//            retryExecutor.execute {
-//                it.invoke()
-//            }
-//        }
-//    }
-
-    override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<BaseItemKey>) {
+    override fun onZeroItemsLoaded() {
         Logger.debug("Paging Learn ItemKeyed", "loadInitial")
         networkState.postValue(Resource.loading(null, Loading.LOADING_NORMAL))
-        iApi.getLinkComicPaging(limit = params.requestedLoadSize, id = idComic)
+        iApi.getLinkComicPaging(limit = pageSize, id = idComic)
             .enqueue(object : Callback<LinkComicResponse> {
                 override fun onFailure(call: Call<LinkComicResponse>, t: Throwable) {
                     networkState.postValue(
@@ -52,7 +41,7 @@ class ItemKeyedComicLinkDataSource(
                             null,
                             Loading.LOADING_NORMAL,
                             retry = {
-                                loadInitial(params, callback)
+                                onZeroItemsLoaded()
                             })
                     )
                 }
@@ -67,18 +56,20 @@ class ItemKeyedComicLinkDataSource(
                             val data = result.result
 //                            retry = null
                             networkState.postValue(Resource.success(null, Loading.LOADING_NORMAL))
-                            callback.onResult(convert(dataEntityMapper.linkComicEntityMapper.transform(data)))
+                            ioExecutor.execute {
+                                dbProvider.comicImageDao().insert(data)
+                            }
                         } else {
                             networkState.postValue(
                                 Resource.error("error code: ${result.message}", null, Loading.LOADING_NORMAL, retry = {
-                                    loadInitial(params, callback)
+                                    onZeroItemsLoaded()
                                 })
                             )
                         }
                     } else {
                         networkState.postValue(
                             Resource.error("error code: ${response.code()}", null, Loading.LOADING_NORMAL, retry = {
-                                loadInitial(params, callback)
+                                onZeroItemsLoaded()
                             })
                         )
                     }
@@ -87,10 +78,10 @@ class ItemKeyedComicLinkDataSource(
             })
     }
 
-    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<BaseItemKey>) {
+    override fun onItemAtEndLoaded(itemAtEnd: BaseItemKey) {
         Logger.debug("Paging Learn ItemKeyed", "loadAfter")
         networkState.postValue(Resource.loadingPaging(null, Loading.LOADING_NORMAL))
-        iApi.getLinkComicPaging(idComic, params.key, params.requestedLoadSize)
+        iApi.getLinkComicPaging(idComic, itemAtEnd.idKey, pageSize)
             .enqueue(object : Callback<LinkComicResponse> {
                 override fun onFailure(call: Call<LinkComicResponse>, t: Throwable) {
                     networkState.postValue(
@@ -99,7 +90,7 @@ class ItemKeyedComicLinkDataSource(
                             null,
                             Loading.LOADING_NORMAL,
                             retry = {
-                                loadAfter(params, callback)
+                                onItemAtEndLoaded(itemAtEnd)
                             })
                     )
                 }
@@ -114,7 +105,9 @@ class ItemKeyedComicLinkDataSource(
                             val data = result.result
 //                            retry = null
                             networkState.postValue(Resource.successPaging(null, Loading.LOADING_NORMAL))
-                            callback.onResult(convert(dataEntityMapper.linkComicEntityMapper.transform(data)))
+                            ioExecutor.execute {
+                                dbProvider.comicImageDao().insert(data)
+                            }
                         } else {
                             networkState.postValue(
                                 Resource.errorPaging(
@@ -122,7 +115,7 @@ class ItemKeyedComicLinkDataSource(
                                     null,
                                     Loading.LOADING_NORMAL,
                                     retry = {
-                                        loadAfter(params, callback)
+                                        onItemAtEndLoaded(itemAtEnd)
                                     })
                             )
                         }
@@ -133,7 +126,7 @@ class ItemKeyedComicLinkDataSource(
                                 null,
                                 Loading.LOADING_NORMAL,
                                 retry = {
-                                    loadAfter(params, callback)
+                                    onItemAtEndLoaded(itemAtEnd)
                                 })
                         )
                     }
@@ -142,12 +135,7 @@ class ItemKeyedComicLinkDataSource(
             })
     }
 
-    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<BaseItemKey>) {
-        // ignored, since we only ever append to our initial load
-        Logger.debug("Paging Learn ItemKeyed", "loadBefore")
-    }
-
-    override fun getKey(item: BaseItemKey): Int {
-        return item.idKey
+    override fun onItemAtFrontLoaded(itemAtFront: BaseItemKey) {
+        // ignored, since we only ever append to what's in the DB
     }
 }

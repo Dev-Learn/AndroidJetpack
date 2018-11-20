@@ -5,6 +5,8 @@ import androidx.databinding.DataBindingUtil
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.AdapterComicItemBinding
 import nam.tran.android.helper.model.ComicModel
@@ -14,13 +16,18 @@ class ComicAdapter(private val dataBindingComponent: DataBindingComponent) :
     DataBoundListAdapter<ComicModel, AdapterComicItemBinding>() {
 
     override fun createBinding(parent: ViewGroup): AdapterComicItemBinding {
-        return DataBindingUtil.inflate(
+        val binding : AdapterComicItemBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             R.layout.adapter_comic_item,
             parent,
             false,
             dataBindingComponent
         )
+        binding.root.setOnClickListener {
+            val bundle = bundleOf("comic" to binding.comic,"isLocal" to true)
+            it.findNavController().navigate(R.id.detailComicFragment, bundle)
+        }
+        return binding
     }
 
     override fun bind(binding: AdapterComicItemBinding, item: ComicModel) {

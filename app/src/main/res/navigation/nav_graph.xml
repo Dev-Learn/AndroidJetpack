@@ -14,6 +14,8 @@
             tools:layout="@layout/fragment_comic">
         <action android:id="@+id/action_homeFragment_to_detailComicFragment"
                 app:destination="@id/detailComicFragment"/>
+        <action android:id="@+id/action_homeFragment_to_localComicFragment"
+                app:destination="@id/localComicFragment"/>
     </fragment>
 
     <fragment
@@ -21,10 +23,14 @@
             android:name="nam.tran.android.helper.view.main.detail.DetailComicFragment"
             android:label="DetailComicFragment">
         <argument android:name="comic"/>
+        <argument android:name="isLocal" android:defaultValue="false"/>
     </fragment>
 
     <fragment
             android:id="@+id/localComicFragment"
             android:name="nam.tran.android.helper.view.main.local.ComicLocalFragment"
-            android:label="ComicLocalFragment"/>
+            android:label="ComicLocalFragment">
+        <action android:id="@+id/action_localComicFragment_to_detailComicFragment"
+                app:destination="@id/detailComicFragment"/>
+    </fragment>
 </navigation>

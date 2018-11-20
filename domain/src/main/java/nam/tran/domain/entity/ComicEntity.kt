@@ -1,5 +1,7 @@
 package nam.tran.domain.entity
 
+import nam.tran.flatform.model.response.BaseItemKey
+
 data class ComicEntity(
     val id: Int,
     var title: String,

@@ -2,12 +2,11 @@ package nam.tran.domain.interactor
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
-import nam.tran.domain.entity.BaseItemKey
+import nam.tran.flatform.model.response.BaseItemKey
 import nam.tran.domain.entity.LinkComicEntity
 import nam.tran.domain.mapper.DataEntityMapper
 import nam.tran.flatform.IApi
 import tran.nam.util.Logger
-import java.util.concurrent.Executor
 
 class ItemLinkComicDataSourceFactory(
     private val idComic: Int,

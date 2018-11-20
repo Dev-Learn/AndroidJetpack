@@ -1,6 +1,6 @@
 package nam.tran.android.helper.model
 
-import nam.tran.domain.entity.BaseItemKey
+import nam.tran.flatform.model.response.BaseItemKey
 import java.io.Serializable
 
 data class ComicModel(var id : Int, var title : String, var description : String, var image : String, var genre : ArrayList<GenreModel>) : BaseItemKey(id),Serializable{

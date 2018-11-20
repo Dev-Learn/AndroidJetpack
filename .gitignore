@@ -9,3 +9,4 @@
 .externalNativeBuild
 ktlint
 gradle/
+/util/src/main/java/tran/nam/util/Constant.kt

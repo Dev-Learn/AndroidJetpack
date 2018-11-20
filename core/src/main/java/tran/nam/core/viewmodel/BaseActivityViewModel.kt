@@ -6,8 +6,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import android.os.Bundle
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import java.lang.ref.WeakReference
 
 @Suppress("unused", "UNUSED_PARAMETER")
@@ -16,7 +14,7 @@ open class BaseActivityViewModel(application: Application) : AndroidViewModel(ap
     @Volatile
     var mViewWeakReference: WeakReference<IViewModel>? = null
 
-    private var compositeDisposables: CompositeDisposable? = null
+//    private var compositeDisposables: CompositeDisposable? = null
 
     protected inline fun<reified V: IViewModel> view(): V? {
         if (mViewWeakReference == null || mViewWeakReference?.get() == null)
@@ -26,8 +24,8 @@ open class BaseActivityViewModel(application: Application) : AndroidViewModel(ap
 
     open fun onCreated(view: IViewModel) {
         mViewWeakReference = WeakReference(view)
-        if (compositeDisposables == null)
-            compositeDisposables = CompositeDisposable()
+//        if (compositeDisposables == null)
+//            compositeDisposables = CompositeDisposable()
         view.lifecycle.addObserver(this)
     }
 
@@ -70,11 +68,11 @@ open class BaseActivityViewModel(application: Application) : AndroidViewModel(ap
 
     override fun onCleared() {
         super.onCleared()
-        if (compositeDisposables != null)
-            compositeDisposables!!.dispose()
+//        if (compositeDisposables != null)
+//            compositeDisposables!!.dispose()
     }
 
-    open fun addDisposable(disposable: Disposable) {
-        compositeDisposables!!.add(disposable)
-    }
+//    open fun addDisposable(disposable: Disposable) {
+//        compositeDisposables!!.add(disposable)
+//    }
 }

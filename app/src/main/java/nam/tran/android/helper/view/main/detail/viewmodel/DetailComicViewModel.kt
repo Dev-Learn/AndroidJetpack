@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import nam.tran.android.helper.mapper.DataMapper
 import nam.tran.android.helper.model.ComicModel
-import nam.tran.domain.entity.BaseItemKey
+import nam.tran.flatform.model.response.BaseItemKey
 import nam.tran.domain.entity.state.Listing
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.interactor.ComicUseCase
@@ -13,9 +13,12 @@ import tran.nam.core.viewmodel.BaseFragmentViewModel
 import tran.nam.core.viewmodel.IProgressViewModel
 import javax.inject.Inject
 
-class DetailComicViewModel @Inject internal constructor(application: Application,val comicUseCase: ComicUseCase,val dataMapper: DataMapper) : BaseFragmentViewModel(application),
+class DetailComicViewModel @Inject internal constructor(
+    application: Application,
+    val comicUseCase: ComicUseCase,
+    val dataMapper: DataMapper
+) : BaseFragmentViewModel(application),
     IProgressViewModel {
-
 
 
     private var repoResult = MutableLiveData<Listing<BaseItemKey>>()
@@ -27,9 +30,9 @@ class DetailComicViewModel @Inject internal constructor(application: Application
         return results.value
     }
 
-    fun getData(comicModel: ComicModel?) {
+    fun getData(comicModel: ComicModel?, isLocal: Boolean?) {
         comicModel?.let { it ->
-            repoResult.postValue(comicUseCase.getLinkComicItem(it.id){
+            repoResult.postValue(comicUseCase.getLinkComicItem(isLocal ?: false, it.id) {
                 dataMapper.linkComicModelMapper.transform(it)
             })
         }

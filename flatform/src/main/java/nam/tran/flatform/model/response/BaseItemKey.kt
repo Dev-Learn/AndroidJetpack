@@ -1,4 +1,4 @@
-package nam.tran.domain.entity
+package nam.tran.flatform.model.response
 
 abstract class BaseItemKey(id:Int){
 

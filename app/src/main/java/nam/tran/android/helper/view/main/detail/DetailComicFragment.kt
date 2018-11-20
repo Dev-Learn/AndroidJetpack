@@ -42,7 +42,7 @@ class DetailComicFragment : BaseFragmentMVVM<FragmentDetailComicBinding, DetailC
         )
         binding.rvLinkComic.adapter = adapter
 
-        mViewModel?.getData(arguments?.get("comic") as ComicModel)
+        mViewModel?.getData(arguments?.get("comic") as ComicModel,arguments?.getBoolean("isLocal"))
 
         mViewModel?.posts?.observe(this, Observer {
             adapter.submitList(it as PagedList<LinkComicModel>)

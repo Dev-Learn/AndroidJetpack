@@ -2,7 +2,7 @@ package nam.tran.domain.interactor
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.ItemKeyedDataSource
-import nam.tran.domain.entity.BaseItemKey
+import nam.tran.flatform.model.response.BaseItemKey
 import nam.tran.domain.entity.ComicEntity
 import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Resource
