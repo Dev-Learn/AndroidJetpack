@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import nam.tran.android.helper.mapper.DataMapper
 import nam.tran.android.helper.model.ComicModel
-import nam.tran.flatform.model.response.BaseItemKey
 import nam.tran.domain.entity.state.Listing
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.interactor.ComicUseCase
+import nam.tran.flatform.model.response.BaseItemKey
 import tran.nam.core.viewmodel.BaseFragmentViewModel
 import tran.nam.core.viewmodel.IProgressViewModel
 import javax.inject.Inject
@@ -24,6 +24,7 @@ class DetailComicViewModel @Inject internal constructor(
     private var repoResult = MutableLiveData<Listing<BaseItemKey>>()
 
     val posts = Transformations.switchMap(repoResult, { it.pagedList })
+
     val results = Transformations.switchMap(repoResult, { it.networkState })
 
     override fun resource(): Resource<*>? {

@@ -51,16 +51,10 @@ abstract class DataBoundNetwork<ResultType, RequestType>
             result.removeSource(apiResponse)
             when (response) {
                 is ApiSuccessResponse -> {
-                    appExecutors.diskIO().execute {
-                        appExecutors.mainThread().execute {
-                            setValue(Resource.success(convertData(response.body), statusLoading()))
-                        }
-                    }
+                    setValue(Resource.success(convertData(response.body), statusLoading()))
                 }
                 is ApiEmptyResponse -> {
-                    appExecutors.mainThread().execute {
-                        setValue(Resource.success(null, statusLoading()))
-                    }
+                    setValue(Resource.success(null, statusLoading()))
                 }
                 is ApiErrorResponse -> {
                     onFetchFailed()

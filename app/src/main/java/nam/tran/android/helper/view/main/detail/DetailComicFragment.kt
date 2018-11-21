@@ -14,6 +14,7 @@ import nam.tran.android.helper.view.main.detail.viewmodel.DetailComicViewModel
 import nam.tran.android.helper.view.main.detail.viewmodel.IDetailComicViewModel
 import tran.nam.core.biding.FragmentDataBindingComponent
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
+import tran.nam.util.Logger
 
 @Suppress("UNCHECKED_CAST")
 class DetailComicFragment : BaseFragmentMVVM<FragmentDetailComicBinding, DetailComicViewModel>(),
@@ -45,6 +46,7 @@ class DetailComicFragment : BaseFragmentMVVM<FragmentDetailComicBinding, DetailC
         mViewModel?.getData(arguments?.get("comic") as ComicModel,arguments?.getBoolean("isLocal"))
 
         mViewModel?.posts?.observe(this, Observer {
+//            Logger.debug(it)
             adapter.submitList(it as PagedList<LinkComicModel>)
         })
 

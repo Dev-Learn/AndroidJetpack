@@ -6,8 +6,6 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.Config
-import androidx.paging.DataSource
-import androidx.paging.ItemKeyedDataSource
 import androidx.paging.toLiveData
 import nam.tran.domain.entity.ComicEntity
 import nam.tran.domain.entity.LinkComicEntity
@@ -132,44 +130,22 @@ internal constructor(
         val config = Config(
             pageSize = 20,
             enablePlaceholders = false,
-            initialLoadSizeHint = 40,
-            maxSize = 500
+            initialLoadSizeHint = 40
         )
 
         if (isDb) {
 
-            val dataSource = object : DataSource.Factory<Int,BaseItemKey>(){
-                override fun create(): DataSource<Int, BaseItemKey> {
-                    return object : ItemKeyedDataSource<Int,BaseItemKey>(){
-                        override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<BaseItemKey>) {
-                            Transformations.map(dbProvider.comicImageDao().loadComicImage(idComic,0,params.requestedLoadSize)){
-                                callback.onResult(convert(dataEntityMapper.linkComicEntityMapper.transform(it)))
-                            }
-
-                        }
-
-                        override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<BaseItemKey>) {
-                            Transformations.map(dbProvider.comicImageDao().loadComicImage(idComic,params.key,params.requestedLoadSize)){
-                                callback.onResult(convert(dataEntityMapper.linkComicEntityMapper.transform(it)))
-                            }
-                        }
-
-                        override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<BaseItemKey>) {
-
-                        }
-
-                        override fun getKey(item: BaseItemKey): Int {
-                            return item.idKey
-                        }
-
-                    }
-                }
-            }
-
             val sourceFactory =
                 ItemLinkComicDataSourceFactory2(idComic, iApi, appExecutors.networkIO(), 30, dbProvider)
 
-            val livePagedList = dataSource.toLiveData(config = config,boundaryCallback = sourceFactory,fetchExecutor = appExecutors.networkIO())
+            val livePagedList = dbProvider.comicImageDao().loadComicImage(
+                idComic
+            ).mapByPage {
+                return@mapByPage convert(dataEntityMapper.linkComicEntityMapper.transform(it))
+            }.toLiveData(
+                pageSize = 10,
+                boundaryCallback = sourceFactory
+            )
 
             return Listing(
                 pagedList = livePagedList,

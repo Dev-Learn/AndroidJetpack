@@ -56,7 +56,7 @@ dependencies {
     api "com.google.dagger:dagger-android:$rootProject.dagger"
     api "com.google.dagger:dagger-android-support:$rootProject.dagger"
 
-    api 'androidx.paging:paging-runtime-ktx:2.1.0-beta01'
+    implementation 'androidx.paging:paging-runtime-ktx:2.1.0-beta01'
 
     //live data
     api 'androidx.lifecycle:lifecycle-runtime:2.0.0'
