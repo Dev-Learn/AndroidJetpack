@@ -28,10 +28,6 @@ open class BaseFragmentViewModel(application: Application) : AndroidViewModel(ap
         view.lifecycle.addObserver(this)
     }
 
-    open fun onInitialized() {
-
-    }
-
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     open fun onCreated() {
 //        if (compositeDisposables == null)

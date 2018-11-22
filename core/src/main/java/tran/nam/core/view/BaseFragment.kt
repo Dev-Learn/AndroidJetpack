@@ -17,72 +17,18 @@
 package tran.nam.core.view
 
 import android.os.Bundle
-import androidx.annotation.LayoutRes
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import tran.nam.core.R
+import androidx.annotation.LayoutRes
 
 abstract class BaseFragment : androidx.fragment.app.Fragment() {
-
-    protected var mIsCurrentScreen: Boolean = false
-    private var mIsInLeft: Boolean = false
-    private var mIsOutLeft: Boolean = false
-    private var mIsPush: Boolean = false
-    var isInitialized = true
-    var isViewCreated = false
-    private var mViewDestroyed = false
-    private var mWaitThread: WaitThread? = null
 
     /**
      * @return layout resource id
      */
     @LayoutRes
     protected abstract fun layoutId(): Int
-
-    protected open fun isHaveAnimation(): Boolean{
-        return true
-    }
-
-    val tagName: String = javaClass.simpleName
-
-    val isShouldSave: Boolean = true
-
-    protected open fun pushExitAnimId(): Int{
-        return R.anim.slide_left_out
-    }
-
-    protected open fun popEnterAnimId(): Int{
-        return R.anim.slide_left_in
-    }
-
-    protected open fun popExitAnimId(): Int{
-        return R.anim.slide_right_out
-    }
-
-    protected open fun pushEnterAnimId(): Int{
-        return R.anim.slide_right_in
-    }
-
-    protected open fun leftInAnimId(): Int{
-        return  R.anim.slide_left_in
-    }
-
-    protected open fun rightInAnimId(): Int{
-        return R.anim.slide_right_in
-    }
-
-    protected open fun leftOutAnimId(): Int{
-        return R.anim.slide_left_out
-    }
-
-    protected open fun rightOutAnimId(): Int{
-        return R.anim.slide_right_out
-    }
 
     /*
      * Init Child Fragment Helper
@@ -106,78 +52,6 @@ abstract class BaseFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onVisible()
-        isViewCreated = true
-        mViewDestroyed = false
-        if (mWaitThread != null)
-            mWaitThread!!.continueProcessing()
-    }
-
-    override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation {
-        val animation: Animation
-        if (isHaveAnimation()) {
-            if (mIsCurrentScreen) {
-                val popExit = popExitAnimId()
-                val pushEnter = pushEnterAnimId()
-                val pushExit = pushExitAnimId()
-                val popEnter = popEnterAnimId()
-                animation = if (mIsPush)
-                    AnimationUtils.loadAnimation(activity(), if (enter) pushEnter else pushExit)
-                else
-                    AnimationUtils.loadAnimation(activity(), if (enter) popEnter else popExit)
-            } else {
-                if (enter) {
-                    val left = leftInAnimId()
-                    val right = rightInAnimId()
-                    if (mIsInLeft) {
-                        if (left == 0) {
-                            animation = AlphaAnimation(1f, 1f)
-                            animation.setDuration(resources.getInteger(R.integer.animation_time_full).toLong())
-                        } else {
-                            animation = AnimationUtils.loadAnimation(activity(), left)
-                        }
-                    } else {
-                        if (right == 0) {
-                            animation = AlphaAnimation(1f, 1f)
-                            animation.setDuration(resources.getInteger(R.integer.animation_time_full).toLong())
-                        } else {
-                            animation = AnimationUtils.loadAnimation(activity(), right)
-                        }
-                    }
-                } else {
-                    val left = leftOutAnimId()
-                    val right = rightOutAnimId()
-                    animation = AnimationUtils.loadAnimation(activity(), if (mIsOutLeft) left else right)
-                }
-            }
-        } else {
-            animation = AnimationUtils.loadAnimation(context, R.anim.no_anim)
-        }
-
-        if (enter) {
-            animation.setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationStart(animation: Animation) {}
-
-                override fun onAnimationEnd(animation: Animation) {
-                    if (mViewDestroyed)
-                        return
-                    mWaitThread = WaitThread(this@BaseFragment)
-                    mWaitThread!!.start()
-                }
-
-                override fun onAnimationRepeat(animation: Animation) {}
-            })
-        }
-        return animation
-    }
-
-    override fun onDestroyView() {
-//     This lifecycle method still gets called even if onCreateView returns a null view.
-        mViewDestroyed = true
-        isViewCreated = false
-        onInVisible()
-        if (mWaitThread != null)
-            mWaitThread!!.stopProcessing()
-        super.onDestroyView()
     }
 
     protected fun showLoadingDialog() {
@@ -201,29 +75,6 @@ abstract class BaseFragment : androidx.fragment.app.Fragment() {
             activity()!!.hideKeyboard()
     }
 
-    open fun initialized() {
-        isInitialized = false
-    }
-
-    fun setInLeft(inLeft: Boolean) {
-        mIsInLeft = inLeft
-    }
-
-    fun setOutLeft(outLeft: Boolean) {
-        mIsOutLeft = outLeft
-    }
-
-    fun setCurrentScreen(currentScreen: Boolean) {
-        mIsCurrentScreen = currentScreen
-    }
-
-    fun setPush(push: Boolean) {
-        mIsPush = push
-    }
 
     protected open fun onVisible() {}
-
-    fun handleAfterVisible() {}
-
-    protected fun onInVisible() {}
 }

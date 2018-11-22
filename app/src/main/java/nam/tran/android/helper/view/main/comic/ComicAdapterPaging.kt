@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -125,7 +126,7 @@ class ComicAdapterPaging(
         init {
             binding.root.setOnClickListener {
                 val bundle = bundleOf("comic" to binding.comic)
-                it.findNavController().navigate(R.id.detailComicFragment, bundle)
+                it.findNavController().navigate(R.id.action_homeFragment_to_detailComicFragment, bundle)
             }
         }
 

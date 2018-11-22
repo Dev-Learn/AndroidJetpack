@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.AdapterComicItemBinding
@@ -25,7 +26,7 @@ class ComicAdapter(private val dataBindingComponent: DataBindingComponent) :
         )
         binding.root.setOnClickListener {
             val bundle = bundleOf("comic" to binding.comic,"isLocal" to true)
-            it.findNavController().navigate(R.id.detailComicFragment, bundle)
+            it.findNavController().navigate(R.id.action_localComicFragment_to_detailComicFragment, bundle)
         }
         return binding
     }

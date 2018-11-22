@@ -5,6 +5,7 @@ package nam.tran.android.helper.view.main.comic;
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -39,7 +40,7 @@ class ComicFragment : BaseFragmentMVVM<FragmentComicBinding, ComicViewModel>(), 
 //
 
         binding.fab.setOnClickListener {
-            it.findNavController().navigate(R.id.localComicFragment)
+            it.findNavController().navigate(R.id.action_homeFragment_to_localComicFragment)
         }
 
         binding.rvComic.addItemDecoration(

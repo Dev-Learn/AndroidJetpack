@@ -52,11 +52,6 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseFragmentViewModel>
         mViewModel?.onAttach(this)
     }
 
-    override fun initialized() {
-        super.initialized()
-        mViewModel?.onInitialized()
-    }
-
     override fun initLayout(inflater: LayoutInflater, container: ViewGroup?): View {
         mViewDataBinding = DataBindingUtil.inflate(inflater, layoutId(), container, false)
         binding = mViewDataBinding
