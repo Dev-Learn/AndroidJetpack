@@ -32,8 +32,8 @@ internal constructor(
     private val appExecutors: AppExecutors,
     private val iPreference: IPreference,
     private val dataEntityMapper: DataEntityMapper,
-    private val iApi: IApi
-    , private val dbProvider: DbProvider
+    private val iApi: IApi,
+    private val dbProvider: DbProvider
 ) : IRepository {
 
     override fun getComic(offset: Int, count: Int, typeLoading: Int): LiveData<Resource<List<ComicEntity>>> {

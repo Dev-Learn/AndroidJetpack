@@ -10,14 +10,10 @@ import nam.tran.flatform.di.PreferenceModule
 import javax.inject.Singleton
 
 
-@Module(includes = arrayOf(NetModule::class, DbModule::class, PreferenceModule::class))
+@Module(includes = arrayOf(NetModule::class, DbModule::class))
 abstract class DataModule {
 
     @Binds
     @Singleton
     internal abstract fun provideRepository(repository: Repository): IRepository
-
-//    @Binds
-//    @Singleton
-//    internal abstract fun provideSchedulerProvider(schedulerProvider: AppSchedulerProvider): SchedulerProvider
 }
