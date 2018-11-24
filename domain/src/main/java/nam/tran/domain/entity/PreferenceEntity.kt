@@ -1,3 +1,5 @@
 package nam.tran.domain.entity
 
-class PreferenceEntity
+class PreferenceEntity{
+    var token : String = ""
+}

@@ -15,7 +15,7 @@ import nam.tran.flatform.model.response.LinkComic
 interface ComicImageDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(list: ArrayList<LinkComic>?)
+    fun insert(list: List<LinkComic>?)
 
     @Query("SELECT * FROM comicimage WHERE idcomic = (:idComic)")
     fun loadComicImage(idComic: Int): DataSource.Factory<Int,LinkComic>

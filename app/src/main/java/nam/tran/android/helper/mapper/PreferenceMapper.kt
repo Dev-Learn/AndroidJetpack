@@ -19,6 +19,7 @@ internal constructor(private val preferenceModel: PreferenceModel) {
         if (data == null) {
             throw IllegalArgumentException("Cannot transform a null value")
         }
+        preferenceModel.token = data.token
     }
 
 }

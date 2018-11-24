@@ -13,6 +13,7 @@ import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import tran.nam.util.Constant.Companion.API_URL
 import java.util.concurrent.TimeUnit
@@ -51,11 +52,6 @@ class NetModule {
                 request.addHeader("Content-Type", "application/json")
                 if (token.isNotEmpty())
                     request.addHeader("token",token)
-                else
-                    request.addHeader("token","0f9154d631bb7382c7ec25cf9c5ba42c7aa3cd348b46ec582c5fc1a57787b76a")
-//                token?.let {
-//                    request.addHeader("token",token)
-//                }
                  it.proceed(request.build())
             }
             .connectTimeout(10, TimeUnit.MINUTES)
@@ -71,7 +67,7 @@ class NetModule {
             .client(okHttpClient)
             .baseUrl(API_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(LiveDataCallAdapterFactory())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
     }
 

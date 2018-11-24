@@ -27,7 +27,7 @@ internal constructor(mApp: Application) : IPreference {
         const val TOKEN = "token"
     }
 
-    override fun saveToken(token: String) {
+    override fun saveToken(token: String?) {
         mPref.edit().putString(TOKEN,token).apply()
     }
 

@@ -9,8 +9,8 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import nam.tran.android.helper.view.AppState
-import nam.tran.android.helper.view.main.MainActivity
-import nam.tran.android.helper.view.main.MainActivityModule
+import nam.tran.android.helper.view.MainActivity
+import nam.tran.android.helper.view.MainActivityModule
 import nam.tran.domain.di.DataModule
 import tran.nam.core.di.inject.PerActivity
 

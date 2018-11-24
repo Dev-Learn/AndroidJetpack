@@ -61,9 +61,6 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
     implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
 
-    implementation "android.arch.navigation:navigation-fragment-ktx:$rootProject.navigation"
-    implementation "android.arch.navigation:navigation-ui-ktx:$rootProject.navigation"
-
     kapt "com.google.dagger:dagger-compiler:$rootProject.dagger"
     kapt "com.google.dagger:dagger-android-processor:$rootProject.dagger"
     kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'

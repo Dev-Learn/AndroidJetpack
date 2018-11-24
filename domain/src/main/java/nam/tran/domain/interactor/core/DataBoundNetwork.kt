@@ -19,11 +19,14 @@ package nam.tran.domain.interactor.core
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.executor.AppExecutors
-import nam.tran.flatform.core.ApiEmptyResponse
-import nam.tran.flatform.core.ApiErrorResponse
-import nam.tran.flatform.core.ApiSuccessResponse
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * A generic class that can provide a resource backed by both the sqlite database and the network.
@@ -38,7 +41,7 @@ import nam.tran.flatform.core.ApiSuccessResponse
 abstract class DataBoundNetwork<ResultType, RequestType>
 @MainThread constructor(private val appExecutors: AppExecutors) : IDataBoundResource<RequestType> {
 
-    val result = MediatorLiveData<Resource<ResultType>>()
+    val result = MutableLiveData<Resource<ResultType>>()
 
     init {
         result.value = Resource.loading(null, statusLoading())
@@ -46,24 +49,35 @@ abstract class DataBoundNetwork<ResultType, RequestType>
     }
 
     private fun fetchFromNetwork() {
-        val apiResponse = createCall()
-        result.addSource(apiResponse) { response ->
-            result.removeSource(apiResponse)
-            when (response) {
-                is ApiSuccessResponse -> {
-                    setValue(Resource.success(convertData(response.body), statusLoading()))
-                }
-                is ApiEmptyResponse -> {
-                    setValue(Resource.success(null, statusLoading()))
-                }
-                is ApiErrorResponse -> {
-                    onFetchFailed()
-                    setValue(Resource.error(response.errorMessage, null, statusLoading(), retry = {
+        createCall().enqueue(object : Callback<RequestType> {
+            override fun onFailure(call: Call<RequestType>, t: Throwable) {
+                setValue(Resource.error(
+                    t.message ?: "unknown err",
+                    null,
+                    statusLoading(),
+                    retry = {
                         fetchFromNetwork()
                     }))
+            }
+
+            override fun onResponse(call: Call<RequestType>, response: Response<RequestType>) {
+                if (response.isSuccessful) {
+                    setValue(Resource.success(convertData(response.body()), statusLoading()))
+                } else {
+                    onFetchFailed()
+                    setValue(
+                        Resource.error(
+                            JSONObject(response.errorBody()?.string()).getString("message"),
+                            null,
+                            statusLoading(),
+                            retry = {
+                                fetchFromNetwork()
+                            })
+                    )
                 }
             }
-        }
+
+        })
     }
 
     @MainThread

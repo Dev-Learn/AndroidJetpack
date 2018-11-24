@@ -6,13 +6,13 @@
     <data>
         <variable
                 name="viewModel"
-                type="nam.tran.android.helper.view.main.detail.viewmodel.DetailComicViewModel"/>
+                type="nam.tran.android.helper.view.detail.viewmodel.DetailComicViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="nam.tran.android.helper.view.main.detail.DetailComicFragment">
+            tools:context="nam.tran.android.helper.view.detail.DetailComicFragment">
 
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"

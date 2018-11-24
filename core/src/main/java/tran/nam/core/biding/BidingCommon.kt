@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.databinding.BindingAdapter
 import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Status
+import tran.nam.core.view.BaseActivity
 import tran.nam.core.viewmodel.IProgressViewModel
 import tran.nam.core.viewmodel.IViewModel
 
@@ -130,43 +131,37 @@ object BidingCommon {
             } else {
                 (context as IViewModel).hideDialogLoading()
             }
+        } else {
+            if (context is BaseActivity) {
+                val manager = (view.context as BaseActivity).supportFragmentManager?.primaryNavigationFragment
+                if (manager != null) {
+                    val fragment = manager.childFragmentManager.primaryNavigationFragment
+                    if (fragment != null && fragment is IViewModel) {
+                        if (isShow!!) {
+                            (fragment as IViewModel).showDialogLoading()
+                        } else {
+                            (fragment as IViewModel).hideDialogLoading()
+                        }
+                    }
+                }
+            }
         }
-//        else {
-//            if (context is BaseActivityWithFragment) {
-//                val fragmentHelper = context.mFragmentHelper
-//                val fragment = fragmentHelper?.getCurrentFragment()
-//                if (fragment != null && fragment is BaseParentFragment) {
-//                    val fragmentHelperChild = fragment.mChildFragmentHelper
-//                    val childFragment = fragmentHelperChild.getCurrentFragment()
-//                    if (childFragment is IViewModel) {
-//                        if (isShow!!) {
-//                            (childFragment as IViewModel).showDialogLoading()
-//                        } else {
-//                            (childFragment as IViewModel).hideDialogLoading()
-//                        }
-//                    }
-//                }
-//            }
-//        }
     }
 
     private fun dialogError(view: View, error: String?) {
         val context = view.context
         if (context is IViewModel) {
             (context as IViewModel).onShowDialogError(error)
+        } else {
+            if (context is BaseActivity){
+                val manager = (view.context as BaseActivity).supportFragmentManager?.primaryNavigationFragment
+                if (manager != null){
+                    val fragment = manager.childFragmentManager.primaryNavigationFragment
+                    if (fragment != null && fragment is IViewModel){
+                        (fragment as IViewModel).onShowDialogError(error)
+                    }
+                }
+            }
         }
-//        else {
-//            if (context is BaseActivityWithFragment) {
-//                val fragmentHelper = context.mFragmentHelper
-//                val fragment = fragmentHelper?.getCurrentFragment()
-//                if (fragment != null && fragment is BaseParentFragment) {
-//                    val fragmentHelperChild = fragment.mChildFragmentHelper
-//                    val childFragment = fragmentHelperChild.getCurrentFragment()
-//                    if (childFragment is IViewModel) {
-//                        (childFragment as IViewModel).onShowDialogError(error)
-//                    }
-//                }
-//            }
-//        }
     }
 }

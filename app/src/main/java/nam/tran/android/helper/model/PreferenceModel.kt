@@ -7,4 +7,6 @@ import javax.inject.Singleton
 
 @Singleton
 class PreferenceModel @Inject
-internal constructor() : BaseObservable()
+internal constructor() : BaseObservable(){
+    var token : String = ""
+}

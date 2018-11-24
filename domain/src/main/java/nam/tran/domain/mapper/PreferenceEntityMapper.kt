@@ -20,6 +20,8 @@ class PreferenceEntityMapper @Inject internal constructor() {
             throw IllegalArgumentException("Cannot transform a null value")
         }
 
-        return PreferenceEntity()
+        val result = PreferenceEntity()
+        result.token = data.getToken()
+        return result
     }
 }

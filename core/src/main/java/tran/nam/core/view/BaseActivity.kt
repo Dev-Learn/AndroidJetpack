@@ -2,10 +2,12 @@ package tran.nam.core.view
 
 import android.content.Context
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
+import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import android.view.inputmethod.InputMethodManager
+import androidx.navigation.Navigation
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -18,11 +20,18 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private var mLoadingDialog: LoadingDialog? = null
 
+    open val navController by lazy {
+        Navigation.findNavController(this, navigationId())
+    }
+
     /**
      * @return layout resource id
      */
     @LayoutRes
     abstract fun layoutId(): Int
+
+    @IdRes
+    abstract fun navigationId(): Int
 
     protected open fun setStatusBar() {}
 
@@ -40,9 +49,7 @@ abstract class BaseActivity : AppCompatActivity() {
      **/
     protected open fun inject() {}
 
-    abstract fun initView(savedInstanceState: Bundle?)
-
-    abstract fun initData(savedInstanceState: Bundle?)
+    open fun initData(savedInstanceState: Bundle?) {}
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,8 +59,17 @@ abstract class BaseActivity : AppCompatActivity() {
         initLayout()
         initFragment()
         mLoadingDialog = LoadingDialog(this)
-        initView(savedInstanceState)
         initData(savedInstanceState)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp()
+    }
+
+    override fun onBackPressed() {
+        if (!navController.popBackStack()) {
+            super.onBackPressed()
+        }
     }
 
     fun showLoadingDialog() {
