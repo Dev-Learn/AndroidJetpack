@@ -2,19 +2,32 @@ package nam.tran.android.helper.view.register.viewmodel;
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import nam.tran.domain.entity.state.Resource
+import nam.tran.domain.interactor.login.ILoginUseCase
 import tran.nam.core.viewmodel.BaseFragmentViewModel
 import tran.nam.core.viewmodel.IProgressViewModel
 import javax.inject.Inject
 
-class RegisterViewModel @Inject internal constructor(application: Application) : BaseFragmentViewModel(application),
+class RegisterViewModel @Inject internal constructor(
+    application: Application,
+    private val iLoginUseCase: ILoginUseCase
+) : BaseFragmentViewModel(application),
     IProgressViewModel {
 
-    private val results = MutableLiveData<Resource<*>>()
+    val results = MutableLiveData<Resource<String>?>()
 
-    override fun resource(): Resource<*>? {
+    override fun resource(): Resource<String>? {
         return results.value
     }
 
+    fun register(name: String, email: String, password: String) {
+        view<IRegisterViewModel>()?.let { v ->
+            results.value = null
+            iLoginUseCase.register(name, email, password).observe(v, Observer {
+                results.value = it
+            })
+        }
+    }
 
 }

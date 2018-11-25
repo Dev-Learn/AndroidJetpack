@@ -1,6 +1,8 @@
 package nam.tran.android.helper.view.local;
 
 
+import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -29,7 +31,8 @@ class ComicLocalFragment : BaseFragmentMVVM<FragmentComicLocalBinding, ComicLoca
         return R.layout.fragment_comic_local
     }
 
-    override fun onVisible() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         mViewDataBinding.viewModel = mViewModel
 
         adapter = ComicAdapter(dataBindingComponent)

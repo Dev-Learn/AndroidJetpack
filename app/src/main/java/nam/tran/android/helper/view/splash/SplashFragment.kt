@@ -1,5 +1,7 @@
 package nam.tran.android.helper.view.splash;
 
+import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
@@ -20,14 +22,15 @@ class SplashFragment : BaseFragmentMVVM<FragmentSplashBinding, SplashViewModel>(
         return R.layout.fragment_splash
     }
 
-    override fun onVisible() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         mViewDataBinding.viewModel = mViewModel
         mViewDataBinding.image.postDelayed(runnable, 2000)
     }
 
     var runnable = Runnable {
         mViewModel?.let {
-            // todo : Error when app go to background ( navigate not call - Ignoring navigate() call)
+            // todo : ErrorResource when app go to background ( navigate not call - Ignoring navigate() call)
             try {
                 if (it.isLogin()) {
                     mViewDataBinding.image.findNavController().navigate(R.id.action_splashFragment_to_homeFragment)

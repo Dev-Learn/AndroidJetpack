@@ -3,6 +3,7 @@ package nam.tran.domain.interactor
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.ItemKeyedDataSource
 import nam.tran.domain.entity.ComicEntity
+import nam.tran.domain.entity.state.ErrorResource
 import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.mapper.DataEntityMapper
@@ -50,9 +51,13 @@ class ItemKeyedComicDataSource(
         iApi.getComicPaging2(limit = params.requestedLoadSize).enqueue(object : Callback<List<Comic>> {
             override fun onFailure(call: Call<List<Comic>>, t: Throwable) {
                 networkState.postValue(
-                    Resource.error(t.message ?: "unknown err", null, Loading.LOADING_NORMAL, retry = {
-                        loadInitial(params, callback)
-                    })
+                    Resource.error(
+                        ErrorResource(massage = t.message ?: "unknown err"),
+                        null,
+                        Loading.LOADING_NORMAL,
+                        retry = {
+                            loadInitial(params, callback)
+                        })
                 )
             }
 
@@ -77,9 +82,14 @@ class ItemKeyedComicDataSource(
                     }
                 } else {
                     networkState.postValue(
-                        Resource.error(JSONObject(response.errorBody()?.string()).getString("message"), null, Loading.LOADING_NORMAL, retry = {
-                            loadInitial(params, callback)
-                        })
+                        Resource.error(
+                            ErrorResource(
+                                JSONObject(response.errorBody()?.string()).getString(
+                                    "message"
+                                ), response.code()
+                            ), null, Loading.LOADING_NORMAL, retry = {
+                                loadInitial(params, callback)
+                            })
                     )
                 }
             }
@@ -94,7 +104,7 @@ class ItemKeyedComicDataSource(
             override fun onFailure(call: Call<List<Comic>>, t: Throwable) {
                 networkState.postValue(
                     Resource.errorPaging(
-                        t.message ?: "unknown err",
+                        ErrorResource(massage = t.message ?: "unknown err"),
                         null,
                         Loading.LOADING_NORMAL,
                         retry = {
@@ -125,9 +135,14 @@ class ItemKeyedComicDataSource(
                     }
                 } else {
                     networkState.postValue(
-                        Resource.errorPaging(JSONObject(response.errorBody()?.string()).getString("message"), null, Loading.LOADING_NORMAL, retry = {
-                            loadAfter(params, callback)
-                        })
+                        Resource.errorPaging(
+                            ErrorResource(
+                                JSONObject(response.errorBody()?.string()).getString(
+                                    "message"
+                                ), response.code()
+                            ), null, Loading.LOADING_NORMAL, retry = {
+                                loadAfter(params, callback)
+                            })
                     )
                 }
             }

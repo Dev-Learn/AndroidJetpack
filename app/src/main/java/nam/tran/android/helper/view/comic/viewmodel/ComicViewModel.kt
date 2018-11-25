@@ -6,6 +6,7 @@ import nam.tran.android.helper.mapper.DataMapper
 import nam.tran.android.helper.model.ComicModel
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.ComicUseCase
+import nam.tran.domain.entity.state.Loading
 import tran.nam.core.viewmodel.BaseFragmentViewModel
 import tran.nam.core.viewmodel.IProgressViewModel
 import javax.inject.Inject
@@ -18,7 +19,7 @@ class ComicViewModel @Inject internal constructor(
     BaseFragmentViewModel(application),
     IProgressViewModel {
 
-//    val results = Transformations.map(comicUseCase.getComic(0,20,Loading.LOADING_NORMAL)){
+//    val results = Transformations.map(comicUseCase.getComic(0,20, Loading.LOADING_NORMAL)){
 //        mDataMapper.comicModelMapper.transform(it)
 //    }
 

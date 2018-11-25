@@ -2,6 +2,8 @@
 
 package nam.tran.android.helper.view.comic;
 
+import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -13,12 +15,12 @@ import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.FragmentComicBinding
 import nam.tran.android.helper.model.ComicModel
 import nam.tran.android.helper.view.comic.viewmodel.ComicViewModel
-import nam.tran.android.helper.view.comic.viewmodel.IHomeViewModel
+import nam.tran.android.helper.view.comic.viewmodel.IComicViewModel
 import tran.nam.core.biding.FragmentDataBindingComponent
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 
 class ComicFragment : BaseFragmentMVVM<FragmentComicBinding, ComicViewModel>(),
-    IHomeViewModel {
+    IComicViewModel {
 
     private val dataBindingComponent = FragmentDataBindingComponent(this)
 
@@ -30,14 +32,13 @@ class ComicFragment : BaseFragmentMVVM<FragmentComicBinding, ComicViewModel>(),
         return R.layout.fragment_comic
     }
 
-    override fun onVisible() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         mViewDataBinding.viewModel = mViewModel
 
         val adapter = ComicAdapterPaging(dataBindingComponent) {
             mViewModel?.like(it)
         }
-
-//
 
         binding.fab.setOnClickListener {
             it.findNavController().navigate(R.id.action_homeFragment_to_localComicFragment)
@@ -63,11 +64,10 @@ class ComicFragment : BaseFragmentMVVM<FragmentComicBinding, ComicViewModel>(),
             adapter.submitList(it as PagedList<ComicModel>)
         })
 
-        mViewModel?.results?.observe(this, Observer { it ->
-            it?.let {
+        mViewModel?.results?.observe(this, Observer { result ->
+            result?.let {
                 if (it.initial) {
                     mViewDataBinding.viewModel = mViewModel
-                    mViewDataBinding.executePendingBindings()
                 } else {
                     adapter.setNetworkState(it)
                 }

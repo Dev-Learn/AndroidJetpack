@@ -2,6 +2,7 @@ package nam.tran.flatform
 
 import androidx.lifecycle.LiveData
 import nam.tran.flatform.model.request.LoginRequest
+import nam.tran.flatform.model.request.RegisterRequest
 import nam.tran.flatform.model.response.Comic
 import nam.tran.flatform.model.response.LinkComic
 import retrofit2.Call
@@ -23,4 +24,7 @@ interface IApi {
 
     @POST("/login")
     fun login(@Body loginRequest: LoginRequest): Call<String>
+
+    @PUT("/register")
+    fun register(@Body registerRequest: RegisterRequest) : Call<String>
 }

@@ -1,5 +1,7 @@
 package nam.tran.android.helper.view.detail;
 
+import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -29,7 +31,8 @@ class DetailComicFragment : BaseFragmentMVVM<FragmentDetailComicBinding, DetailC
         return R.layout.fragment_detail_comic
     }
 
-    override fun onVisible() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         mViewDataBinding.viewModel = mViewModel
 
         val adapter = DetailComicAdapterPaging(dataBindingComponent)
@@ -42,10 +45,11 @@ class DetailComicFragment : BaseFragmentMVVM<FragmentDetailComicBinding, DetailC
         )
         binding.rvLinkComic.adapter = adapter
 
-        mViewModel?.getData(arguments?.get("comic") as ComicModel,arguments?.getBoolean("isLocal"))
+        if (savedInstanceState == null)
+            mViewModel?.getData(arguments?.get("comic") as ComicModel,arguments?.getBoolean("isLocal"))
 
         mViewModel?.posts?.observe(this, Observer {
-//            Logger.debug(it)
+            //            Logger.debug(it)
             adapter.submitList(it as PagedList<LinkComicModel>)
         })
 

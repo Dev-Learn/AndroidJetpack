@@ -1,7 +1,12 @@
 package nam.tran.android.helper.view.register;
 
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.FragmentRegisterBinding
 import nam.tran.android.helper.view.register.viewmodel.IRegisterViewModel
@@ -11,12 +16,6 @@ import tran.nam.core.view.mvvm.BaseFragmentMVVM
 class RegisterFragment : BaseFragmentMVVM<FragmentRegisterBinding, RegisterViewModel>(),
     IRegisterViewModel {
 
-    companion object {
-        @JvmStatic
-        fun newInstance(): RegisterFragment =
-            RegisterFragment()
-    }
-
     override fun initViewModel(factory: ViewModelProvider.Factory?) {
         mViewModel = ViewModelProviders.of(this, factory).get(RegisterViewModel::class.java)
     }
@@ -25,7 +24,24 @@ class RegisterFragment : BaseFragmentMVVM<FragmentRegisterBinding, RegisterViewM
         return R.layout.fragment_register
     }
 
-    override fun onVisible() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         mViewDataBinding.viewModel = mViewModel
+
+        mViewModel?.results?.observe(this, Observer { result ->
+            result?.let {
+                mViewDataBinding.viewModel = mViewModel
+                if (it.isSuccess()) {
+                    val alarm = AlertDialog.Builder(context!!)
+                    alarm.setTitle("Register Success")
+                    alarm.setMessage(it.data)
+                    alarm.setCancelable(false)
+                    alarm.setPositiveButton("OK") { dialog, which ->
+                        mViewDataBinding.root.findNavController().navigateUp()
+                    }
+                    alarm.show()
+                }
+            }
+        })
     }
 }

@@ -18,9 +18,8 @@ package nam.tran.domain.interactor.core
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import nam.tran.domain.entity.state.Loading
+import nam.tran.domain.entity.state.ErrorResource
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.executor.AppExecutors
 import org.json.JSONObject
@@ -51,13 +50,15 @@ abstract class DataBoundNetwork<ResultType, RequestType>
     private fun fetchFromNetwork() {
         createCall().enqueue(object : Callback<RequestType> {
             override fun onFailure(call: Call<RequestType>, t: Throwable) {
-                setValue(Resource.error(
-                    t.message ?: "unknown err",
-                    null,
-                    statusLoading(),
-                    retry = {
-                        fetchFromNetwork()
-                    }))
+                setValue(
+                    Resource.error(
+                        ErrorResource(massage = t.message ?: "unknown err"),
+                        null,
+                        statusLoading(),
+                        retry = {
+                            fetchFromNetwork()
+                        })
+                )
             }
 
             override fun onResponse(call: Call<RequestType>, response: Response<RequestType>) {
@@ -67,7 +68,10 @@ abstract class DataBoundNetwork<ResultType, RequestType>
                     onFetchFailed()
                     setValue(
                         Resource.error(
-                            JSONObject(response.errorBody()?.string()).getString("message"),
+                            ErrorResource(
+                                JSONObject(response.errorBody()?.string()).getString("message"),
+                                response.code()
+                            ),
                             null,
                             statusLoading(),
                             retry = {

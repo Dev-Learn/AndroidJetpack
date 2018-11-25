@@ -89,7 +89,7 @@ abstract class BaseActivityMVVM<V : ViewDataBinding, VM : BaseActivityViewModel>
     }
 
     override fun onShowDialogError(message: String?) {
-        Toast.makeText(this, "Error Dialog", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "ErrorResource Dialog", Toast.LENGTH_SHORT).show()
     }
 }
 

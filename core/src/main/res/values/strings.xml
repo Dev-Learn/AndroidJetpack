@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Error Message -->
+    <!-- ErrorResource Message -->
     <string name="error_unknown">Cannot retrieve data. Please try again!</string>
     <string name="error_no_internet_connection">There is no internet connection</string>
     <string name="error_timeout">Timeout error. Please try again!</string>

@@ -5,4 +5,5 @@ import nam.tran.domain.entity.state.Resource
 
 interface ILoginUseCase {
     fun login(email : String,password:String): LiveData<Resource<Void>>
+    fun register(name : String,email: String,password: String) : LiveData<Resource<String>>
 }

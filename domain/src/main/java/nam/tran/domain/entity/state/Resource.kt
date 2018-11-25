@@ -24,8 +24,9 @@ import tran.nam.util.Constant.Companion.EMPTY
  *
  * @param <T>
 </T> */
-class Resource<T>(@Status val status: Int, val data: T?, val message: String?, @Loading var loading: Int,
-                  val retry: (() -> Unit)?
+class Resource<T>(
+    @Status val status: Int, val data: T?, val errorResource: ErrorResource?, @Loading var loading: Int,
+    val retry: (() -> Unit)?
 ) {
 
     var initial = true
@@ -41,13 +42,13 @@ class Resource<T>(@Status val status: Int, val data: T?, val message: String?, @
         val resource = other as Resource<*>?
 
         return (status == resource!!.status
-                && (if (message != null) message == resource.message else resource.message == null)
+                && (if (errorResource != null) errorResource == resource.errorResource else resource.errorResource == null)
                 && if (data != null) data == resource.data else resource.data == null)
     }
 
     override fun hashCode(): Int {
         var result = status
-        result = 31 * result + (message?.hashCode() ?: 0)
+        result = 31 * result + (errorResource?.hashCode() ?: 0)
         result = 31 * result + (data?.hashCode() ?: 0)
         return result
     }
@@ -56,14 +57,14 @@ class Resource<T>(@Status val status: Int, val data: T?, val message: String?, @
         return "Resource{" +
                 "status=" + getStatus(status) + "\n" +
                 "loading=" + getLoading(loading) + "\n" +
-                ", message='" + message + '\''.toString() + "\n" +
+                ", message='" + errorResource + '\''.toString() + "\n" +
                 ", data=" + data +
                 '}'.toString()
     }
 
     private fun getStatus(@Status status: Int): String {
         when (status) {
-            ERROR -> return "Error"
+            ERROR -> return "ErrorResource"
             LOADING -> return "Loading"
             SUCCESS -> return "Success"
         }
@@ -79,7 +80,7 @@ class Resource<T>(@Status val status: Int, val data: T?, val message: String?, @
         return EMPTY
     }
 
-    fun isSuccess():Boolean{
+    fun isSuccess(): Boolean {
         return status == Status.SUCCESS
     }
 
@@ -87,36 +88,36 @@ class Resource<T>(@Status val status: Int, val data: T?, val message: String?, @
 
         @JvmStatic
         fun <T> success(data: T?, loading: Int): Resource<T> {
-            return Resource(SUCCESS, data, null, loading,null)
+            return Resource(SUCCESS, data, null, loading, null)
         }
 
         @JvmStatic
         fun <T> successPaging(data: T?, loading: Int): Resource<T> {
-            val resource = Resource(SUCCESS, data, null, loading,null)
+            val resource = Resource(SUCCESS, data, null, loading, null)
             resource.initial = false
             return resource
         }
 
         @JvmStatic
-        fun <T> error(msg: String?, data: T?, loading: Int,retry: () -> Unit): Resource<T> {
-            return Resource(ERROR, data, msg, loading,retry)
+        fun <T> error(msg: ErrorResource?, data: T?, loading: Int, retry: () -> Unit): Resource<T> {
+            return Resource(ERROR, data, msg, loading, retry)
         }
 
         @JvmStatic
-        fun <T> errorPaging(msg: String?, data: T?, loading: Int,retry: () -> Unit): Resource<T> {
-            val resource = Resource(ERROR, data, msg, loading,retry)
+        fun <T> errorPaging(msg: ErrorResource?, data: T?, loading: Int, retry: () -> Unit): Resource<T> {
+            val resource = Resource(ERROR, data, msg, loading, retry)
             resource.initial = false
             return resource
         }
 
         @JvmStatic
         fun <T> loading(data: T?, @Loading loading: Int): Resource<T> {
-            return Resource(LOADING, data, null, loading,null)
+            return Resource(LOADING, data, null, loading, null)
         }
 
         @JvmStatic
         fun <T> loadingPaging(data: T?, @Loading loading: Int): Resource<T> {
-            val resource = Resource(LOADING, data, null, loading,null)
+            val resource = Resource(LOADING, data, null, loading, null)
             resource.initial = false
             return resource
         }

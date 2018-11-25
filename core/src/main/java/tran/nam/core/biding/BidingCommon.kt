@@ -24,10 +24,11 @@ object BidingCommon {
                 Status.ERROR -> when (it.loading) {
                     Loading.LOADING_DIALOG -> {
                         view.visibility = View.GONE
-                        dialogError(view, it.message)
+                        dialogError(view, it.errorResource?.massage)
                     }
-                    Loading.LOADING_NONE -> Toast.makeText(view.context, it.message, Toast.LENGTH_SHORT).show()
+                    Loading.LOADING_NONE -> Toast.makeText(view.context, it.errorResource?.massage, Toast.LENGTH_SHORT).show()
                     Loading.LOADING_NORMAL -> {
+                        view.visibility = View.VISIBLE
                     }
                 }
                 Status.LOADING -> when (it.loading) {
@@ -98,7 +99,7 @@ object BidingCommon {
                     }
                     Loading.LOADING_NORMAL -> {
                         text.visibility = View.VISIBLE
-                        text.text = it.message
+                        text.text = it.errorResource?.massage
                     }
                 }
                 Status.LOADING, Status.SUCCESS -> text.visibility = View.GONE
@@ -153,11 +154,11 @@ object BidingCommon {
         if (context is IViewModel) {
             (context as IViewModel).onShowDialogError(error)
         } else {
-            if (context is BaseActivity){
+            if (context is BaseActivity) {
                 val manager = (view.context as BaseActivity).supportFragmentManager?.primaryNavigationFragment
-                if (manager != null){
+                if (manager != null) {
                     val fragment = manager.childFragmentManager.primaryNavigationFragment
-                    if (fragment != null && fragment is IViewModel){
+                    if (fragment != null && fragment is IViewModel) {
                         (fragment as IViewModel).onShowDialogError(error)
                     }
                 }

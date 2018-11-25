@@ -49,11 +49,6 @@ abstract class BaseFragment : androidx.fragment.app.Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        onVisible()
-    }
-
     protected fun showLoadingDialog() {
         if (activity != null && activity is BaseActivity && !activity!!.isFinishing)
             (activity as BaseActivity).showLoadingDialog()
@@ -74,7 +69,4 @@ abstract class BaseFragment : androidx.fragment.app.Fragment() {
         if (activity() != null && !activity()!!.isFinishing)
             activity()!!.hideKeyboard()
     }
-
-
-    protected open fun onVisible() {}
 }

@@ -2,6 +2,7 @@ package nam.tran.domain.interactor
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
+import nam.tran.domain.entity.state.ErrorResource
 import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Resource
 import nam.tran.flatform.IApi
@@ -37,7 +38,7 @@ class ItemLinkComicDataSourceFactory2(
                 override fun onFailure(call: Call<List<LinkComic>>, t: Throwable) {
                     networkState.postValue(
                         Resource.error(
-                            t.message ?: "unknown err",
+                            ErrorResource(massage = t.message ?: "unknown err"),
                             null,
                             Loading.LOADING_NORMAL,
                             retry = {
@@ -58,9 +59,14 @@ class ItemLinkComicDataSourceFactory2(
                         }
                     } else {
                         networkState.postValue(
-                            Resource.error(JSONObject(response.errorBody()?.string()).getString("message"), null, Loading.LOADING_NORMAL, retry = {
-                                onZeroItemsLoaded()
-                            })
+                            Resource.error(
+                                ErrorResource(
+                                    JSONObject(response.errorBody()?.string()).getString(
+                                        "message"
+                                    ), response.code()
+                                ), null, Loading.LOADING_NORMAL, retry = {
+                                    onZeroItemsLoaded()
+                                })
                         )
                     }
                 }
@@ -76,7 +82,7 @@ class ItemLinkComicDataSourceFactory2(
                 override fun onFailure(call: Call<List<LinkComic>>, t: Throwable) {
                     networkState.postValue(
                         Resource.errorPaging(
-                            t.message ?: "unknown err",
+                            ErrorResource(massage = t.message ?: "unknown err"),
                             null,
                             Loading.LOADING_NORMAL,
                             retry = {
@@ -98,7 +104,11 @@ class ItemLinkComicDataSourceFactory2(
                     } else {
                         networkState.postValue(
                             Resource.errorPaging(
-                                JSONObject(response.errorBody()?.string()).getString("message"),
+                                ErrorResource(
+                                    JSONObject(response.errorBody()?.string()).getString(
+                                        "message"
+                                    ), response.code()
+                                ),
                                 null,
                                 Loading.LOADING_NORMAL,
                                 retry = {

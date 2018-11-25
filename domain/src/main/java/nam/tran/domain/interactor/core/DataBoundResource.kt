@@ -70,7 +70,7 @@
 //            result.removeSource(dbSource)
 //            it.enqueue(object : Callback<RequestType> {
 //                override fun onFailure(call: Call<RequestType>, t: Throwable) {
-//                    Resource.error(
+//                    Resource.errorResource(
 //                        t.message ?: "unknown err",
 //                        null,
 //                        Loading.LOADING_NORMAL,
@@ -96,7 +96,7 @@
 //                        onFetchFailed()
 //                        result.addSource(dbSource) { newData ->
 //                            setValue(
-//                                Resource.error(
+//                                Resource.errorResource(
 //                                    JSONObject(response.errorBody()?.string()).getString("message"),
 //                                    newData,
 //                                    statusLoading(),

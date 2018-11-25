@@ -93,6 +93,6 @@ class ComicModelMapper @Inject constructor(val genreModelMapper: GenreModelMappe
     }
 
     fun transform(data: Resource<List<ComicEntity>>): Resource<List<ComicModel>> {
-        return Resource(data.status, transform(data.data), data.message, data.loading, data.retry)
+        return Resource(data.status, transform(data.data), data.errorResource, data.loading, data.retry)
     }
 }
