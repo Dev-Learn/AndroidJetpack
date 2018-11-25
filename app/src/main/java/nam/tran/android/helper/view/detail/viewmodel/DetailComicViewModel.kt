@@ -1,4 +1,4 @@
-package nam.tran.android.helper.view.detail.viewmodel;
+package nam.tran.android.helper.view.detail.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData

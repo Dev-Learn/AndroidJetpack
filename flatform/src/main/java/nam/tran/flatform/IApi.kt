@@ -1,6 +1,7 @@
 package nam.tran.flatform
 
 import androidx.lifecycle.LiveData
+import nam.tran.flatform.model.request.EmailVerifyRequest
 import nam.tran.flatform.model.request.LoginRequest
 import nam.tran.flatform.model.request.RegisterRequest
 import nam.tran.flatform.model.response.Comic
@@ -27,4 +28,10 @@ interface IApi {
 
     @PUT("/register")
     fun register(@Body registerRequest: RegisterRequest) : Call<String>
+
+    @POST("/resetPassword")
+    fun forgotPassword(@Body email: String) : Call<String>
+
+    @POST("/sendEmailVerify")
+    fun sendEmailVerify(@Body emailVerifyRequest: EmailVerifyRequest) : Call<Void>
 }

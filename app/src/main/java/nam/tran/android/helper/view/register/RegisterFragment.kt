@@ -33,10 +33,10 @@ class RegisterFragment : BaseFragmentMVVM<FragmentRegisterBinding, RegisterViewM
                 mViewDataBinding.viewModel = mViewModel
                 if (it.isSuccess()) {
                     val alarm = AlertDialog.Builder(context!!)
-                    alarm.setTitle("Register Success")
+                    alarm.setTitle("Success")
                     alarm.setMessage(it.data)
                     alarm.setCancelable(false)
-                    alarm.setPositiveButton("OK") { dialog, which ->
+                    alarm.setPositiveButton("Ok") { dialog, which ->
                         mViewDataBinding.root.findNavController().navigateUp()
                     }
                     alarm.show()

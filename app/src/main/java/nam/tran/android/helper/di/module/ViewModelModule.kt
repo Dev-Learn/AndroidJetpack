@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import nam.tran.android.helper.view.comic.viewmodel.ComicViewModel
 import nam.tran.android.helper.view.detail.viewmodel.DetailComicViewModel
+import nam.tran.android.helper.view.forgotPassword.viewmodel.ForgotPasswordViewModel
 import nam.tran.android.helper.view.local.viewmodel.ComicLocalViewModel
 import nam.tran.android.helper.view.login.viewmodel.LoginViewModel
 import nam.tran.android.helper.view.register.viewmodel.RegisterViewModel
@@ -34,6 +35,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(RegisterViewModel::class)
     internal abstract fun bindRegisterViewModel(model: RegisterViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ForgotPasswordViewModel::class)
+    internal abstract fun bindForgotPasswordViewModel(model: ForgotPasswordViewModel): ViewModel
 
     @Binds
     @IntoMap
