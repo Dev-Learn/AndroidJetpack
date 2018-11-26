@@ -24,11 +24,16 @@ object BidingCommon {
                 Status.ERROR -> when (it.loading) {
                     Loading.LOADING_DIALOG -> {
                         view.visibility = View.GONE
+                        loadingDialog(view, false)
                         dialogError(view, it.errorResource?.massage)
                     }
                     Loading.LOADING_NONE -> Toast.makeText(view.context, it.errorResource?.massage, Toast.LENGTH_SHORT).show()
                     Loading.LOADING_NORMAL -> {
-                        view.visibility = View.VISIBLE
+                        if (it.initial){
+                            view.visibility = View.VISIBLE
+                        }else{
+                            view.visibility = View.GONE
+                        }
                     }
                 }
                 Status.LOADING -> when (it.loading) {
@@ -75,7 +80,11 @@ object BidingCommon {
             when (it.status) {
                 Status.ERROR -> when (it.loading) {
                     Loading.LOADING_DIALOG, Loading.LOADING_NONE -> view.visibility = View.VISIBLE
-                    Loading.LOADING_NORMAL -> view.visibility = View.GONE
+                    Loading.LOADING_NORMAL -> if (it.initial){
+                        view.visibility = View.GONE
+                    }else{
+                        view.visibility = View.VISIBLE
+                    }
                 }
                 Status.LOADING -> when (it.loading) {
                     Loading.LOADING_DIALOG, Loading.LOADING_NONE -> view.visibility = View.VISIBLE
