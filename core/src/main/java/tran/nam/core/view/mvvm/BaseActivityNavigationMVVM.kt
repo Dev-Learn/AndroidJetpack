@@ -16,20 +16,21 @@
 
 package tran.nam.core.view.mvvm
 
-import androidx.lifecycle.ViewModelProvider
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.EditText
 import android.widget.Toast
-import tran.nam.core.view.BaseActivityInjection
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.ViewModelProvider
+import tran.nam.core.view.BaseActivityInjectionNavigation
 import tran.nam.core.viewmodel.BaseActivityViewModel
 import tran.nam.core.viewmodel.IViewModel
 import javax.inject.Inject
 
-abstract class BaseActivityMVVM<V : ViewDataBinding, VM : BaseActivityViewModel> : BaseActivityInjection(), IViewModel {
+abstract class BaseActivityNavigationMVVM<V : ViewDataBinding, VM : BaseActivityViewModel> :
+    BaseActivityInjectionNavigation(), IViewModel {
 
     var mViewModelFactory: ViewModelProvider.Factory? = null
         @Inject set

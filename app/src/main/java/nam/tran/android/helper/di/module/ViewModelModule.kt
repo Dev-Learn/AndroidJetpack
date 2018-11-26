@@ -10,8 +10,8 @@ import nam.tran.android.helper.view.detail.viewmodel.DetailComicViewModel
 import nam.tran.android.helper.view.forgotPassword.viewmodel.ForgotPasswordViewModel
 import nam.tran.android.helper.view.local.viewmodel.ComicLocalViewModel
 import nam.tran.android.helper.view.login.viewmodel.LoginViewModel
+import nam.tran.android.helper.view.main.viewmodel.MainViewModel
 import nam.tran.android.helper.view.register.viewmodel.RegisterViewModel
-import nam.tran.android.helper.view.splash.viewmodel.SplashViewModel
 import tran.nam.core.di.ViewModelFactory
 import tran.nam.core.di.inject.ViewModelKey
 
@@ -23,8 +23,8 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(SplashViewModel::class)
-    internal abstract fun bindSplashViewModel(model: SplashViewModel): ViewModel
+    @ViewModelKey(MainViewModel::class)
+    internal abstract fun bindMainViewModel(model: MainViewModel): ViewModel
 
     @Binds
     @IntoMap

@@ -57,7 +57,6 @@ class DetailComicFragment : BaseFragmentMVVM<FragmentDetailComicBinding, DetailC
             it?.let {
                 if (it.initial) {
                     mViewDataBinding.viewModel = mViewModel
-                    mViewDataBinding.executePendingBindings()
                 } else {
                     adapter.setNetworkState(it)
                 }

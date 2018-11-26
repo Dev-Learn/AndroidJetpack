@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
-                name="viewModel"
-                type="nam.tran.android.helper.view.splash.viewmodel.SplashViewModel"/>
+                name="view"
+                type="nam.tran.android.helper.view.splash.SplashActivity"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="nam.tran.android.helper.view.splash.SplashFragment">
+            tools:context=".view.splash.SplashActivity">
 
         <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"

@@ -1,4 +1,4 @@
-package nam.tran.android.helper.view
+package nam.tran.android.helper.view.main
 
 import androidx.appcompat.app.AppCompatActivity
 import dagger.Binds
@@ -16,8 +16,6 @@ import nam.tran.android.helper.view.login.LoginFragment
 import nam.tran.android.helper.view.login.LoginFragmentModule
 import nam.tran.android.helper.view.register.RegisterFragment
 import nam.tran.android.helper.view.register.RegisterFragmentModule
-import nam.tran.android.helper.view.splash.SplashFragment
-import nam.tran.android.helper.view.splash.SplashFragmentModule
 import tran.nam.core.di.inject.PerActivity
 import tran.nam.core.di.inject.PerFragment
 
@@ -26,14 +24,6 @@ import tran.nam.core.di.inject.PerFragment
  */
 @Module
 abstract class MainActivityModule {
-
-    /**
-     * Provides the injector for the [SplashFragmentModule], which has access to the dependencies
-     * provided by this application instance (singleton scoped objects).
-     */
-    @PerFragment
-    @ContributesAndroidInjector(modules = [SplashFragmentModule::class])
-    internal abstract fun injectorSplashFragment(): SplashFragment
 
     /**
      * Provides the injector for the [LoginFragmentModule], which has access to the dependencies

@@ -73,14 +73,14 @@ class ComicAdapterPaging(
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
-        if (payloads.isNotEmpty()) {
-            val item = getItem(position)
-            (holder as ComicItemViewHolder).bind(item)
-        } else {
-            onBindViewHolder(holder, position)
-        }
-    }
+//    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
+//        if (payloads.isNotEmpty()) {
+//            val item = getItem(position)
+//            (holder as ComicItemViewHolder).bind(item)
+//        } else {
+//            onBindViewHolder(holder, position)
+//        }
+//    }
 
     override fun getItemViewType(position: Int): Int {
         return if (hasExtraRow() && position == itemCount - 1) {
