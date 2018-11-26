@@ -67,10 +67,10 @@ abstract class BaseActivityMVVM<V : ViewDataBinding, VM : BaseActivityViewModel>
                 }
             }
         }
-        try {
-            return super.dispatchTouchEvent(event)
+        return try {
+            super.dispatchTouchEvent(event)
         } catch (e: Exception) {
-            return true
+            true
         }
 
     }
@@ -89,7 +89,8 @@ abstract class BaseActivityMVVM<V : ViewDataBinding, VM : BaseActivityViewModel>
     }
 
     override fun onShowDialogError(message: String?) {
-        Toast.makeText(this, "ErrorResource Dialog", Toast.LENGTH_SHORT).show()
+        hideLoadingDialog()
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
 

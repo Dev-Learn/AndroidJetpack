@@ -24,14 +24,17 @@ object BidingCommon {
                 Status.ERROR -> when (it.loading) {
                     Loading.LOADING_DIALOG -> {
                         view.visibility = View.GONE
-                        loadingDialog(view, false)
                         dialogError(view, it.errorResource?.massage)
                     }
-                    Loading.LOADING_NONE -> Toast.makeText(view.context, it.errorResource?.massage, Toast.LENGTH_SHORT).show()
+                    Loading.LOADING_NONE -> Toast.makeText(
+                        view.context,
+                        it.errorResource?.massage,
+                        Toast.LENGTH_SHORT
+                    ).show()
                     Loading.LOADING_NORMAL -> {
-                        if (it.initial){
+                        if (it.initial) {
                             view.visibility = View.VISIBLE
-                        }else{
+                        } else {
                             view.visibility = View.GONE
                         }
                     }
@@ -80,9 +83,9 @@ object BidingCommon {
             when (it.status) {
                 Status.ERROR -> when (it.loading) {
                     Loading.LOADING_DIALOG, Loading.LOADING_NONE -> view.visibility = View.VISIBLE
-                    Loading.LOADING_NORMAL -> if (it.initial){
+                    Loading.LOADING_NORMAL -> if (it.initial) {
                         view.visibility = View.GONE
-                    }else{
+                    } else {
                         view.visibility = View.VISIBLE
                     }
                 }
@@ -135,23 +138,21 @@ object BidingCommon {
 
     private fun loadingDialog(view: View, isShow: Boolean?) {
         val context = view.context
-        if (context is IViewModel) {
-            if (isShow!!) {
-                (context as IViewModel).showDialogLoading()
-            } else {
-                (context as IViewModel).hideDialogLoading()
-            }
-        } else {
-            if (context is BaseActivity) {
-                val manager = (view.context as BaseActivity).supportFragmentManager?.primaryNavigationFragment
-                if (manager != null) {
-                    val fragment = manager.childFragmentManager.primaryNavigationFragment
-                    if (fragment != null && fragment is IViewModel) {
-                        if (isShow!!) {
-                            (fragment as IViewModel).showDialogLoading()
-                        } else {
-                            (fragment as IViewModel).hideDialogLoading()
-                        }
+        if (context is BaseActivity) {
+            val manager = context.supportFragmentManager?.primaryNavigationFragment
+            if (manager != null) {
+                val fragment = manager.childFragmentManager.primaryNavigationFragment
+                if (fragment != null && fragment is IViewModel) {
+                    if (isShow!!) {
+                        fragment.showDialogLoading()
+                    } else {
+                        fragment.hideDialogLoading()
+                    }
+                } else if (context is IViewModel) {
+                    if (isShow!!) {
+                        context.showDialogLoading()
+                    } else {
+                        context.hideDialogLoading()
                     }
                 }
             }
@@ -160,16 +161,14 @@ object BidingCommon {
 
     private fun dialogError(view: View, error: String?) {
         val context = view.context
-        if (context is IViewModel) {
-            (context as IViewModel).onShowDialogError(error)
-        } else {
-            if (context is BaseActivity) {
-                val manager = (view.context as BaseActivity).supportFragmentManager?.primaryNavigationFragment
-                if (manager != null) {
-                    val fragment = manager.childFragmentManager.primaryNavigationFragment
-                    if (fragment != null && fragment is IViewModel) {
-                        (fragment as IViewModel).onShowDialogError(error)
-                    }
+        if (context is BaseActivity) {
+            val manager = context.supportFragmentManager?.primaryNavigationFragment
+            if (manager != null) {
+                val fragment = manager.childFragmentManager.primaryNavigationFragment
+                if (fragment != null && fragment is IViewModel) {
+                    fragment.onShowDialogError(error)
+                } else if (context is IViewModel) {
+                    context.onShowDialogError(error)
                 }
             }
         }

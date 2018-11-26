@@ -2,16 +2,27 @@ package nam.tran.android.helper.view.main
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.ActivityMainBinding
 import nam.tran.android.helper.view.main.viewmodel.IMainViewModel
 import nam.tran.android.helper.view.main.viewmodel.MainViewModel
-import tran.nam.core.view.mvvm.BaseActivityNavigationMVVM
+import tran.nam.core.view.mvvm.BaseActivityMVVM
 
-class MainActivity : BaseActivityNavigationMVVM<ActivityMainBinding, MainViewModel>(), IMainViewModel {
+class MainActivity : BaseActivityMVVM<ActivityMainBinding, MainViewModel>(), IMainViewModel {
 
-    override fun navigationId(): Int {
-        return R.id.nav_host_fragment
+    val navController by lazy {
+        Navigation.findNavController(this, R.id.nav_host_fragment)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp()
+    }
+
+    override fun onBackPressed() {
+        if (!navController.popBackStack()) {
+            super.onBackPressed()
+        }
     }
 
     override fun layoutId(): Int {

@@ -1,4 +1,4 @@
-package nam.tran.android.helper.view.comic.viewmodel;
+package nam.tran.android.helper.view.home.comic.viewmodel;
 
 import android.app.Application
 import androidx.lifecycle.Transformations
@@ -6,7 +6,6 @@ import nam.tran.android.helper.mapper.DataMapper
 import nam.tran.android.helper.model.ComicModel
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.ComicUseCase
-import nam.tran.domain.entity.state.Loading
 import tran.nam.core.viewmodel.BaseFragmentViewModel
 import tran.nam.core.viewmodel.IProgressViewModel
 import javax.inject.Inject

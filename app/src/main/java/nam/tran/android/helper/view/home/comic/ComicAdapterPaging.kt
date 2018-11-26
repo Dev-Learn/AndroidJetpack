@@ -1,11 +1,9 @@
-package nam.tran.android.helper.view.comic
+package nam.tran.android.helper.view.home.comic
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +16,8 @@ import tran.nam.util.Logger
 
 class ComicAdapterPaging(
     private val dataBindingComponent: DataBindingComponent,
-    private val like:(ComicModel?) -> Unit
+    private val like:(ComicModel?) -> Unit,
+    private val goDetail:(ComicModel?) -> Unit
 ) :
     PagedListAdapter<ComicModel, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<ComicModel>() {
         override fun areItemsTheSame(p0: ComicModel, p1: ComicModel): Boolean {
@@ -42,7 +41,7 @@ class ComicAdapterPaging(
                         parent,
                         false,
                         dataBindingComponent
-                    )
+                    ),goDetail
                 )
                 holder.binding.ckbLike.setOnCheckedChangeListener { buttonView, isChecked ->
                     run {
@@ -120,12 +119,14 @@ class ComicAdapterPaging(
         }
     }
 
-    class ComicItemViewHolder(val binding: AdapterComicItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ComicItemViewHolder(
+        val binding: AdapterComicItemBinding,
+        goDetail: (ComicModel?) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.root.setOnClickListener {
-                val bundle = bundleOf("comic" to binding.comic)
-                it.findNavController().navigate(R.id.action_homeFragment_to_detailComicFragment, bundle)
+                goDetail(binding.comic)
             }
         }
 

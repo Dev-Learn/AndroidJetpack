@@ -5,9 +5,10 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import nam.tran.android.helper.view.comic.viewmodel.ComicViewModel
 import nam.tran.android.helper.view.detail.viewmodel.DetailComicViewModel
 import nam.tran.android.helper.view.forgotPassword.viewmodel.ForgotPasswordViewModel
+import nam.tran.android.helper.view.home.comic.viewmodel.ComicViewModel
+import nam.tran.android.helper.view.home.user.viewmodel.UserViewModel
 import nam.tran.android.helper.view.local.viewmodel.ComicLocalViewModel
 import nam.tran.android.helper.view.login.viewmodel.LoginViewModel
 import nam.tran.android.helper.view.main.viewmodel.MainViewModel
@@ -43,11 +44,6 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(ComicViewModel::class)
-    internal abstract fun bindHomeViewModel(model: ComicViewModel): ViewModel
-
-    @Binds
-    @IntoMap
     @ViewModelKey(DetailComicViewModel::class)
     internal abstract fun bindDetailComicViewModel(model: DetailComicViewModel): ViewModel
 
@@ -55,6 +51,16 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ComicLocalViewModel::class)
     internal abstract fun bindComicLocalViewModel(model: ComicLocalViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ComicViewModel::class)
+    internal abstract fun bindComicViewModel(model: ComicViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(UserViewModel::class)
+    internal abstract fun bindUserViewModel(model: UserViewModel): ViewModel
 
 
 }

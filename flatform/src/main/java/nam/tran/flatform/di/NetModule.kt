@@ -54,9 +54,9 @@ class NetModule {
                     request.addHeader("token",token)
                  it.proceed(request.build())
             }
-            .connectTimeout(10, TimeUnit.MINUTES)
-            .readTimeout(15, TimeUnit.MINUTES)
-            .writeTimeout(15, TimeUnit.MINUTES)
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
+            .writeTimeout(15, TimeUnit.SECONDS)
             .build()
     }
 

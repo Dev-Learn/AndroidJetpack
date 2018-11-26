@@ -38,9 +38,9 @@
 
     <fragment
             android:id="@+id/homeFragment"
-            android:name="nam.tran.android.helper.view.comic.ComicFragment"
+            android:name="nam.tran.android.helper.view.home.HomeFragment"
             android:label="HomeFragment"
-            tools:layout="@layout/fragment_comic">
+            tools:layout="@layout/fragment_home">
         <action android:id="@+id/action_homeFragment_to_detailComicFragment"
                 app:destination="@id/detailComicFragment"
                 app:enterAnim="@anim/slide_right_in"

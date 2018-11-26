@@ -1,4 +1,4 @@
-package nam.tran.android.helper.view.comic.viewmodel;
+package nam.tran.android.helper.view.home.comic.viewmodel;
 
 import tran.nam.core.viewmodel.IViewModel
 
