@@ -138,21 +138,23 @@ object BidingCommon {
 
     private fun loadingDialog(view: View, isShow: Boolean?) {
         val context = view.context
-        if (context is BaseActivity) {
-            val manager = context.supportFragmentManager?.primaryNavigationFragment
-            if (manager != null) {
-                val fragment = manager.childFragmentManager.primaryNavigationFragment
-                if (fragment != null && fragment is IViewModel) {
-                    if (isShow!!) {
-                        fragment.showDialogLoading()
-                    } else {
-                        fragment.hideDialogLoading()
-                    }
-                } else if (context is IViewModel) {
-                    if (isShow!!) {
-                        context.showDialogLoading()
-                    } else {
-                        context.hideDialogLoading()
+        if (context is IViewModel) {
+            if (isShow!!) {
+                context.showDialogLoading()
+            } else {
+                context.hideDialogLoading()
+            }
+        } else {
+            if (context is BaseActivity) {
+                val manager = context.supportFragmentManager?.primaryNavigationFragment
+                if (manager != null) {
+                    val fragment = manager.childFragmentManager.primaryNavigationFragment
+                    if (fragment != null && fragment is IViewModel) {
+                        if (isShow!!) {
+                            fragment.showDialogLoading()
+                        } else {
+                            fragment.hideDialogLoading()
+                        }
                     }
                 }
             }
@@ -161,14 +163,16 @@ object BidingCommon {
 
     private fun dialogError(view: View, error: String?) {
         val context = view.context
-        if (context is BaseActivity) {
-            val manager = context.supportFragmentManager?.primaryNavigationFragment
-            if (manager != null) {
-                val fragment = manager.childFragmentManager.primaryNavigationFragment
-                if (fragment != null && fragment is IViewModel) {
-                    fragment.onShowDialogError(error)
-                } else if (context is IViewModel) {
-                    context.onShowDialogError(error)
+        if (context is IViewModel) {
+            context.onShowDialogError(error)
+        } else {
+            if (context is BaseActivity) {
+                val manager = context.supportFragmentManager?.primaryNavigationFragment
+                if (manager != null) {
+                    val fragment = manager.childFragmentManager.primaryNavigationFragment
+                    if (fragment != null && fragment is IViewModel) {
+                        fragment.onShowDialogError(error)
+                    }
                 }
             }
         }

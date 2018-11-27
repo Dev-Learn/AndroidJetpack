@@ -8,6 +8,8 @@ import dagger.android.support.AndroidSupportInjectionModule
 import nam.tran.android.helper.view.AppState
 import nam.tran.android.helper.view.main.MainActivity
 import nam.tran.android.helper.view.main.MainActivityModule
+import nam.tran.android.helper.view.splash.SplashActivity
+import nam.tran.android.helper.view.splash.SplashActivityModule
 import nam.tran.domain.di.DataModule
 import tran.nam.core.di.inject.PerActivity
 import javax.inject.Singleton
@@ -29,6 +31,14 @@ abstract class AppModule {
      * at what is being provided in order to understand its scope.
      */
     internal abstract fun application(app: AppState): Application
+
+    /**
+     * Provides the injector for the [SplashActivityModule], which has access to the dependencies
+     * provided by this application instance (singleton scoped objects).
+     */
+    @PerActivity
+    @ContributesAndroidInjector(modules = [SplashActivityModule::class])
+    internal abstract fun injectorSplashActivity(): SplashActivity
 
     /**
      * Provides the injector for the [MainActivityModule], which has access to the dependencies
