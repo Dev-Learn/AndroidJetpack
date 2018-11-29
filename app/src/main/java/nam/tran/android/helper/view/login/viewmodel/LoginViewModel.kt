@@ -27,13 +27,8 @@ class LoginViewModel @Inject internal constructor(
         return results.value
     }
 
-    override fun onCreated() {
-        results.value = null
-    }
-
     fun login(email: String, password: String) {
         view<ILoginViewModel>()?.let { v ->
-            type = TYPE.LOGIN
             iLoginUseCase.login(email, password).observe(v, Observer {
                 results.postValue(it)
             })

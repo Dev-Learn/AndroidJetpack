@@ -16,6 +16,7 @@ package nam.tran.android.helper.mapper
 
 import nam.tran.android.helper.model.UserModel
 import nam.tran.domain.entity.UserEntity
+import nam.tran.domain.entity.state.Resource
 import java.util.*
 import javax.inject.Inject
 
@@ -33,11 +34,7 @@ class UserModelMapper @Inject constructor() {
      * @return [UserModel].
      */
     fun transform(data: UserEntity?): UserModel {
-        if (data == null) {
-            throw IllegalArgumentException("Cannot transform a null value")
-        }
-
-        return UserModel(data.id,data.name,data.email,data.avarta)
+        data?.let { return UserModel(data.id, data.name, data.email, data.avarta) }
     }
 
     /**
@@ -59,5 +56,15 @@ class UserModelMapper @Inject constructor() {
         }
 
         return dataEntitys
+    }
+
+    fun transform(data: Resource<UserEntity>): Resource<UserModel> {
+        return Resource(
+            data.status,
+            transform(data.data),
+            data.errorResource,
+            data.loading,
+            data.retry
+        )
     }
 }

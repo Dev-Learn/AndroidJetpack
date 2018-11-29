@@ -6,6 +6,8 @@ import nam.tran.flatform.model.request.RegisterRequest
 import nam.tran.flatform.model.response.Comic
 import nam.tran.flatform.model.response.LinkComic
 import nam.tran.flatform.model.response.User
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -37,4 +39,11 @@ interface IApi {
 
     @POST("/userInfo")
     fun getUserInfo(): Call<User>
+
+    @POST("/updateInfo")
+    fun updateUserInfo(
+        @Field("id") id: RequestBody,
+        @Field("name") name: RequestBody,
+        @Field("picture") file: MultipartBody.Part
+    ): Call<Void>
 }
