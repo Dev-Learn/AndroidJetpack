@@ -16,14 +16,15 @@
 
 package tran.nam.core.view.mvvm
 
-import androidx.lifecycle.ViewModelProvider
 import android.content.Context
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.ViewModelProvider
 import tran.nam.common.autoCleared
 import tran.nam.core.view.BaseFragmentInjection
 import tran.nam.core.viewmodel.BaseFragmentViewModel
@@ -44,6 +45,9 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseFragmentViewModel>
 
     protected var binding by autoCleared<V>()
 
+    private var handler: Handler? = null
+    private var runnable: Runnable? = null
+
     abstract fun initViewModel(factory: ViewModelProvider.Factory?)
 
     override fun onAttach(context: Context?) {
@@ -58,8 +62,17 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseFragmentViewModel>
         return mViewDataBinding.root
     }
 
+    open fun navigation(navigator: (() -> Unit)) {
+        handler = Handler()
+        runnable = Runnable {
+            navigator()
+        }
+        handler?.postDelayed(runnable, 300)
+    }
+
     override fun onDestroy() {
         this.mViewDataBinding.unbind()
+        handler?.removeCallbacks(runnable)
         super.onDestroy()
     }
 

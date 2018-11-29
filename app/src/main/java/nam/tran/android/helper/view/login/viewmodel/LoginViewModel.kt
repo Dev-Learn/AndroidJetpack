@@ -3,13 +3,19 @@ package nam.tran.android.helper.view.login.viewmodel;
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import nam.tran.android.helper.mapper.DataMapper
 import nam.tran.domain.entity.state.Resource
+import nam.tran.domain.interactor.app.IAppUseCase
 import nam.tran.domain.interactor.login.ILoginUseCase
 import tran.nam.core.viewmodel.BaseFragmentViewModel
 import tran.nam.core.viewmodel.IProgressViewModel
 import javax.inject.Inject
 
-class LoginViewModel @Inject internal constructor(application: Application, private val iLoginUseCase: ILoginUseCase) :
+class LoginViewModel @Inject internal constructor(
+    application: Application, private val iLoginUseCase: ILoginUseCase
+    , val iAppUseCase: IAppUseCase,
+    val dataMapper: DataMapper
+) :
     BaseFragmentViewModel(application),
     IProgressViewModel {
 
@@ -41,6 +47,10 @@ class LoginViewModel @Inject internal constructor(application: Application, priv
                 results.postValue(it)
             })
         }
+    }
+
+    fun loginSuccess() {
+        dataMapper.preferenceMapper.transform(iAppUseCase.getPreference())
     }
 
     enum class TYPE {

@@ -45,7 +45,7 @@ object BidingCommon {
                     }
                     Loading.LOADING_NONE -> {
                     }
-                    Loading.LOADING_NORMAL -> view.visibility = View.VISIBLE
+                    Loading.LOADING_NORMAL -> if (it.initial) view.visibility = View.VISIBLE
                 }
                 Status.SUCCESS -> when (it.loading) {
                     Loading.LOADING_DIALOG -> {
@@ -53,7 +53,7 @@ object BidingCommon {
                     }
                     Loading.LOADING_NONE -> {
                     }
-                    Loading.LOADING_NORMAL -> view.visibility = View.GONE
+                    Loading.LOADING_NORMAL -> if (it.initial) view.visibility = View.GONE
                 }
             }
         }
@@ -91,7 +91,7 @@ object BidingCommon {
                 }
                 Status.LOADING -> when (it.loading) {
                     Loading.LOADING_DIALOG, Loading.LOADING_NONE -> view.visibility = View.VISIBLE
-                    Loading.LOADING_NORMAL -> view.visibility = View.GONE
+                    Loading.LOADING_NORMAL -> if (it.initial) view.visibility = View.GONE
                 }
                 Status.SUCCESS -> view.visibility = View.VISIBLE
             }

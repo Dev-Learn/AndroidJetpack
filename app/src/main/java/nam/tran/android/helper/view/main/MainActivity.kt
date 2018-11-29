@@ -21,12 +21,15 @@ class MainActivity : BaseActivityInjection() {
         val inflater = navController.navInflater
         val graph = inflater.inflate(R.navigation.nav_graph)
         graph.setDefaultArguments(intent.extras)
-        if (intent.hasExtra("isLogin")) {
-            graph.startDestination = R.id.homeFragment
-        } else {
-            graph.startDestination = R.id.loginFragment
+        intent.extras?.let {
+            if (it.getBoolean("isLogin")) {
+                graph.startDestination = R.id.homeFragment
+            } else {
+                graph.startDestination = R.id.loginFragment
+            }
+            navController.graph = graph
         }
-        navController.graph = graph
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

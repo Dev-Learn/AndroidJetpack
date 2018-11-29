@@ -47,7 +47,8 @@ class LoginFragment : BaseFragmentMVVM<FragmentLoginBinding, LoginViewModel>(),
             mViewDataBinding.viewModel = mViewModel
 
             if (mViewModel?.type == LoginViewModel.TYPE.LOGIN) {
-                login(it)
+                mViewModel?.loginSuccess()
+                navigation { login(it) }
             } else {
                 verifyEmail(it)
             }
