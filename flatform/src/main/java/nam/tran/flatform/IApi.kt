@@ -40,10 +40,11 @@ interface IApi {
     @POST("/userInfo")
     fun getUserInfo(): Call<User>
 
+    @Multipart
     @POST("/updateInfo")
     fun updateUserInfo(
-        @Field("id") id: RequestBody,
-        @Field("name") name: RequestBody,
-        @Field("picture") file: MultipartBody.Part
+        @Part id: MultipartBody.Part,
+        @Part name: MultipartBody.Part,
+        @Part file: MultipartBody.Part
     ): Call<Void>
 }

@@ -10,12 +10,15 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.FragmentUserBinding
+import nam.tran.android.helper.model.UserModel
 import nam.tran.android.helper.view.home.user.viewmodel.IUserViewModel
 import nam.tran.android.helper.view.home.user.viewmodel.UserViewModel
+import nam.tran.domain.entity.state.Resource
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 
 
-class UserFragment : BaseFragmentMVVM<FragmentUserBinding, UserViewModel>(), IUserViewModel {
+class UserFragment : BaseFragmentMVVM<FragmentUserBinding, UserViewModel>(), IUserViewModel,
+    Observer<Resource<UserModel>> {
 
     override fun initViewModel(factory: ViewModelProvider.Factory?) {
         mViewModel = ViewModelProviders.of(this, factory).get(UserViewModel::class.java)
@@ -27,23 +30,29 @@ class UserFragment : BaseFragmentMVVM<FragmentUserBinding, UserViewModel>(), IUs
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewDataBinding.viewModel = mViewModel
-        mViewDataBinding.view = this
+        mViewDataBinding?.viewModel = mViewModel
+        mViewDataBinding?.view = this
+        mViewModel?.user?.let {
+            mViewDataBinding?.user = it
+        }
 
-        mViewModel?.results?.observe(this, Observer {
-            if (mViewModel?.type == UserViewModel.TYPE.INFO) {
-                if (it.data != null) {
-                    mViewModel?.user = it.data!!
-                    mViewDataBinding.user = mViewModel?.user
-                }
-            } else {
-                if (it.isSuccess()) {
-                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-                }
-            }
-            mViewDataBinding.viewModel = mViewModel
-        })
+        mViewModel?.results?.observe(this, this)
     }
+
+    override fun onChanged(it: Resource<UserModel>?) {
+        if (mViewModel?.type == UserViewModel.TYPE.INFO) {
+            it?.data?.let {
+                mViewModel?.user = it
+                mViewDataBinding?.user = mViewModel?.user
+            }
+        } else {
+            if (it != null && it.isSuccess()) {
+                Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+            }
+        }
+        mViewDataBinding?.viewModel = mViewModel
+    }
+
 
     fun logout() {
         mViewModel?.logout()
@@ -63,7 +72,7 @@ class UserFragment : BaseFragmentMVVM<FragmentUserBinding, UserViewModel>(), IUs
         if (requestCode == PICK_IMAGE) {
             val selectedImage = data?.data
             mViewModel?.user?.uri = selectedImage
-            mViewDataBinding.user = mViewModel?.user
+            mViewDataBinding?.user = mViewModel?.user
         }
     }
 

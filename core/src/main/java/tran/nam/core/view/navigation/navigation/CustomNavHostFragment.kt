@@ -1,4 +1,4 @@
-package nam.tran.android.helper.widget.navigation
+package tran.nam.core.view.navigation.navigation
 
 import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigator

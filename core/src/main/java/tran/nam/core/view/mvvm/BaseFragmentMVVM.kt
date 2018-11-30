@@ -41,7 +41,7 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseFragmentViewModel>
 
     protected var mViewModel: VM? = null
 
-    protected lateinit var mViewDataBinding: V
+    protected var mViewDataBinding: V? = null
 
     protected var binding by autoCleared<V>()
 
@@ -58,8 +58,8 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseFragmentViewModel>
 
     override fun initLayout(inflater: LayoutInflater, container: ViewGroup?): View {
         mViewDataBinding = DataBindingUtil.inflate(inflater, layoutId(), container, false)
-        binding = mViewDataBinding
-        return mViewDataBinding.root
+        binding = mViewDataBinding as V
+        return binding.root
     }
 
     open fun navigation(navigator: (() -> Unit)) {
@@ -71,7 +71,7 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseFragmentViewModel>
     }
 
     override fun onDestroy() {
-        this.mViewDataBinding.unbind()
+        this.mViewDataBinding?.unbind()
         handler?.removeCallbacks(runnable)
         super.onDestroy()
     }

@@ -26,18 +26,18 @@ class RegisterFragment : BaseFragmentMVVM<FragmentRegisterBinding, RegisterViewM
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewDataBinding.viewModel = mViewModel
+        mViewDataBinding?.viewModel = mViewModel
 
         mViewModel?.results?.observe(this, Observer { result ->
             result?.let {
-                mViewDataBinding.viewModel = mViewModel
+                mViewDataBinding?.viewModel = mViewModel
                 if (it.isSuccess()) {
                     val alarm = AlertDialog.Builder(context!!)
                     alarm.setTitle("Success")
                     alarm.setMessage(it.data)
                     alarm.setCancelable(false)
                     alarm.setPositiveButton("Ok") { dialog, which ->
-                        mViewDataBinding.root.findNavController().navigateUp()
+                        mViewDataBinding?.root?.findNavController()?.navigateUp()
                     }
                     alarm.show()
                 }

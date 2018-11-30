@@ -14,6 +14,8 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import tran.nam.util.createPartFromString
+import tran.nam.util.prepareFilePart
 import java.io.File
 import javax.inject.Inject
 
@@ -40,7 +42,7 @@ internal constructor(
 
         }.asLiveData()
 
-    override fun updateUserInfo(id: Int, name: String, file: File, fileType: String?) =
+    override fun updateUserInfo(id: Int, name: String, file: File) =
         object : DataBoundNetwork<UserEntity, Void>(appExecutors) {
             override fun convertData(body: Void?): UserEntity? {
                 return null
@@ -51,28 +53,11 @@ internal constructor(
             }
 
             override fun createCall(): Call<Void> {
-
-                // add another part within the multipart request
-                val idRequest = RequestBody.create(
-                    okhttp3.MultipartBody.FORM, id.toString()
+                return iApi.updateUserInfo(
+                    createPartFromString("id", id.toString()),
+                    createPartFromString("name", name),
+                    prepareFilePart("picture", file)
                 )
-
-                // add another part within the multipart request
-                val nameRequest = RequestBody.create(
-                    okhttp3.MultipartBody.FORM, name
-                )
-
-                // create RequestBody instance from file
-                val requestFile = RequestBody.create(
-                    MediaType.parse(fileType),
-                    file
-                )
-
-                // MultipartBody.Part is used to send also the actual file name
-                val body = MultipartBody.Part.createFormData("picture", file.name, requestFile)
-
-
-                return iApi.updateUserInfo(idRequest, nameRequest, body)
             }
 
         }.asLiveData()

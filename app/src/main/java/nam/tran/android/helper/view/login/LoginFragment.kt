@@ -31,12 +31,10 @@ class LoginFragment : BaseFragmentMVVM<FragmentLoginBinding, LoginViewModel>(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewDataBinding.viewModel = mViewModel
-        mViewDataBinding.view = this
+        mViewDataBinding?.viewModel = mViewModel
+        mViewDataBinding?.view = this
 
         mViewModel?.results?.removeObserver(this)
-
-        mViewModel?.onCreated()
 
         mViewModel?.results?.observe(this, this)
     }
@@ -44,7 +42,7 @@ class LoginFragment : BaseFragmentMVVM<FragmentLoginBinding, LoginViewModel>(),
     override fun onChanged(result: Resource<Void>?) {
         Logger.debug(result)
         result?.let {
-            mViewDataBinding.viewModel = mViewModel
+            mViewDataBinding?.viewModel = mViewModel
 
             if (mViewModel?.type == LoginViewModel.TYPE.LOGIN) {
                 mViewModel?.loginSuccess()
@@ -71,8 +69,8 @@ class LoginFragment : BaseFragmentMVVM<FragmentLoginBinding, LoginViewModel>(),
                 alarm.setPositiveButton("Ok") { dialog, which ->
                     dialog.dismiss()
                     mViewModel?.resendVerifyEmail(
-                        mViewDataBinding.edtEmail.text.toString(),
-                        mViewDataBinding.edtPassword.text.toString()
+                        mViewDataBinding?.edtEmail?.text.toString(),
+                        mViewDataBinding?.edtPassword?.text.toString()
                     )
                 }
                 alarm.setNegativeButton("Cancel") { dialog, which ->
@@ -84,7 +82,7 @@ class LoginFragment : BaseFragmentMVVM<FragmentLoginBinding, LoginViewModel>(),
 
         if (it.isSuccess()) {
             Logger.debug(it)
-            mViewDataBinding.view?.findNavController()?.navigate(R.id.action_loginFragment_to_homeFragment)
+            mViewDataBinding?.view?.findNavController()?.navigate(R.id.action_loginFragment_to_homeFragment)
         }
     }
 

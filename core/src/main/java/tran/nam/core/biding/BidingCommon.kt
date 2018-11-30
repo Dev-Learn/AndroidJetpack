@@ -10,6 +10,7 @@ import androidx.databinding.BindingAdapter
 import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Status
 import tran.nam.core.view.BaseActivity
+import tran.nam.core.view.navigation.navigation.CustomNavHostFragment
 import tran.nam.core.viewmodel.IProgressViewModel
 import tran.nam.core.viewmodel.IViewModel
 
@@ -149,11 +150,27 @@ object BidingCommon {
                 val manager = context.supportFragmentManager?.primaryNavigationFragment
                 if (manager != null) {
                     val fragment = manager.childFragmentManager.primaryNavigationFragment
-                    if (fragment != null && fragment is IViewModel) {
-                        if (isShow!!) {
-                            fragment.showDialogLoading()
-                        } else {
-                            fragment.hideDialogLoading()
+                    if (fragment != null) {
+                        if (fragment is IViewModel)
+                            if (isShow!!) {
+                                fragment.showDialogLoading()
+                            } else {
+                                fragment.hideDialogLoading()
+                            }
+                        else{
+                            val managerChild = fragment.childFragmentManager
+                            if (managerChild.fragments.size > 0){
+                                if (managerChild.fragments[0] is CustomNavHostFragment){
+                                    val fragmentChild = managerChild.fragments[0].childFragmentManager.primaryNavigationFragment
+                                    if (fragmentChild != null && fragmentChild is IViewModel){
+                                        if (isShow!!) {
+                                            fragmentChild.showDialogLoading()
+                                        } else {
+                                            fragmentChild.hideDialogLoading()
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -170,8 +187,20 @@ object BidingCommon {
                 val manager = context.supportFragmentManager?.primaryNavigationFragment
                 if (manager != null) {
                     val fragment = manager.childFragmentManager.primaryNavigationFragment
-                    if (fragment != null && fragment is IViewModel) {
-                        fragment.onShowDialogError(error)
+                    if (fragment != null) {
+                        if (fragment is IViewModel)
+                            fragment.onShowDialogError(error)
+                        else{
+                            val managerChild = fragment.childFragmentManager
+                            if (managerChild.fragments.size > 0){
+                                if (managerChild.fragments[0] is CustomNavHostFragment){
+                                    val fragmentChild = managerChild.fragments[0].childFragmentManager.primaryNavigationFragment
+                                    if (fragmentChild != null && fragmentChild is IViewModel){
+                                        fragmentChild.onShowDialogError(error)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

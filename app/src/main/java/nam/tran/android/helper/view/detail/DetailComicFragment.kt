@@ -33,7 +33,7 @@ class DetailComicFragment : BaseFragmentMVVM<FragmentDetailComicBinding, DetailC
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewDataBinding.viewModel = mViewModel
+        mViewDataBinding?.viewModel = mViewModel
 
         val adapter = DetailComicAdapterPaging(dataBindingComponent)
 
@@ -56,7 +56,7 @@ class DetailComicFragment : BaseFragmentMVVM<FragmentDetailComicBinding, DetailC
         mViewModel?.results?.observe(this, Observer { it ->
             it?.let {
                 if (it.initial) {
-                    mViewDataBinding.viewModel = mViewModel
+                    mViewDataBinding?.viewModel = mViewModel
                 } else {
                     adapter.setNetworkState(it)
                 }

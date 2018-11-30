@@ -8,7 +8,6 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import nam.tran.android.helper.R
 import nam.tran.android.helper.di.module.GlideApp
 import nam.tran.android.helper.model.UserModel
-import java.io.File
 
 object BidingCommon {
 
@@ -22,6 +21,8 @@ object BidingCommon {
             circularProgressDrawable.start()
             GlideApp.with(image).load(urlImage).diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.5f)
                 .transition(DrawableTransitionOptions.withCrossFade()).placeholder(circularProgressDrawable)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .error(R.drawable.image_error).into(image)
         }
     }
@@ -35,8 +36,11 @@ object BidingCommon {
             circularProgressDrawable.centerRadius = 30f
             circularProgressDrawable.start()
             GlideApp.with(image).load(if (it.uri != null) it.uri else it.avarta)
-                .diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.5f)
-                .transition(DrawableTransitionOptions.withCrossFade()).placeholder(circularProgressDrawable)
+                .thumbnail(0.5f)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .placeholder(circularProgressDrawable)
                 .error(R.drawable.image_error).into(image)
         }
     }

@@ -33,7 +33,7 @@ class ComicLocalFragment : BaseFragmentMVVM<FragmentComicLocalBinding, ComicLoca
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewDataBinding.viewModel = mViewModel
+        mViewDataBinding?.viewModel = mViewModel
 
         adapter = ComicAdapter(dataBindingComponent)
 
@@ -49,8 +49,8 @@ class ComicLocalFragment : BaseFragmentMVVM<FragmentComicLocalBinding, ComicLoca
             if (it?.data != null && it.data!!.isNotEmpty()) {
                 adapter.replace(it.data!!)
             }
-            mViewDataBinding.viewModel = mViewModel
-            mViewDataBinding.executePendingBindings()
+            mViewDataBinding?.viewModel = mViewModel
+            mViewDataBinding?.executePendingBindings()
         })
     }
 }

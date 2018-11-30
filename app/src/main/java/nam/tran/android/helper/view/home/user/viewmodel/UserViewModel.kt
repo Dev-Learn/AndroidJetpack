@@ -13,7 +13,9 @@ import nam.tran.domain.interactor.app.IAppUseCase
 import nam.tran.domain.interactor.user.IUserUseCase
 import tran.nam.core.viewmodel.BaseFragmentViewModel
 import tran.nam.core.viewmodel.IProgressViewModel
+import tran.nam.util.FilePickUtils
 import java.io.File
+import java.net.URI
 import javax.inject.Inject
 
 class UserViewModel @Inject internal constructor(
@@ -24,7 +26,7 @@ class UserViewModel @Inject internal constructor(
 
     val mApp = application
 
-    lateinit var user: UserModel
+    var user: UserModel? = null
 
     var type = INFO
 
@@ -36,11 +38,13 @@ class UserViewModel @Inject internal constructor(
 
     override fun onCreated() {
         view<IUserViewModel>()?.let { v ->
-            Transformations.map(iUserUseCase.getUserInfo()) {
-                dataMapper.userModelMapper.transform(it)
-            }.observe(v, Observer {
-                results.postValue(it)
-            })
+            if (user == null){
+                Transformations.map(iUserUseCase.getUserInfo()) {
+                    dataMapper.userModelMapper.transform(it)
+                }.observe(v, Observer {
+                    results.postValue(it)
+                })
+            }
         }
     }
 
@@ -51,15 +55,16 @@ class UserViewModel @Inject internal constructor(
     fun updateInfo(name: String, userModel: UserModel) {
         view<IUserViewModel>()?.let { v ->
             type = UPDATE_INFO
-            val uri = user.uri
-            val file = File(uri?.path)
-            val type = mApp.contentResolver.getType(uri)
-            val update = Transformations.map(iUserUseCase.updateUserInfo(userModel.id, name, file, type)) {
-                dataMapper.userModelMapper.transform(it)
+            val uri = user?.uri
+            uri?.let {
+                val path = FilePickUtils.getPath(mApp, uri) ?: ""
+                Transformations.map(iUserUseCase.updateUserInfo(userModel.id, name, File(path))) {
+                    dataMapper.userModelMapper.transform(it)
+                }.observe(v, Observer {
+                    results.value = it
+                })
             }
-            update.observe(v, Observer {
-                results.value = it
-            })
+
         }
     }
 

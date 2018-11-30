@@ -7,5 +7,5 @@ import java.io.File
 
 interface IUserUseCase {
     fun getUserInfo(): LiveData<Resource<UserEntity>>
-    fun updateUserInfo(id: Int, name: String, file: File, fileType: String?): LiveData<Resource<UserEntity>>
+    fun updateUserInfo(id: Int, name: String, file: File): LiveData<Resource<UserEntity>>
 }
