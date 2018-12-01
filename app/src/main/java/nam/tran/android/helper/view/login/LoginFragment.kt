@@ -34,14 +34,14 @@ class LoginFragment : BaseFragmentMVVM<FragmentLoginBinding, LoginViewModel>(),
         mViewDataBinding?.viewModel = mViewModel
         mViewDataBinding?.view = this
 
-        mViewModel?.login?.observe(this, Observer {
+        mViewModel?.login?.observe(viewLifecycleOwner, Observer {
             it?.let { resource ->
                 navigation { login(resource) }
             }
             mViewDataBinding?.resource = it
         })
 
-        mViewModel?.resendEmail?.observe(this, Observer { resource ->
+        mViewModel?.resendEmail?.observe(viewLifecycleOwner, Observer { resource ->
             resource?.let {
                 verifyEmail(it)
             }

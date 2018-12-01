@@ -28,7 +28,7 @@ class RegisterFragment : BaseFragmentMVVM<FragmentRegisterBinding, RegisterViewM
         super.onViewCreated(view, savedInstanceState)
         mViewDataBinding?.viewModel = mViewModel
 
-        mViewModel?.results?.observe(this, Observer { result ->
+        mViewModel?.results?.observe(viewLifecycleOwner, Observer { result ->
             result?.let {
                 mViewDataBinding?.viewModel = mViewModel
                 if (it.isSuccess()) {

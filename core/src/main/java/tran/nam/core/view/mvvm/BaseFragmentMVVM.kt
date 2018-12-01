@@ -72,6 +72,7 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseFragmentViewModel>
 
     override fun onDestroy() {
         this.mViewDataBinding?.unbind()
+        mViewModel?.onDestroy()
         handler?.removeCallbacks(runnable)
         super.onDestroy()
     }

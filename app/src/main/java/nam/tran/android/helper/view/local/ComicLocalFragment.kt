@@ -45,7 +45,7 @@ class ComicLocalFragment : BaseFragmentMVVM<FragmentComicLocalBinding, ComicLoca
         )
         binding.rvComicLocal.adapter = adapter
 
-        mViewModel?.results?.observe(this, Observer {
+        mViewModel?.results?.observe(viewLifecycleOwner, Observer {
             if (it?.data != null && it.data!!.isNotEmpty()) {
                 adapter.replace(it.data!!)
             }

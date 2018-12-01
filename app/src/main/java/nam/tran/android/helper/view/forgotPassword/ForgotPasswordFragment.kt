@@ -28,7 +28,7 @@ class ForgotPasswordFragment : BaseFragmentMVVM<FragmentForgotPasswordBinding, F
         super.onViewCreated(view, savedInstanceState)
         mViewDataBinding?.viewModel = mViewModel
 
-        mViewModel?.results?.observe(this, Observer {
+        mViewModel?.results?.observe(viewLifecycleOwner, Observer {
             mViewDataBinding?.viewModel = mViewModel
             if (it.isSuccess()){
                 val alarm = AlertDialog.Builder(context!!)

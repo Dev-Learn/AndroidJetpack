@@ -33,7 +33,7 @@ class UserFragment : BaseFragmentMVVM<FragmentUserBinding, UserViewModel>(), IUs
             mViewDataBinding?.user = it
         }
 
-        mViewModel?.userInfo?.observe(this, Observer {
+        mViewModel?.userInfo?.observe(viewLifecycleOwner, Observer {
             it?.data?.let {
                 mViewModel?.user = it
                 mViewDataBinding?.user = mViewModel?.user
@@ -41,7 +41,7 @@ class UserFragment : BaseFragmentMVVM<FragmentUserBinding, UserViewModel>(), IUs
             mViewDataBinding?.resource = it
         })
 
-        mViewModel?.updateUserInfo?.observe(this, Observer {
+        mViewModel?.updateUserInfo?.observe(viewLifecycleOwner, Observer {
             if (it != null && it.isSuccess()) {
                 Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
             }

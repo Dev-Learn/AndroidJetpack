@@ -48,12 +48,12 @@ class DetailComicFragment : BaseFragmentMVVM<FragmentDetailComicBinding, DetailC
         if (savedInstanceState == null)
             mViewModel?.getData(arguments?.get("comic") as ComicModel,arguments?.getBoolean("isLocal"))
 
-        mViewModel?.posts?.observe(this, Observer {
+        mViewModel?.posts?.observe(viewLifecycleOwner, Observer {
             //            Logger.debug(it)
             adapter.submitList(it as PagedList<LinkComicModel>)
         })
 
-        mViewModel?.results?.observe(this, Observer { it ->
+        mViewModel?.results?.observe(viewLifecycleOwner, Observer { it ->
             it?.let {
                 if (it.initial) {
                     mViewDataBinding?.viewModel = mViewModel

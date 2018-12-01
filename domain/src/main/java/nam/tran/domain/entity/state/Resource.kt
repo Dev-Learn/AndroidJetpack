@@ -84,18 +84,6 @@ class Resource<T>(
         return status == Status.SUCCESS
     }
 
-    fun isError(): Boolean {
-        return status == Status.ERROR
-    }
-
-    fun getStatusCode(): Int? {
-        return errorResource?.code
-    }
-
-    fun getMassageError(): String? {
-        return errorResource?.massage
-    }
-
     companion object {
 
         @JvmStatic

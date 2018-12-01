@@ -17,8 +17,8 @@ class LoginViewModel @Inject internal constructor(
 ) :
     BaseFragmentViewModel(application) {
 
-    val login = MutableLiveData<Resource<*>?>()
-    val resendEmail = MutableLiveData<Resource<*>?>()
+    val login = MutableLiveData<Resource<Void>?>()
+    val resendEmail = MutableLiveData<Resource<Void>?>()
 
     fun login(email: String, password: String) {
         view<ILoginViewModel>()?.let { v ->
@@ -34,6 +34,12 @@ class LoginViewModel @Inject internal constructor(
                 resendEmail.postValue(it)
             })
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        login.postValue(null)
+        resendEmail.postValue(null)
     }
 
     fun loginSuccess() {

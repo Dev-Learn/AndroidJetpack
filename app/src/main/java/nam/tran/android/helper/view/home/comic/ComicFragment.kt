@@ -56,11 +56,11 @@ class ComicFragment : BaseFragmentMVVM<FragmentComicBinding, ComicViewModel>(),
         )
         binding.rvComic.adapter = adapter
 
-        mViewModel?.posts?.observe(this, Observer {
+        mViewModel?.posts?.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it as PagedList<ComicModel>)
         })
 
-        mViewModel?.results?.observe(this, Observer { result ->
+        mViewModel?.results?.observe(viewLifecycleOwner, Observer { result ->
             result?.let {
                 if (it.initial) {
                     mViewDataBinding?.viewModel = mViewModel
