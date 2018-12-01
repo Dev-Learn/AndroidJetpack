@@ -19,10 +19,10 @@ object BidingCommon {
             circularProgressDrawable.strokeWidth = 5f
             circularProgressDrawable.centerRadius = 30f
             circularProgressDrawable.start()
-            GlideApp.with(image).load(urlImage).diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.5f)
+            GlideApp.with(image).load(urlImage)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .thumbnail(0.5f)
                 .transition(DrawableTransitionOptions.withCrossFade()).placeholder(circularProgressDrawable)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
                 .error(R.drawable.image_error).into(image)
         }
     }

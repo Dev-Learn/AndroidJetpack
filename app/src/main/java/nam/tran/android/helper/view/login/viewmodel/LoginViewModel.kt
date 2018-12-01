@@ -8,38 +8,30 @@ import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.interactor.app.IAppUseCase
 import nam.tran.domain.interactor.login.ILoginUseCase
 import tran.nam.core.viewmodel.BaseFragmentViewModel
-import tran.nam.core.viewmodel.IProgressViewModel
 import javax.inject.Inject
 
 class LoginViewModel @Inject internal constructor(
     application: Application, private val iLoginUseCase: ILoginUseCase
-    , val iAppUseCase: IAppUseCase,
-    val dataMapper: DataMapper
+    , private val iAppUseCase: IAppUseCase,
+    private val dataMapper: DataMapper
 ) :
-    BaseFragmentViewModel(application),
-    IProgressViewModel {
+    BaseFragmentViewModel(application) {
 
-    val results = MutableLiveData<Resource<Void>?>()
-
-    var type = TYPE.LOGIN
-
-    override fun resource(): Resource<Void>? {
-        return results.value
-    }
+    val login = MutableLiveData<Resource<*>?>()
+    val resendEmail = MutableLiveData<Resource<*>?>()
 
     fun login(email: String, password: String) {
         view<ILoginViewModel>()?.let { v ->
             iLoginUseCase.login(email, password).observe(v, Observer {
-                results.postValue(it)
+                login.postValue(it)
             })
         }
     }
 
     fun resendVerifyEmail(email: String, password: String) {
         view<ILoginViewModel>()?.let { v ->
-            type = TYPE.VERIFY_EMAIL
             iLoginUseCase.send_email_verify(email, password).observe(v, Observer {
-                results.postValue(it)
+                resendEmail.postValue(it)
             })
         }
     }
@@ -47,9 +39,4 @@ class LoginViewModel @Inject internal constructor(
     fun loginSuccess() {
         dataMapper.preferenceMapper.transform(iAppUseCase.getPreference())
     }
-
-    enum class TYPE {
-        LOGIN, VERIFY_EMAIL
-    }
-
 }

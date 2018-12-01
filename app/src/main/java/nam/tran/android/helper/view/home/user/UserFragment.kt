@@ -10,15 +10,12 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.FragmentUserBinding
-import nam.tran.android.helper.model.UserModel
 import nam.tran.android.helper.view.home.user.viewmodel.IUserViewModel
 import nam.tran.android.helper.view.home.user.viewmodel.UserViewModel
-import nam.tran.domain.entity.state.Resource
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 
 
-class UserFragment : BaseFragmentMVVM<FragmentUserBinding, UserViewModel>(), IUserViewModel,
-    Observer<Resource<UserModel>> {
+class UserFragment : BaseFragmentMVVM<FragmentUserBinding, UserViewModel>(), IUserViewModel {
 
     override fun initViewModel(factory: ViewModelProvider.Factory?) {
         mViewModel = ViewModelProviders.of(this, factory).get(UserViewModel::class.java)
@@ -36,23 +33,21 @@ class UserFragment : BaseFragmentMVVM<FragmentUserBinding, UserViewModel>(), IUs
             mViewDataBinding?.user = it
         }
 
-        mViewModel?.results?.observe(this, this)
-    }
-
-    override fun onChanged(it: Resource<UserModel>?) {
-        if (mViewModel?.type == UserViewModel.TYPE.INFO) {
+        mViewModel?.userInfo?.observe(this, Observer {
             it?.data?.let {
                 mViewModel?.user = it
                 mViewDataBinding?.user = mViewModel?.user
             }
-        } else {
+            mViewDataBinding?.resource = it
+        })
+
+        mViewModel?.updateUserInfo?.observe(this, Observer {
             if (it != null && it.isSuccess()) {
                 Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
             }
-        }
-        mViewDataBinding?.viewModel = mViewModel
+            mViewDataBinding?.resource = it
+        })
     }
-
 
     fun logout() {
         mViewModel?.logout()

@@ -84,7 +84,7 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseFragmentViewModel>
         hideLoadingDialog()
     }
 
-    override fun onShowDialogError(message: String?) {
+    override fun onShowDialogError(message: String?, codeError: Int?) {
         hideDialogLoading()
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }

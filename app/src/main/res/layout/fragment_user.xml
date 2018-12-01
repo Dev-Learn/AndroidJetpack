@@ -13,6 +13,10 @@
                 type="nam.tran.android.helper.view.home.user.UserFragment"/>
 
         <variable
+                name="resource"
+                type="nam.tran.domain.entity.state.Resource"/>
+
+        <variable
                 name="user"
                 type="nam.tran.android.helper.model.UserModel"/>
     </data>
@@ -27,7 +31,7 @@
                 android:layout_height="match_parent"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                app:visibleView="@{viewModel}">
+                app:visibleView="@{resource}">
 
             <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="@dimen/positive_150dp"
@@ -99,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 layout="@layout/loading_state"
-                app:iProgress="@{viewModel}"
+                app:resource="@{resource}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -19,7 +19,7 @@ import tran.nam.core.view.mvvm.BaseFragmentMVVM
 import tran.nam.util.Logger
 
 class LoginFragment : BaseFragmentMVVM<FragmentLoginBinding, LoginViewModel>(),
-    ILoginViewModel, Observer<Resource<Void>?> {
+    ILoginViewModel {
 
     override fun initViewModel(factory: ViewModelProvider.Factory?) {
         mViewModel = ViewModelProviders.of(this, factory).get(LoginViewModel::class.java)
@@ -34,54 +34,31 @@ class LoginFragment : BaseFragmentMVVM<FragmentLoginBinding, LoginViewModel>(),
         mViewDataBinding?.viewModel = mViewModel
         mViewDataBinding?.view = this
 
-        mViewModel?.results?.removeObserver(this)
+        mViewModel?.login?.observe(this, Observer {
+            it?.let { resource ->
+                navigation { login(resource) }
+            }
+            mViewDataBinding?.resource = it
+        })
 
-        mViewModel?.results?.observe(this, this)
-    }
-
-    override fun onChanged(result: Resource<Void>?) {
-        Logger.debug(result)
-        result?.let {
-            mViewDataBinding?.viewModel = mViewModel
-
-            if (mViewModel?.type == LoginViewModel.TYPE.LOGIN) {
-                mViewModel?.loginSuccess()
-                navigation { login(it) }
-            } else {
+        mViewModel?.resendEmail?.observe(this, Observer { resource ->
+            resource?.let {
                 verifyEmail(it)
             }
-        }
+            mViewDataBinding?.resource = resource
+        })
     }
 
-    private fun verifyEmail(it: Resource<Void>) {
+    private fun verifyEmail(it: Resource<*>) {
         if (it.isSuccess()) {
             Toast.makeText(context, "Please check email to verify account", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun login(it: Resource<Void>) {
-        if (it.isError()) {
-            if (it.getStatusCode() == 600) {
-                val alarm = AlertDialog.Builder(context!!)
-                alarm.setTitle(it.getMassageError())
-                alarm.setMessage("You want resend email verify ???")
-                alarm.setCancelable(false)
-                alarm.setPositiveButton("Ok") { dialog, which ->
-                    dialog.dismiss()
-                    mViewModel?.resendVerifyEmail(
-                        mViewDataBinding?.edtEmail?.text.toString(),
-                        mViewDataBinding?.edtPassword?.text.toString()
-                    )
-                }
-                alarm.setNegativeButton("Cancel") { dialog, which ->
-                    dialog.dismiss()
-                }
-                alarm.show()
-            }
-        }
-
+    private fun login(it: Resource<*>) {
         if (it.isSuccess()) {
             Logger.debug(it)
+            mViewModel?.loginSuccess()
             mViewDataBinding?.view?.findNavController()?.navigate(R.id.action_loginFragment_to_homeFragment)
         }
     }
@@ -92,5 +69,28 @@ class LoginFragment : BaseFragmentMVVM<FragmentLoginBinding, LoginViewModel>(),
 
     fun forgotPassword(v: View) {
         v.findNavController().navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
+    }
+
+    override fun onShowDialogError(message: String?, codeError: Int?) {
+        hideDialogLoading()
+        if (codeError == 600) {
+            val alarm = AlertDialog.Builder(context!!)
+            alarm.setTitle(message)
+            alarm.setMessage("You want resend email verify ???")
+            alarm.setCancelable(false)
+            alarm.setPositiveButton("Ok") { dialog, which ->
+                dialog.dismiss()
+                mViewModel?.resendVerifyEmail(
+                    mViewDataBinding?.edtEmail?.text.toString(),
+                    mViewDataBinding?.edtPassword?.text.toString()
+                )
+            }
+            alarm.setNegativeButton("Cancel") { dialog, which ->
+                dialog.dismiss()
+            }
+            alarm.show()
+        } else {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
     }
 }

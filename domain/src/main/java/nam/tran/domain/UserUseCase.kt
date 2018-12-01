@@ -43,8 +43,8 @@ internal constructor(
         }.asLiveData()
 
     override fun updateUserInfo(id: Int, name: String, file: File) =
-        object : DataBoundNetwork<UserEntity, Void>(appExecutors) {
-            override fun convertData(body: Void?): UserEntity? {
+        object : DataBoundNetwork<Void, Void>(appExecutors) {
+            override fun convertData(body: Void?): Void? {
                 return null
             }
 

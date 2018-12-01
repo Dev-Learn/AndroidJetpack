@@ -8,8 +8,13 @@
                 name="viewModel"
                 type="nam.tran.android.helper.view.login.viewmodel.LoginViewModel"/>
         <variable
+                name="resource"
+                type="nam.tran.domain.entity.state.Resource"/>
+        <variable
                 name="view"
                 type="nam.tran.android.helper.view.login.LoginFragment"/>
+
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -98,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 layout="@layout/loading_state"
-                app:iProgress="@{viewModel}"
+                app:resource="@{resource}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

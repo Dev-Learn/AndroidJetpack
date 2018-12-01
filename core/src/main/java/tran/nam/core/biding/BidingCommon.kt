@@ -8,24 +8,24 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.BindingAdapter
 import nam.tran.domain.entity.state.Loading
+import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.entity.state.Status
 import tran.nam.core.view.BaseActivity
 import tran.nam.core.view.navigation.navigation.CustomNavHostFragment
-import tran.nam.core.viewmodel.IProgressViewModel
 import tran.nam.core.viewmodel.IViewModel
 
 object BidingCommon {
 
     @JvmStatic
     @BindingAdapter("visibleContainLoading")
-    fun visibleContainLoading(view: View, iProgress: IProgressViewModel?) {
-        val resource = iProgress?.resource()
+    fun visibleContainLoading(view: View, resource: Resource<*>?) {
+//        val resource = iProgress?.resource()
         resource?.let {
             when (it.status) {
                 Status.ERROR -> when (it.loading) {
                     Loading.LOADING_DIALOG -> {
                         view.visibility = View.GONE
-                        dialogError(view, it.errorResource?.massage)
+                        dialogError(view, it.errorResource?.massage,it.errorResource?.code)
                     }
                     Loading.LOADING_NONE -> Toast.makeText(
                         view.context,
@@ -62,8 +62,8 @@ object BidingCommon {
 
     @JvmStatic
     @BindingAdapter("visibleProgress")
-    fun visibleProgress(view: View, iProgress: IProgressViewModel?) {
-        val resource = iProgress?.resource()
+    fun visibleProgress(view: View, resource: Resource<*>?) {
+//        val resource = iProgress?.resource()
         resource?.let {
             when (it.status) {
                 Status.ERROR, Status.SUCCESS -> view.visibility = View.GONE
@@ -78,8 +78,8 @@ object BidingCommon {
 
     @JvmStatic
     @BindingAdapter("visibleView")
-    fun visibleView(view: View, iProgress: IProgressViewModel?) {
-        val resource = iProgress?.resource()
+    fun visibleView(view: View, resource: Resource<*>?) {
+//        val resource = iProgress?.resource()
         resource?.let {
             when (it.status) {
                 Status.ERROR -> when (it.loading) {
@@ -101,8 +101,8 @@ object BidingCommon {
 
     @JvmStatic
     @BindingAdapter("visibleTextError")
-    fun visibleTextError(text: TextView, iProgress: IProgressViewModel?) {
-        val resource = iProgress?.resource()
+    fun visibleTextError(text: TextView, resource: Resource<*>?) {
+//        val resource = iProgress?.resource()
         resource?.let {
             when (it.status) {
                 Status.ERROR -> when (it.loading) {
@@ -122,8 +122,8 @@ object BidingCommon {
 
     @JvmStatic
     @BindingAdapter("visibleButtonError")
-    fun visibleButtonError(bt: Button, iProgress: IProgressViewModel?) {
-        val resource = iProgress?.resource()
+    fun visibleButtonError(bt: Button, resource: Resource<*>?) {
+//        val resource = iProgress?.resource()
         resource?.let {
             when (it.status) {
                 Status.ERROR -> {
@@ -157,12 +157,13 @@ object BidingCommon {
                             } else {
                                 fragment.hideDialogLoading()
                             }
-                        else{
+                        else {
                             val managerChild = fragment.childFragmentManager
-                            if (managerChild.fragments.size > 0){
-                                if (managerChild.fragments[0] is CustomNavHostFragment){
-                                    val fragmentChild = managerChild.fragments[0].childFragmentManager.primaryNavigationFragment
-                                    if (fragmentChild != null && fragmentChild is IViewModel){
+                            if (managerChild.fragments.size > 0) {
+                                if (managerChild.fragments[0] is CustomNavHostFragment) {
+                                    val fragmentChild =
+                                        managerChild.fragments[0].childFragmentManager.primaryNavigationFragment
+                                    if (fragmentChild != null && fragmentChild is IViewModel) {
                                         if (isShow!!) {
                                             fragmentChild.showDialogLoading()
                                         } else {
@@ -178,10 +179,10 @@ object BidingCommon {
         }
     }
 
-    private fun dialogError(view: View, error: String?) {
+    private fun dialogError(view: View, error: String?,codeError : Int?) {
         val context = view.context
         if (context is IViewModel) {
-            context.onShowDialogError(error)
+            context.onShowDialogError(error, codeError)
         } else {
             if (context is BaseActivity) {
                 val manager = context.supportFragmentManager?.primaryNavigationFragment
@@ -189,14 +190,15 @@ object BidingCommon {
                     val fragment = manager.childFragmentManager.primaryNavigationFragment
                     if (fragment != null) {
                         if (fragment is IViewModel)
-                            fragment.onShowDialogError(error)
-                        else{
+                            fragment.onShowDialogError(error,codeError)
+                        else {
                             val managerChild = fragment.childFragmentManager
-                            if (managerChild.fragments.size > 0){
-                                if (managerChild.fragments[0] is CustomNavHostFragment){
-                                    val fragmentChild = managerChild.fragments[0].childFragmentManager.primaryNavigationFragment
-                                    if (fragmentChild != null && fragmentChild is IViewModel){
-                                        fragmentChild.onShowDialogError(error)
+                            if (managerChild.fragments.size > 0) {
+                                if (managerChild.fragments[0] is CustomNavHostFragment) {
+                                    val fragmentChild =
+                                        managerChild.fragments[0].childFragmentManager.primaryNavigationFragment
+                                    if (fragmentChild != null && fragmentChild is IViewModel) {
+                                        fragmentChild.onShowDialogError(error, codeError)
                                     }
                                 }
                             }

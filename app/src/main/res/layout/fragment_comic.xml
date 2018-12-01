@@ -20,7 +20,7 @@
                 android:orientation="vertical"
                 android:id="@+id/rv_comic"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:visibleView="@{viewModel}"
+                app:visibleView="@{viewModel.resource()}"
                 tools:listitem="@layout/adapter_comic_item"
                 app:layout_behavior="nam.tran.android.helper.widget.FabBehavior"/>
 
@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 layout="@layout/loading_state"
                 android:layout_gravity="center"
-                app:iProgress="@{viewModel}"/>
+                app:resource="@{viewModel.resource()}"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"
