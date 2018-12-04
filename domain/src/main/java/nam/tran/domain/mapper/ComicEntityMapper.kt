@@ -32,17 +32,15 @@ class ComicEntityMapper @Inject constructor(private val genreEntityMapper: Genre
      * @return [ComicEntity].
      */
     fun transform(data: Comic?): ComicEntity {
-        if (data == null) {
-            throw IllegalArgumentException("Cannot transform a null value")
+        data?.let {
+            return ComicEntity(
+                data.id,
+                data.title,
+                data.description,
+                data.image,
+                ArrayList(genreEntityMapper.transformEntity(data.genre))
+            )
         }
-
-        return ComicEntity(
-            data.id,
-            data.title,
-            data.description,
-            data.image,
-            ArrayList(genreEntityMapper.transformEntity(data.genre))
-        )
     }
 
     /**

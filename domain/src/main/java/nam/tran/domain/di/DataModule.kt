@@ -4,7 +4,7 @@ import dagger.Binds
 import dagger.Module
 import nam.tran.domain.AppUseCase
 import nam.tran.domain.ComicUseCase
-import nam.tran.domain.LogicUseCase
+import nam.tran.domain.LoginUseCase
 import nam.tran.domain.UserUseCase
 import nam.tran.domain.interactor.app.IAppUseCase
 import nam.tran.domain.interactor.comic.IComicUseCase
@@ -24,7 +24,7 @@ abstract class DataModule {
 
     @Binds
     @Singleton
-    internal abstract fun provideLoginUseCase(loginUseCase: LogicUseCase): ILoginUseCase
+    internal abstract fun provideLoginUseCase(loginUseCase: LoginUseCase): ILoginUseCase
 
     @Binds
     @Singleton

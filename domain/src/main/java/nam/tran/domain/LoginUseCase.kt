@@ -14,7 +14,8 @@ import nam.tran.flatform.model.request.RegisterRequest
 import retrofit2.Call
 import javax.inject.Inject
 
-class LogicUseCase @Inject
+
+class LoginUseCase @Inject
 internal constructor(
     private val appExecutors: AppExecutors,
     private val iApi: IApi,

@@ -33,20 +33,18 @@ import javax.inject.Singleton
  * webservice requests).
  */
 @Singleton
-class AppExecutors @Inject
-internal constructor() {
-
-    private val diskIO: Executor
-
-    private val networkIO: Executor
-
+open class AppExecutors(
+    private val diskIO: Executor,
+    private val networkIO: Executor,
     private val mainThread: Executor
+) {
 
-    init {
-        this.diskIO = Executors.newSingleThreadExecutor()
-        this.networkIO = Executors.newFixedThreadPool(3)
-        this.mainThread = MainThreadExecutor()
-    }
+    @Inject
+    constructor() : this(
+        Executors.newSingleThreadExecutor(),
+        Executors.newFixedThreadPool(3),
+        MainThreadExecutor()
+    )
 
     fun diskIO(): Executor {
         return diskIO
@@ -62,7 +60,6 @@ internal constructor() {
 
     private class MainThreadExecutor : Executor {
         private val mainThreadHandler = Handler(Looper.getMainLooper())
-
         override fun execute(command: Runnable) {
             mainThreadHandler.post(command)
         }
