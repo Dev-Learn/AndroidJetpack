@@ -17,6 +17,7 @@
 package tran.nam.core.view.mvvm
 
 import android.content.Context
+import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
@@ -28,10 +29,10 @@ import androidx.lifecycle.ViewModelProvider
 import tran.nam.common.autoCleared
 import tran.nam.core.view.BaseFragmentInjection
 import tran.nam.core.viewmodel.BaseFragmentViewModel
-import tran.nam.core.viewmodel.IViewModel
+import tran.nam.core.viewmodel.IView
 import javax.inject.Inject
 
-abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseFragmentViewModel> : BaseFragmentInjection(), IViewModel {
+abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseFragmentViewModel> : BaseFragmentInjection(), IView {
 
     /**
      * MVVM ViewModel ViewModelProvider.Factory

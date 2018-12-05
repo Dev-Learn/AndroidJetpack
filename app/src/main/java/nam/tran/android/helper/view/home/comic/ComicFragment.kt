@@ -16,12 +16,12 @@ import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.FragmentComicBinding
 import nam.tran.android.helper.model.ComicModel
 import nam.tran.android.helper.view.home.comic.viewmodel.ComicViewModel
-import nam.tran.android.helper.view.home.comic.viewmodel.IComicViewModel
+import nam.tran.android.helper.view.home.comic.viewmodel.IComicView
 import tran.nam.core.biding.FragmentDataBindingComponent
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 
 class ComicFragment : BaseFragmentMVVM<FragmentComicBinding, ComicViewModel>(),
-    IComicViewModel {
+    IComicView {
 
     private val dataBindingComponent = FragmentDataBindingComponent(this)
 

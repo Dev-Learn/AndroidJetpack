@@ -13,13 +13,13 @@ import nam.tran.android.helper.databinding.FragmentDetailComicBinding
 import nam.tran.android.helper.model.ComicModel
 import nam.tran.android.helper.model.LinkComicModel
 import nam.tran.android.helper.view.detail.viewmodel.DetailComicViewModel
-import nam.tran.android.helper.view.detail.viewmodel.IDetailComicViewModel
+import nam.tran.android.helper.view.detail.viewmodel.IDetailComicView
 import tran.nam.core.biding.FragmentDataBindingComponent
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 
 @Suppress("UNCHECKED_CAST")
 class DetailComicFragment : BaseFragmentMVVM<FragmentDetailComicBinding, DetailComicViewModel>(),
-    IDetailComicViewModel {
+    IDetailComicView {
 
     private val dataBindingComponent = FragmentDataBindingComponent(this)
 

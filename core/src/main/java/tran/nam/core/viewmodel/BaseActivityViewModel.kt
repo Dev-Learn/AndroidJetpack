@@ -12,17 +12,17 @@ import java.lang.ref.WeakReference
 open class BaseActivityViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
 
     @Volatile
-    var mViewWeakReference: WeakReference<IViewModel>? = null
+    var mViewWeakReference: WeakReference<IView>? = null
 
 //    private var compositeDisposables: CompositeDisposable? = null
 
-    protected inline fun<reified V: IViewModel> view(): V? {
+    protected inline fun<reified V: IView> view(): V? {
         if (mViewWeakReference == null || mViewWeakReference?.get() == null)
             return null
         return V::class.java.cast(mViewWeakReference?.get())
     }
 
-    open fun onCreated(view: IViewModel) {
+    open fun onCreated(view: IView) {
         mViewWeakReference = WeakReference(view)
 //        if (compositeDisposables == null)
 //            compositeDisposables = CompositeDisposable()

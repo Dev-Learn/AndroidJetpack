@@ -27,7 +27,7 @@ internal constructor(
 ) : IUserUseCase {
 
     override fun getUserInfo(): LiveData<Resource<UserEntity>> =
-        object : DataBoundNetwork<UserEntity, User>(appExecutors) {
+        object : DataBoundNetwork<User,UserEntity>(appExecutors) {
             override fun convertData(body: User?): UserEntity? {
                 return dataEntityMapper.userEntityMapper.transform(body)
             }

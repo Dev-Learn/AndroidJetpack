@@ -6,6 +6,8 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import nam.tran.android.helper.view.home.comic.ComicFragment
 import nam.tran.android.helper.view.home.comic.ComicFragmentModule
+import nam.tran.android.helper.view.home.article.ArticleFragment
+import nam.tran.android.helper.view.home.article.ArticleFragmentModule
 import nam.tran.android.helper.view.home.user.UserFragment
 import nam.tran.android.helper.view.home.user.UserFragmentModule
 import tran.nam.core.di.inject.PerChildFragment
@@ -34,6 +36,15 @@ abstract class HomeFragmentModule {
     @PerChildFragment
     @ContributesAndroidInjector(modules = [UserFragmentModule::class])
     internal abstract fun injectorUserFragment(): UserFragment
+
+    /**
+     * Provides the injector for the [ArticleFragmentModule], which has access to the
+     * dependencies provided by this fragment and activity and application instance
+     * (singleton scoped objects).
+     */
+    @PerChildFragment
+    @ContributesAndroidInjector(modules = [ArticleFragmentModule::class])
+    internal abstract fun injectorTestFragment(): ArticleFragment
 
     @Binds
     @PerFragment

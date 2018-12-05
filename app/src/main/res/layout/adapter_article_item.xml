@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+                name="article"
+                type="nam.tran.android.helper.model.ArticleModel"/>
+        <import type="nam.tran.android.helper.model.AuthorArticleModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="@dimen/positive_100dp"
+                android:layout_height="@dimen/positive_100dp"
+                android:id="@+id/iv_article"
+                loadImageNetwork="@{article.image}"
+                tools:src="@drawable/splash_icon"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_title"
+                android:text="@{article.title}"
+                android:textSize="@dimen/text_size_10sp"
+                android:textStyle="bold"
+                android:layout_marginStart="@dimen/positive_10dp"
+                app:layout_constraintStart_toEndOf="@+id/iv_article"
+                tools:text="Hình ảnh từ chuyến tham quan nhà máy sản xuất điện thoại Vsmart"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toTopOf="@+id/tv_author"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_author"
+                android:text="@{article.author.author_name}"
+                android:textSize="@dimen/text_size_8sp"
+                android:textStyle="italic"
+                android:layout_marginStart="@dimen/positive_10dp"
+                app:layout_constraintStart_toEndOf="@+id/iv_article"
+                tools:text="Doujinshi, Historical, One shot, Drama" app:layout_constraintTop_toBottomOf="@+id/tv_title"
+                app:layout_constraintBottom_toTopOf="@+id/tv_time"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_time"
+                android:text="@{article.time_ago}"
+                android:textSize="@dimen/text_size_8sp"
+                android:textStyle="italic"
+                android:layout_marginStart="@dimen/positive_10dp"
+                app:layout_constraintStart_toEndOf="@+id/iv_article"
+                tools:text="11 giờ trước" app:layout_constraintTop_toBottomOf="@+id/tv_author"
+                app:layout_constraintBottom_toTopOf="@+id/tv_description"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_description"
+                android:text="@{article.description.trim()}"
+                android:maxLines="3"
+                android:ellipsize="end"
+                app:layout_constraintTop_toBottomOf="@+id/iv_article"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="@dimen/positive_5dp"
+                tools:text="Mình vừa trở về từ chuyến tham quan nhà máy sản xuất điện thoại Vsmart của VỉnGroup, bên dưới là loạt hình mình chụp, mình sẽ cố gắng thuật lại chi tiết nhất những gì mình được nghe về dự án này của…"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

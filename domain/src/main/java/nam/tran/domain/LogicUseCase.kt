@@ -22,7 +22,7 @@ internal constructor(
 ) : ILoginUseCase {
 
     override fun login(email: String, password: String): LiveData<Resource<Void>> {
-        return object : DataBoundNetwork<Void, String>(appExecutors) {
+        return object : DataBoundNetwork<String,Void>(appExecutors) {
             override fun convertData(body: String?): Void? {
                 iPreference.saveToken(body)
                 return null

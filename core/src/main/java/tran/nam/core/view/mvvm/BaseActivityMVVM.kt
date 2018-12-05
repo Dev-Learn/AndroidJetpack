@@ -26,10 +26,10 @@ import android.widget.EditText
 import android.widget.Toast
 import tran.nam.core.view.BaseActivityInjection
 import tran.nam.core.viewmodel.BaseActivityViewModel
-import tran.nam.core.viewmodel.IViewModel
+import tran.nam.core.viewmodel.IView
 import javax.inject.Inject
 
-abstract class BaseActivityMVVM<V : ViewDataBinding, VM : BaseActivityViewModel> : BaseActivityInjection(), IViewModel {
+abstract class BaseActivityMVVM<V : ViewDataBinding, VM : BaseActivityViewModel> : BaseActivityInjection(), IView {
 
     var mViewModelFactory: ViewModelProvider.Factory? = null
         @Inject set

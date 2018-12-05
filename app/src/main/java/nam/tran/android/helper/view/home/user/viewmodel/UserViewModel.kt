@@ -34,7 +34,7 @@ class UserViewModel @Inject internal constructor(
     }
 
     fun updateInfo(name: String, userModel: UserModel) {
-        view<IUserViewModel>()?.let { v ->
+        view<IUserView>()?.let { v ->
             val uri = user?.uri
             uri?.let {
                 val path = FilePickUtils.getPath(mApp, uri) ?: ""

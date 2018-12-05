@@ -2,11 +2,9 @@ package nam.tran.domain.di
 
 import dagger.Binds
 import dagger.Module
-import nam.tran.domain.AppUseCase
-import nam.tran.domain.ComicUseCase
-import nam.tran.domain.LogicUseCase
-import nam.tran.domain.UserUseCase
+import nam.tran.domain.*
 import nam.tran.domain.interactor.app.IAppUseCase
+import nam.tran.domain.interactor.article.IArticleUseCase
 import nam.tran.domain.interactor.comic.IComicUseCase
 import nam.tran.domain.interactor.login.ILoginUseCase
 import nam.tran.domain.interactor.user.IUserUseCase
@@ -33,6 +31,10 @@ abstract class DataModule {
     @Binds
     @Singleton
     internal abstract fun provideComicUseCase(userUseCase: UserUseCase): IUserUseCase
+
+    @Binds
+    @Singleton
+    internal abstract fun provideArticleUseCase(articleUseCase: ArticleUseCase): IArticleUseCase
 
 
 }

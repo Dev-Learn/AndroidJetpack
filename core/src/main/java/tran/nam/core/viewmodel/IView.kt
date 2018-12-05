@@ -2,7 +2,7 @@ package tran.nam.core.viewmodel
 
 import androidx.lifecycle.LifecycleOwner
 
-interface IViewModel : LifecycleOwner {
+interface IView : LifecycleOwner {
 
     fun showDialogLoading()
 

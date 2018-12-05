@@ -10,11 +10,11 @@ import androidx.navigation.findNavController
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.FragmentForgotPasswordBinding
 import nam.tran.android.helper.view.forgotPassword.viewmodel.ForgotPasswordViewModel
-import nam.tran.android.helper.view.forgotPassword.viewmodel.IForgotPasswordViewModel
+import nam.tran.android.helper.view.forgotPassword.viewmodel.IForgotPasswordView
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 
 class ForgotPasswordFragment : BaseFragmentMVVM<FragmentForgotPasswordBinding, ForgotPasswordViewModel>(),
-    IForgotPasswordViewModel {
+    IForgotPasswordView {
 
     override fun initViewModel(factory: ViewModelProvider.Factory?) {
         mViewModel = ViewModelProviders.of(this, factory).get(ForgotPasswordViewModel::class.java)

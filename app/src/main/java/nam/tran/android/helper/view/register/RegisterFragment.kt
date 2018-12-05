@@ -9,12 +9,12 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.FragmentRegisterBinding
-import nam.tran.android.helper.view.register.viewmodel.IRegisterViewModel
+import nam.tran.android.helper.view.register.viewmodel.IRegisterView
 import nam.tran.android.helper.view.register.viewmodel.RegisterViewModel
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 
 class RegisterFragment : BaseFragmentMVVM<FragmentRegisterBinding, RegisterViewModel>(),
-    IRegisterViewModel {
+    IRegisterView {
 
     override fun initViewModel(factory: ViewModelProvider.Factory?) {
         mViewModel = ViewModelProviders.of(this, factory).get(RegisterViewModel::class.java)

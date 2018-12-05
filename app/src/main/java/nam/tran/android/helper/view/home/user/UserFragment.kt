@@ -10,12 +10,12 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.FragmentUserBinding
-import nam.tran.android.helper.view.home.user.viewmodel.IUserViewModel
+import nam.tran.android.helper.view.home.user.viewmodel.IUserView
 import nam.tran.android.helper.view.home.user.viewmodel.UserViewModel
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 
 
-class UserFragment : BaseFragmentMVVM<FragmentUserBinding, UserViewModel>(), IUserViewModel {
+class UserFragment : BaseFragmentMVVM<FragmentUserBinding, UserViewModel>(), IUserView {
 
     override fun initViewModel(factory: ViewModelProvider.Factory?) {
         mViewModel = ViewModelProviders.of(this, factory).get(UserViewModel::class.java)

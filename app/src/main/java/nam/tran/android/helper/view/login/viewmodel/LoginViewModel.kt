@@ -21,7 +21,7 @@ class LoginViewModel @Inject internal constructor(
     val resendEmail = MutableLiveData<Resource<Void>?>()
 
     fun login(email: String, password: String) {
-        view<ILoginViewModel>()?.let { v ->
+        view<ILoginView>()?.let { v ->
             iLoginUseCase.login(email, password).observe(v, Observer {
                 login.postValue(it)
             })
@@ -29,7 +29,7 @@ class LoginViewModel @Inject internal constructor(
     }
 
     fun resendVerifyEmail(email: String, password: String) {
-        view<ILoginViewModel>()?.let { v ->
+        view<ILoginView>()?.let { v ->
             iLoginUseCase.send_email_verify(email, password).observe(v, Observer {
                 resendEmail.postValue(it)
             })

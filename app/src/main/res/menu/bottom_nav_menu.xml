@@ -14,11 +14,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
             android:id="@id/comicFragment"
-            android:icon="@android:drawable/ic_dialog_dialer"
+            android:icon="@android:drawable/ic_menu_gallery"
             android:title="@string/comic"/>
 
     <item
             android:id="@id/userFragment"
             android:icon="@android:drawable/ic_menu_mapmode"
             android:title="@string/user"/>
+
+    <item
+            android:id="@id/testFragment"
+            android:icon="@android:drawable/ic_menu_preferences"
+            android:title="@string/test"/>
 </menu>

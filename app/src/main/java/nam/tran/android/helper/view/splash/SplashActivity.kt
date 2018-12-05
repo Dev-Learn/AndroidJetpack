@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModelProviders
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.ActivitySplashBinding
 import nam.tran.android.helper.view.main.MainActivity
-import nam.tran.android.helper.view.splash.viewmodel.ISplashViewModel
+import nam.tran.android.helper.view.splash.viewmodel.ISplashView
 import nam.tran.android.helper.view.splash.viewmodel.SplashViewModel
 import tran.nam.core.view.mvvm.BaseActivityMVVM
 
-class SplashActivity : BaseActivityMVVM<ActivitySplashBinding, SplashViewModel>(), ISplashViewModel {
+class SplashActivity : BaseActivityMVVM<ActivitySplashBinding, SplashViewModel>(), ISplashView {
 
     override fun layoutId(): Int {
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(SplashViewModel::class.java)

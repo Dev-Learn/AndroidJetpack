@@ -22,7 +22,7 @@ class ForgotPasswordViewModel @Inject internal constructor(
     }
 
     fun requestPassword(email: String) {
-        view<IForgotPasswordViewModel>()?.let { v ->
+        view<IForgotPasswordView>()?.let { v ->
             iLoginUseCase.forgotPassword(email).observe(v, Observer {
                 results.postValue(it)
             })

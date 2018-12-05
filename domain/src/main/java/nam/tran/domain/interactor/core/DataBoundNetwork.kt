@@ -33,51 +33,67 @@ import retrofit2.Response
  *
  * You can read more about it in the [Architecture
  * Guide](https://developer.android.com/arch).
- * @param <ResultType>
- * @param <RequestType>
-</RequestType></ResultType> */
+ * @param <ResultEntity>
+ * @param <Result>
+</Result></ResultEntity> */
 @Suppress("LeakingThis")
-abstract class DataBoundNetwork<ResultType, RequestType>
-@MainThread constructor(private val appExecutors: AppExecutors) : IDataBoundResource<RequestType> {
+abstract class DataBoundNetwork<Result,ResultEntity>
+@MainThread constructor(private val appExecutors: AppExecutors) : IDataBoundResource<Result> {
 
-    val result = MutableLiveData<Resource<ResultType>>()
+    val result = MutableLiveData<Resource<ResultEntity>>()
 
-    init {
-        result.value = Resource.loading(null, statusLoading())
-        fetchFromNetwork()
-    }
-
-    private fun fetchFromNetwork() {
-        createCall().enqueue(object : Callback<RequestType> {
-            override fun onFailure(call: Call<RequestType>, t: Throwable) {
-                setValue(
-                    Resource.error(
+    fun fetchFromNetwork() {
+        result.postValue(if (isPaging()) Resource.loadingPaging<ResultEntity>(null, statusLoading()) else Resource.loading<ResultEntity>(
+            null,
+            statusLoading()
+        ))
+        createCall().enqueue(object : Callback<Result> {
+            override fun onFailure(call: Call<Result>, t: Throwable) {
+                setValue(if (isPaging())
+                    Resource.errorPaging<ResultEntity>(
                         ErrorResource(massage = t.message ?: "unknown err"),
                         null,
                         statusLoading(),
                         retry = {
                             fetchFromNetwork()
                         })
-                )
+                else
+                    Resource.error<ResultEntity>(
+                        ErrorResource(massage = t.message ?: "unknown err"),
+                        null,
+                        statusLoading(),
+                        retry = {
+                            fetchFromNetwork()
+                        }))
             }
 
-            override fun onResponse(call: Call<RequestType>, response: Response<RequestType>) {
+            override fun onResponse(call: Call<Result>, response: Response<Result>) {
                 if (response.isSuccessful) {
-                    setValue(Resource.success(convertData(response.body()), statusLoading()))
+                    setValue(if (isPaging()) Resource.successPaging(
+                        convertData(response.body()),
+                        statusLoading()
+                    ) else Resource.success(convertData(response.body()), statusLoading()))
                 } else {
                     onFetchFailed()
-                    setValue(
-                        Resource.error(
-                            ErrorResource(
-                                JSONObject(response.errorBody()?.string()).getString("message"),
-                                response.code()
-                            ),
-                            null,
-                            statusLoading(),
-                            retry = {
-                                fetchFromNetwork()
-                            })
-                    )
+                    setValue(if (isPaging()) Resource.errorPaging<ResultEntity>(
+                        ErrorResource(
+                            JSONObject(response.errorBody()?.string()).getString("message"),
+                            response.code()
+                        ),
+                        null,
+                        statusLoading(),
+                        retry = {
+                            fetchFromNetwork()
+                        }) else Resource.error<ResultEntity>(
+                        ErrorResource(
+                            JSONObject(response.errorBody()?.string()).getString("message"),
+                            response.code()
+                        ),
+                        null,
+                        statusLoading(),
+                        retry = {
+                            fetchFromNetwork()
+                        }))
                 }
             }
 
@@ -85,15 +101,19 @@ abstract class DataBoundNetwork<ResultType, RequestType>
     }
 
     @MainThread
-    fun setValue(newValue: Resource<ResultType>) {
+    fun setValue(newValue: Resource<ResultEntity>) {
         if (result.value != newValue) {
             result.value = newValue
         }
     }
 
-    fun asLiveData() = result as LiveData<Resource<ResultType>>
+    fun asLiveData() = result as LiveData<Resource<ResultEntity>>
 
     protected open fun onFetchFailed() {}
 
-    abstract fun convertData(body: RequestType?): ResultType?
+    protected open fun isPaging(): Boolean {
+        return false
+    }
+
+    abstract fun convertData(body: Result?): ResultEntity?
 }

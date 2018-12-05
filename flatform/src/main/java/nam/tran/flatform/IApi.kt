@@ -3,11 +3,11 @@ package nam.tran.flatform
 import nam.tran.flatform.model.request.EmailVerifyRequest
 import nam.tran.flatform.model.request.LoginRequest
 import nam.tran.flatform.model.request.RegisterRequest
+import nam.tran.flatform.model.response.Article
 import nam.tran.flatform.model.response.Comic
 import nam.tran.flatform.model.response.LinkComic
 import nam.tran.flatform.model.response.User
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -47,4 +47,11 @@ interface IApi {
         @Part name: MultipartBody.Part,
         @Part file: MultipartBody.Part
     ): Call<Void>
+
+    @GET
+    fun getArticle(
+        @Url url: String = "http://192.168.7.152:5000/getArticle", @Query("before") before: Int? = null, @Query("after") after: Int? = null, @Query(
+            "limit"
+        ) limit: Int = 30
+    ): Call<List<Article>>
 }

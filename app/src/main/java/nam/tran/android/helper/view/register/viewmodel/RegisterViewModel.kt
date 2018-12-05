@@ -22,7 +22,7 @@ class RegisterViewModel @Inject internal constructor(
     }
 
     fun register(name: String, email: String, password: String) {
-        view<IRegisterViewModel>()?.let { v ->
+        view<IRegisterView>()?.let { v ->
             results.value = null
             iLoginUseCase.register(name, email, password).observe(v, Observer {
                 results.postValue(it)

@@ -12,7 +12,7 @@ import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.entity.state.Status
 import tran.nam.core.view.BaseActivity
 import tran.nam.core.view.navigation.navigation.CustomNavHostFragment
-import tran.nam.core.viewmodel.IViewModel
+import tran.nam.core.viewmodel.IView
 
 object BidingCommon {
 
@@ -139,7 +139,7 @@ object BidingCommon {
 
     private fun loadingDialog(view: View, isShow: Boolean?) {
         val context = view.context
-        if (context is IViewModel) {
+        if (context is IView) {
             if (isShow!!) {
                 context.showDialogLoading()
             } else {
@@ -151,7 +151,7 @@ object BidingCommon {
                 if (manager != null) {
                     val fragment = manager.childFragmentManager.primaryNavigationFragment
                     if (fragment != null) {
-                        if (fragment is IViewModel)
+                        if (fragment is IView)
                             if (isShow!!) {
                                 fragment.showDialogLoading()
                             } else {
@@ -163,7 +163,7 @@ object BidingCommon {
                                 if (managerChild.fragments[0] is CustomNavHostFragment) {
                                     val fragmentChild =
                                         managerChild.fragments[0].childFragmentManager.primaryNavigationFragment
-                                    if (fragmentChild != null && fragmentChild is IViewModel) {
+                                    if (fragmentChild != null && fragmentChild is IView) {
                                         if (isShow!!) {
                                             fragmentChild.showDialogLoading()
                                         } else {
@@ -181,7 +181,7 @@ object BidingCommon {
 
     private fun dialogError(view: View, error: String?,codeError : Int?) {
         val context = view.context
-        if (context is IViewModel) {
+        if (context is IView) {
             context.onShowDialogError(error, codeError)
         } else {
             if (context is BaseActivity) {
@@ -189,7 +189,7 @@ object BidingCommon {
                 if (manager != null) {
                     val fragment = manager.childFragmentManager.primaryNavigationFragment
                     if (fragment != null) {
-                        if (fragment is IViewModel)
+                        if (fragment is IView)
                             fragment.onShowDialogError(error,codeError)
                         else {
                             val managerChild = fragment.childFragmentManager
@@ -197,7 +197,7 @@ object BidingCommon {
                                 if (managerChild.fragments[0] is CustomNavHostFragment) {
                                     val fragmentChild =
                                         managerChild.fragments[0].childFragmentManager.primaryNavigationFragment
-                                    if (fragmentChild != null && fragmentChild is IViewModel) {
+                                    if (fragmentChild != null && fragmentChild is IView) {
                                         fragmentChild.onShowDialogError(error, codeError)
                                     }
                                 }

@@ -12,14 +12,14 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.FragmentLoginBinding
-import nam.tran.android.helper.view.login.viewmodel.ILoginViewModel
+import nam.tran.android.helper.view.login.viewmodel.ILoginView
 import nam.tran.android.helper.view.login.viewmodel.LoginViewModel
 import nam.tran.domain.entity.state.Resource
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 import tran.nam.util.Logger
 
 class LoginFragment : BaseFragmentMVVM<FragmentLoginBinding, LoginViewModel>(),
-    ILoginViewModel {
+    ILoginView {
 
     override fun initViewModel(factory: ViewModelProvider.Factory?) {
         mViewModel = ViewModelProviders.of(this, factory).get(LoginViewModel::class.java)

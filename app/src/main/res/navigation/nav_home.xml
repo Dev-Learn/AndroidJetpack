@@ -17,4 +17,10 @@
             android:label="UserFragment"
             tools:layout="@layout/fragment_user"/>
 
+    <custom_fragment
+            android:id="@+id/testFragment"
+            android:name="nam.tran.android.helper.view.home.article.ArticleFragment"
+            android:label="TestFragment"
+            tools:layout="@layout/fragment_article"/>
+
 </navigation>

@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.FragmentComicLocalBinding
 import nam.tran.android.helper.view.local.viewmodel.ComicLocalViewModel
-import nam.tran.android.helper.view.local.viewmodel.IComicLocalViewModel
+import nam.tran.android.helper.view.local.viewmodel.IComicLocalView
 import tran.nam.common.autoCleared
 import tran.nam.core.biding.FragmentDataBindingComponent
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 
 class ComicLocalFragment : BaseFragmentMVVM<FragmentComicLocalBinding, ComicLocalViewModel>(),
-    IComicLocalViewModel {
+    IComicLocalView {
 
     private val dataBindingComponent = FragmentDataBindingComponent(this)
 

@@ -9,5 +9,6 @@ internal constructor(
     val mPreferenceEntityMapper: PreferenceEntityMapper,
     val comicEntityMapper: ComicEntityMapper,
     val linkComicEntityMapper: LinkComicEntityMapper,
-    val userEntityMapper: UserEntityMapper
+    val userEntityMapper: UserEntityMapper,
+    val articleEntityMapper: ArticleEntityMapper
 )

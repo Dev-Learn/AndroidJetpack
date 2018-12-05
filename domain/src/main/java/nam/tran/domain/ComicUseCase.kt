@@ -37,7 +37,7 @@ internal constructor(
     IComicUseCase {
 
     override fun getComic(offset: Int, count: Int, typeLoading: Int): LiveData<Resource<List<ComicEntity>>> =
-        object : DataBoundNetwork<List<ComicEntity>, List<Comic>>(appExecutors) {
+        object : DataBoundNetwork<List<Comic>,List<ComicEntity>>(appExecutors) {
             override fun convertData(body: List<Comic>?): List<ComicEntity>? {
                 return dataEntityMapper.comicEntityMapper.transformEntity(body)
             }
