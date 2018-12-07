@@ -16,7 +16,7 @@ import javax.inject.Inject
 class ArticleViewModel @Inject internal constructor(
     application: Application,
     val dataMapper: DataMapper,
-    val iArticleUseCase: IArticleUseCase
+    private val iArticleUseCase: IArticleUseCase
 ) : BaseFragmentViewModel(application),
     IProgressViewModel, Observer<Resource<List<ArticleEntity>>> {
 
@@ -40,15 +40,17 @@ class ArticleViewModel @Inject internal constructor(
         results.postValue(dataMapper.articleModelMapper.transform(it))
     }
 
-//    fun loadMore(article: ArticleModel?) {
-//        article?.let { item ->
-//            view<IArticleView>()?.let {
-//                iArticleUseCase.loadAfter(item.id).observe(it, Observer {
-//                    results.value = dataMapper.articleModelMapper.transform(it)
-//                })
-//            }
-//        }
-//    }
+    fun loadMore(article: ArticleModel?) {
+        article?.let { item ->
+            iArticleUseCase.loadAfter(item.id)
+        }
+    }
+
+    fun loadBefore(article: ArticleModel?) {
+        article?.let { item ->
+            iArticleUseCase.loadBefore(item.id)
+        }
+    }
 
     override fun onCleared() {
         iArticleUseCase.unObserve(this)

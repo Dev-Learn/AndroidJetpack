@@ -9,7 +9,8 @@
         android:id="@+id/progress_loading"
         android:layout_width="@dimen/progress_width_height"
         android:layout_height="@dimen/progress_width_height"
-        app:indicatorName="BallClipRotatePulseIndicator" />
+        app:indicatorName="BallClipRotatePulseIndicator"
+        app:indicatorColor="#000000"/>
 
 </layout>
 

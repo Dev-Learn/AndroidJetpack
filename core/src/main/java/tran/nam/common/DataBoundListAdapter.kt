@@ -17,12 +17,12 @@
 package tran.nam.common
 
 import android.annotation.SuppressLint
-import androidx.databinding.ViewDataBinding
 import android.os.AsyncTask
+import android.view.ViewGroup
 import androidx.annotation.MainThread
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import android.view.ViewGroup
 
 /**
  * A generic RecyclerView adapter that uses Data Binding & DiffUtil.
@@ -30,9 +30,9 @@ import android.view.ViewGroup
  * @param <T> Type of the items in the list
  * @param <V> The type of the ViewDataBinding
 </V></T> */
-abstract class DataBoundListAdapter<T, V : ViewDataBinding> : androidx.recyclerview.widget.RecyclerView.Adapter<DataBoundViewHolder<V>>() {
+abstract class DataBoundListAdapter<T, V : ViewDataBinding> : RecyclerView.Adapter<DataBoundViewHolder<V>>() {
 
-    protected var items: List<T>? = null
+    protected var items: ArrayList<T>? = null
     // each time data is set, we update this variable so that if DiffUtil calculation returns
     // after repetitive updates, we can ignore the old calculation
     private var dataVersion = 0
@@ -58,7 +58,7 @@ abstract class DataBoundListAdapter<T, V : ViewDataBinding> : androidx.recyclerv
             if (update == null) {
                 return
             }
-            items = update
+            items = ArrayList(update)
             notifyDataSetChanged()
         } else if (update == null) {
             val oldSize = items!!.size
@@ -97,7 +97,7 @@ abstract class DataBoundListAdapter<T, V : ViewDataBinding> : androidx.recyclerv
                         // ignore update
                         return
                     }
-                    items = update
+                    items = ArrayList(update)
                     diffResult.dispatchUpdatesTo(this@DataBoundListAdapter)
 
                 }

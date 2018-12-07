@@ -74,6 +74,8 @@ class ArticleModelMapper @Inject constructor(
     }
 
     fun transform(data: Resource<List<ArticleEntity>>): Resource<List<ArticleModel>> {
-        return Resource(data.status, transform(data.data), data.errorResource, data.loading, data.retry)
+        val result = Resource(data.status, transform(data.data), data.errorResource, data.loading, data.retry)
+        result.initial = data.initial
+        return result
     }
 }

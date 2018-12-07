@@ -22,7 +22,7 @@ internal constructor(
 ) : ILoginUseCase {
 
     override fun login(email: String, password: String): LiveData<Resource<Void>> {
-        return object : DataBoundNetwork<String,Void>(appExecutors) {
+        val request = object : DataBoundNetwork<String,Void>(appExecutors) {
             override fun convertData(body: String?): Void? {
                 iPreference.saveToken(body)
                 return null
@@ -36,11 +36,13 @@ internal constructor(
                 return iApi.login(LoginRequest(email, password))
             }
 
-        }.asLiveData()
+        }
+        request.fetchFromNetwork()
+        return request.asLiveData()
     }
 
     override fun register(name: String, email: String, password: String): LiveData<Resource<String>> {
-        return object : DataBoundNetwork<String, String>(appExecutors) {
+        val request = object : DataBoundNetwork<String, String>(appExecutors) {
             override fun convertData(body: String?): String? {
                 return body
             }
@@ -53,11 +55,13 @@ internal constructor(
                 return iApi.register(RegisterRequest(name, email, password))
             }
 
-        }.asLiveData()
+        }
+        request.fetchFromNetwork()
+        return request.asLiveData()
     }
 
     override fun forgotPassword(email: String): LiveData<Resource<String>> {
-        return object : DataBoundNetwork<String, String>(appExecutors) {
+        val request = object : DataBoundNetwork<String, String>(appExecutors) {
             override fun convertData(body: String?): String? {
                 return body
             }
@@ -70,11 +74,13 @@ internal constructor(
                 return iApi.forgotPassword(email)
             }
 
-        }.asLiveData()
+        }
+        request.fetchFromNetwork()
+        return request.asLiveData()
     }
 
     override fun send_email_verify(email: String, password: String): LiveData<Resource<Void>> {
-        return object : DataBoundNetwork<Void, Void>(appExecutors) {
+        val request = object : DataBoundNetwork<Void, Void>(appExecutors) {
             override fun convertData(body: Void?): Void? {
                 return null
             }
@@ -87,6 +93,8 @@ internal constructor(
                 return iApi.sendEmailVerify(EmailVerifyRequest(email, password))
             }
 
-        }.asLiveData()
+        }
+        request.fetchFromNetwork()
+        return request.asLiveData()
     }
 }

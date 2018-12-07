@@ -1,6 +1,5 @@
 package nam.tran.domain.interactor
 
-import androidx.lifecycle.MutableLiveData
 import nam.tran.domain.entity.ArticleEntity
 import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.executor.AppExecutors
@@ -12,11 +11,13 @@ import retrofit2.Call
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 class ArticleBoundNetwork @Inject constructor(
     appExecutors: AppExecutors, private val dataEntityMapper: DataEntityMapper,
     private val iApi: IApi
-) : DataBoundNetwork<List<Article>,List<ArticleEntity>>(appExecutors) {
+) : DataBoundNetwork<List<Article>, List<ArticleEntity>>(appExecutors) {
+
+    var id: Int? = null
+    var isAfter = true
 
     override fun convertData(body: List<Article>?): List<ArticleEntity>? {
         return dataEntityMapper.articleEntityMapper.transform(body)
@@ -27,6 +28,13 @@ class ArticleBoundNetwork @Inject constructor(
     }
 
     override fun createCall(): Call<List<Article>> {
-        return iApi.getArticle()
+        return if (id != null) {
+            if (isAfter) iApi.getArticle(after = id, limit = 20) else iApi.getArticle(before = id,limit = 20)
+        } else
+            iApi.getArticle()
+    }
+
+    override fun isPaging(): Boolean {
+        return id != null
     }
 }

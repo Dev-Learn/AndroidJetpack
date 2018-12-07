@@ -10,9 +10,6 @@ import nam.tran.domain.interactor.user.IUserUseCase
 import nam.tran.domain.mapper.DataEntityMapper
 import nam.tran.flatform.IApi
 import nam.tran.flatform.model.response.User
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Call
 import tran.nam.util.createPartFromString
 import tran.nam.util.prepareFilePart
@@ -26,8 +23,8 @@ internal constructor(
     private val dataEntityMapper: DataEntityMapper
 ) : IUserUseCase {
 
-    override fun getUserInfo(): LiveData<Resource<UserEntity>> =
-        object : DataBoundNetwork<User,UserEntity>(appExecutors) {
+    override fun getUserInfo(): LiveData<Resource<UserEntity>> {
+        val request = object : DataBoundNetwork<User, UserEntity>(appExecutors) {
             override fun convertData(body: User?): UserEntity? {
                 return dataEntityMapper.userEntityMapper.transform(body)
             }
@@ -40,10 +37,13 @@ internal constructor(
                 return iApi.getUserInfo()
             }
 
-        }.asLiveData()
+        }
+        request.fetchFromNetwork()
+        return request.asLiveData()
+    }
 
-    override fun updateUserInfo(id: Int, name: String, file: File) =
-        object : DataBoundNetwork<Void, Void>(appExecutors) {
+    override fun updateUserInfo(id: Int, name: String, file: File): LiveData<Resource<Void>> {
+        val request = object : DataBoundNetwork<Void, Void>(appExecutors) {
             override fun convertData(body: Void?): Void? {
                 return null
             }
@@ -60,5 +60,8 @@ internal constructor(
                 )
             }
 
-        }.asLiveData()
+        }
+        request.fetchFromNetwork()
+        return request.asLiveData()
+    }
 }

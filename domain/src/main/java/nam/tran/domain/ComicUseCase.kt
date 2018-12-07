@@ -33,11 +33,10 @@ internal constructor(
     private val dataEntityMapper: DataEntityMapper,
     private val iApi: IApi,
     private val dbProvider: DbProvider
-) :
-    IComicUseCase {
+) : IComicUseCase {
 
-    override fun getComic(offset: Int, count: Int, typeLoading: Int): LiveData<Resource<List<ComicEntity>>> =
-        object : DataBoundNetwork<List<Comic>,List<ComicEntity>>(appExecutors) {
+    override fun getComic(offset: Int, count: Int, typeLoading: Int): LiveData<Resource<List<ComicEntity>>> {
+        val request = object : DataBoundNetwork<List<Comic>, List<ComicEntity>>(appExecutors) {
             override fun convertData(body: List<Comic>?): List<ComicEntity>? {
                 return dataEntityMapper.comicEntityMapper.transformEntity(body)
             }
@@ -50,7 +49,10 @@ internal constructor(
                 return iApi.getComic(offset, count)
             }
 
-        }.asLiveData()
+        }
+        request.fetchFromNetwork()
+        return request.asLiveData()
+    }
 
     override fun getComicPage(convert: (List<ComicEntity>) -> List<BaseItemKey>): LiveData<Listing<BaseItemKey>> {
         Logger.debug("Paging Learn Page", "Repository - getComic")

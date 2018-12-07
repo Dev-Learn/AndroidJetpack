@@ -50,8 +50,8 @@ interface IApi {
 
     @GET
     fun getArticle(
-        @Url url: String = "http://192.168.7.152:5000/getArticle", @Query("before") before: Int? = null, @Query("after") after: Int? = null, @Query(
+        @Url url: String = "http://192.168.1.84:5000/getArticle", @Query("before") before: Int? = null, @Query("after") after: Int? = null, @Query(
             "limit"
-        ) limit: Int = 30
+        ) limit: Int = 50
     ): Call<List<Article>>
 }
