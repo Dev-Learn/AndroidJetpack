@@ -24,7 +24,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_title"
-                android:text="@{article.title}"
+                android:text="@{article.title()}"
                 android:textSize="@dimen/text_size_10sp"
                 android:textStyle="bold"
                 android:layout_marginStart="@dimen/positive_10dp"

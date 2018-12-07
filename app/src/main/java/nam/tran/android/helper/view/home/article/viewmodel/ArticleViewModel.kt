@@ -11,6 +11,7 @@ import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.interactor.article.IArticleUseCase
 import tran.nam.core.viewmodel.BaseFragmentViewModel
 import tran.nam.core.viewmodel.IProgressViewModel
+import tran.nam.util.Logger
 import javax.inject.Inject
 
 class ArticleViewModel @Inject internal constructor(
@@ -42,12 +43,14 @@ class ArticleViewModel @Inject internal constructor(
 
     fun loadMore(article: ArticleModel?) {
         article?.let { item ->
+            Logger.debug("""getItemEnd : ${item.id}""")
             iArticleUseCase.loadAfter(item.id)
         }
     }
 
     fun loadBefore(article: ArticleModel?) {
         article?.let { item ->
+            Logger.debug("""getItemFirst : ${item.id}""")
             iArticleUseCase.loadBefore(item.id)
         }
     }

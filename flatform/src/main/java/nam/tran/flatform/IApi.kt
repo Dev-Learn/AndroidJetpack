@@ -48,9 +48,9 @@ interface IApi {
         @Part file: MultipartBody.Part
     ): Call<Void>
 
-    @GET
+    @GET("/getArticle")
     fun getArticle(
-        @Url url: String = "http://192.168.1.84:5000/getArticle", @Query("before") before: Int? = null, @Query("after") after: Int? = null, @Query(
+        @Query("before") before: Int? = null, @Query("after") after: Int? = null, @Query(
             "limit"
         ) limit: Int = 50
     ): Call<List<Article>>

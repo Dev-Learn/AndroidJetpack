@@ -11,7 +11,7 @@ import retrofit2.Call
 import javax.inject.Inject
 import javax.inject.Singleton
 
-class ArticleBoundNetwork @Inject constructor(
+class ArticleBoundNetwork constructor(
     appExecutors: AppExecutors, private val dataEntityMapper: DataEntityMapper,
     private val iApi: IApi
 ) : DataBoundNetwork<List<Article>, List<ArticleEntity>>(appExecutors) {

@@ -90,16 +90,14 @@ class ArticleAdapter(private val dataBindingComponent: DataBindingComponent, pri
         this.networkState = newNetworkState
         val hasExtraRow = hasExtraRow()
         if (hadExtraRow != hasExtraRow) {
-            if (hadExtraRow) {
+            if (!hadExtraRow) {
                 if (isAfter)
-                    notifyItemRemoved(super.getItemCount())
-                else
-                    notifyItemRemoved(0)
-            } else {
-                if (isAfter)
-                    notifyItemInserted(super.getItemCount())
+                    notifyItemInserted(itemCount)
                 else
                     notifyItemInserted(0)
+            }else{
+                if (!isAfter)
+                    notifyItemRemoved(0)
             }
         } else if (hasExtraRow && previousState != newNetworkState) {
             notifyItemChanged(itemCount - 1)
@@ -116,7 +114,7 @@ class ArticleAdapter(private val dataBindingComponent: DataBindingComponent, pri
     }
 
     fun isOverLimit(): Boolean {
-        return itemCount == LIMIT - 1
+        return itemCount == LIMIT
     }
 
     private fun isOverLimit(size: Int): Boolean {
@@ -124,12 +122,11 @@ class ArticleAdapter(private val dataBindingComponent: DataBindingComponent, pri
     }
 
     fun add(data: List<ArticleModel>, isAfter: Boolean = true) {
-        val position = itemCount
         if (isAfter) {
-            if (isOverLimit(position + data.size)) {
-                val surplus = position + data.size - LIMIT
+            if (isOverLimit(itemCount + data.size)) {
+                val surplus = itemCount + data.size - LIMIT
                 val listItemRemove = ArrayList<ArticleModel>()
-                for (i in 0..surplus) {
+                for (i in 0..surplus - 1) {
                     items?.get(i)?.let {
                         listItemRemove.add(it)
                     }
@@ -139,21 +136,21 @@ class ArticleAdapter(private val dataBindingComponent: DataBindingComponent, pri
                 loadBefore.invoke()
             }
             items?.addAll(data)
-            notifyItemRangeInserted(position, data.size)
+            notifyItemRangeInserted(itemCount, data.size)
         } else {
-            if (isOverLimit(position + data.size)) {
-                val surplus = position + data.size - LIMIT
-                val size = position - 1
+            if (isOverLimit(itemCount + data.size)) {
+                val surplus = itemCount + data.size - LIMIT
+                val size = itemCount - 1
                 val listItemRemove = ArrayList<ArticleModel>()
-                for (i in size downTo size - surplus) {
+                for (i in size downTo size - surplus + 1) {
                     items?.get(i)?.let {
                         listItemRemove.add(it)
                     }
                 }
                 items?.removeAll(listItemRemove)
-                notifyItemRangeRemoved(position, surplus)
+                notifyItemRangeRemoved(itemCount, surplus)
             }
-            for (i in 0 until data.size) {
+            for (i in 0..data.size - 1) {
                 items?.add(i, data[i])
             }
             notifyItemRangeInserted(0, data.size)
