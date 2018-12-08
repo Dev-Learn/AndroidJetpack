@@ -52,6 +52,6 @@ interface IApi {
     fun getArticle(
         @Query("before") before: Int? = null, @Query("after") after: Int? = null, @Query(
             "limit"
-        ) limit: Int = 50
+        ) limit: Int = 20
     ): Call<List<Article>>
 }

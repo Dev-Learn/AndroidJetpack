@@ -29,7 +29,7 @@ class PageKeyedComicDataSource(
      * There is no sync on the state because paging will always call loadInitial first then wait
      * for it to return some success value before calling loadAfter.
      */
-    val networkState = MutableLiveData<Resource<BaseItemKey>>()
+    val networkState = MutableLiveData<Resource<*>>()
 
 //    fun retryAllFailed() {
 //        val prevRetry = retry

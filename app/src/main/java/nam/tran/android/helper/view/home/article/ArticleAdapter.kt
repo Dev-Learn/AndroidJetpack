@@ -1,24 +1,31 @@
 package nam.tran.android.helper.view.home.article
 
+import android.annotation.SuppressLint
+import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.AdapterArticleItemBinding
 import nam.tran.android.helper.databinding.NetworkStateItemBinding
 import nam.tran.android.helper.model.ArticleModel
 import nam.tran.domain.entity.state.Resource
-import tran.nam.common.DataBoundListAdapter
 import tran.nam.common.DataBoundViewHolder
+import tran.nam.util.Constant.Companion.LIMIT
 
-class ArticleAdapter(private val dataBindingComponent: DataBindingComponent, private val loadBefore: () -> Unit) :
-    DataBoundListAdapter<ArticleModel, ViewDataBinding>() {
+class ArticleAdapter(
+    private val dataBindingComponent: DataBindingComponent,
+    private val loadAfter: () -> Unit,
+    private val loadBefore: () -> Unit,
+    private val loading: () -> Unit
+) :
+    RecyclerView.Adapter<DataBoundViewHolder<ViewDataBinding>>() {
 
-    companion object {
-        const val LIMIT = 100
-    }
+    private var items = ArrayList<ArticleModel>()
 
     private var networkState: Resource<*>? = null
 
@@ -26,11 +33,11 @@ class ArticleAdapter(private val dataBindingComponent: DataBindingComponent, pri
         return when (viewType) {
             R.layout.adapter_article_item -> {
                 val binding = createBinding(parent)
-                return DataBoundViewHolder(binding)
+                DataBoundViewHolder(binding)
             }
             R.layout.network_state_item -> {
                 val binding = createBindingNetwork(parent)
-                return DataBoundViewHolder(binding)
+                DataBoundViewHolder(binding)
             }
             else -> throw IllegalArgumentException("unknown view type $viewType")
         }
@@ -40,13 +47,17 @@ class ArticleAdapter(private val dataBindingComponent: DataBindingComponent, pri
 
         when (getItemViewType(position)) {
             R.layout.adapter_article_item -> {
-                bind(holder.binding, items!![position])
+                bind(holder.binding, items[position])
             }
             R.layout.network_state_item -> {
                 if (holder.binding is NetworkStateItemBinding)
                     (holder.binding as NetworkStateItemBinding).resource = networkState
             }
         }
+    }
+
+    override fun getItemCount(): Int {
+        return items.size
     }
 
     private fun hasExtraRow() = networkState != null && !networkState!!.isSuccess()
@@ -59,7 +70,7 @@ class ArticleAdapter(private val dataBindingComponent: DataBindingComponent, pri
         }
     }
 
-    override fun createBinding(parent: ViewGroup): AdapterArticleItemBinding {
+    private fun createBinding(parent: ViewGroup): AdapterArticleItemBinding {
         return DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             R.layout.adapter_article_item,
@@ -79,7 +90,7 @@ class ArticleAdapter(private val dataBindingComponent: DataBindingComponent, pri
         )
     }
 
-    override fun bind(binding: ViewDataBinding, item: ArticleModel) {
+    fun bind(binding: ViewDataBinding, item: ArticleModel) {
         if (binding is AdapterArticleItemBinding)
             binding.article = item
     }
@@ -95,75 +106,84 @@ class ArticleAdapter(private val dataBindingComponent: DataBindingComponent, pri
                     notifyItemInserted(itemCount)
                 else
                     notifyItemInserted(0)
-            }else{
-                if (!isAfter)
+            } else {
+                if (isAfter)
+                    notifyItemRemoved(itemCount)
+                else
                     notifyItemRemoved(0)
             }
         } else if (hasExtraRow && previousState != newNetworkState) {
-            notifyItemChanged(itemCount - 1)
+            if (isAfter)
+                notifyItemChanged(itemCount - 1)
+            else
+                notifyItemChanged(0)
         }
 
-    }
-
-    override fun areItemsTheSame(oldItem: ArticleModel, newItem: ArticleModel): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: ArticleModel, newItem: ArticleModel): Boolean {
-        return oldItem.title == newItem.title
     }
 
     fun isOverLimit(): Boolean {
         return itemCount == LIMIT
     }
 
-    private fun isOverLimit(size: Int): Boolean {
-        return size > LIMIT
+    fun add(data: List<ArticleModel>, isAfter: Boolean = true) {
+        if (isOverLimit()) {
+            if (isAfter) loadBefore.invoke()
+            else loadAfter.invoke()
+        }
+        updateData(data)
+
     }
 
-    fun add(data: List<ArticleModel>, isAfter: Boolean = true) {
-        if (isAfter) {
-            if (isOverLimit(itemCount + data.size)) {
-                val surplus = itemCount + data.size - LIMIT
-                val listItemRemove = ArrayList<ArticleModel>()
-                for (i in 0..surplus - 1) {
-                    items?.get(i)?.let {
-                        listItemRemove.add(it)
-                    }
-                }
-                items?.removeAll(listItemRemove)
-                notifyItemRangeRemoved(0, surplus)
-                loadBefore.invoke()
-            }
-            items?.addAll(data)
-            notifyItemRangeInserted(itemCount, data.size)
-        } else {
-            if (isOverLimit(itemCount + data.size)) {
-                val surplus = itemCount + data.size - LIMIT
-                val size = itemCount - 1
-                val listItemRemove = ArrayList<ArticleModel>()
-                for (i in size downTo size - surplus + 1) {
-                    items?.get(i)?.let {
-                        listItemRemove.add(it)
-                    }
-                }
-                items?.removeAll(listItemRemove)
-                notifyItemRangeRemoved(itemCount, surplus)
-            }
-            for (i in 0..data.size - 1) {
-                items?.add(i, data[i])
-            }
-            notifyItemRangeInserted(0, data.size)
-        }
+    fun areItemsTheSame(oldItem: ArticleModel, newItem: ArticleModel): Boolean {
+        return oldItem.id == newItem.id
+    }
 
+    fun areContentsTheSame(oldItem: ArticleModel, newItem: ArticleModel): Boolean {
+        return oldItem.title == newItem.title
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    fun updateData(update: List<ArticleModel>) {
+        val oldItems = items
+        object : AsyncTask<Void, Void, DiffUtil.DiffResult>() {
+            override fun doInBackground(vararg voids: Void): DiffUtil.DiffResult {
+                return DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+                    override fun getOldListSize(): Int {
+                        return oldItems.size
+                    }
+
+                    override fun getNewListSize(): Int {
+                        return update.size
+                    }
+
+                    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                        val oldItem = oldItems[oldItemPosition]
+                        val newItem = update[newItemPosition]
+                        return areItemsTheSame(oldItem, newItem)
+                    }
+
+                    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                        val oldItem = oldItems[oldItemPosition]
+                        val newItem = update[newItemPosition]
+                        return areContentsTheSame(oldItem, newItem)
+                    }
+                })
+            }
+
+            override fun onPostExecute(diffResult: DiffUtil.DiffResult) {
+                items = ArrayList(update)
+                diffResult.dispatchUpdatesTo(this@ArticleAdapter)
+                loading.invoke()
+            }
+        }.execute()
     }
 
     fun getItemLasted(): ArticleModel? {
-        return items?.get(itemCount - 1)
+        return items[itemCount - 1]
     }
 
     fun getItemFirst(): ArticleModel? {
-        return items?.get(0)
+        return items[0]
     }
 
 }

@@ -3,11 +3,12 @@ package nam.tran.android.helper.view.detail.viewmodel
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.paging.PagedList
 import nam.tran.android.helper.mapper.DataMapper
 import nam.tran.android.helper.model.ComicModel
+import nam.tran.domain.ComicUseCase
 import nam.tran.domain.entity.state.Listing
 import nam.tran.domain.entity.state.Resource
-import nam.tran.domain.ComicUseCase
 import nam.tran.flatform.model.response.BaseItemKey
 import tran.nam.core.viewmodel.BaseFragmentViewModel
 import tran.nam.core.viewmodel.IProgressViewModel
@@ -20,8 +21,7 @@ class DetailComicViewModel @Inject internal constructor(
 ) : BaseFragmentViewModel(application),
     IProgressViewModel {
 
-
-    private var repoResult = MutableLiveData<Listing<BaseItemKey>>()
+    private var repoResult = MutableLiveData<Listing<PagedList<BaseItemKey>>>()
 
     val posts = Transformations.switchMap(repoResult, { it.pagedList })
 

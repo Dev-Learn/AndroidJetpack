@@ -1,14 +1,14 @@
-package nam.tran.android.helper.view.home.article.viewmodel;
+package nam.tran.android.helper.view.home.article.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
+import android.os.Parcelable
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import nam.tran.android.helper.mapper.DataMapper
 import nam.tran.android.helper.model.ArticleModel
-import nam.tran.domain.entity.ArticleEntity
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.interactor.article.IArticleUseCase
+import nam.tran.flatform.model.response.BaseItemKey
 import tran.nam.core.viewmodel.BaseFragmentViewModel
 import tran.nam.core.viewmodel.IProgressViewModel
 import tran.nam.util.Logger
@@ -19,43 +19,39 @@ class ArticleViewModel @Inject internal constructor(
     val dataMapper: DataMapper,
     private val iArticleUseCase: IArticleUseCase
 ) : BaseFragmentViewModel(application),
-    IProgressViewModel, Observer<Resource<List<ArticleEntity>>> {
+    IProgressViewModel {
 
-    init {
-        iArticleUseCase.loadInitial()
+    private val response = iArticleUseCase.loadInitial {
+        dataMapper.articleModelMapper.transform(it)
     }
 
-    val results = MutableLiveData<Resource<List<ArticleModel>>>()
-
-    override fun onCreated() {
-        view<IArticleView>()?.let {
-            iArticleUseCase.observe(it, this)
-        }
+    val data: LiveData<ArrayList<BaseItemKey>> = Transformations.switchMap(response) {
+        it.pagedList
     }
 
-    override fun resource(): Resource<List<ArticleModel>>? {
+    val results: LiveData<Resource<*>> = Transformations.switchMap(response) {
+        it.networkState
+    }
+
+    override fun resource(): Resource<*>? {
         return results.value
-    }
-
-    override fun onChanged(it: Resource<List<ArticleEntity>>) {
-        results.postValue(dataMapper.articleModelMapper.transform(it))
     }
 
     fun loadMore(article: ArticleModel?) {
         article?.let { item ->
             Logger.debug("""getItemEnd : ${item.id}""")
-            iArticleUseCase.loadAfter(item.id)
+            iArticleUseCase.loadAfter(item.id) {
+                dataMapper.articleModelMapper.transform(it)
+            }
         }
     }
 
     fun loadBefore(article: ArticleModel?) {
         article?.let { item ->
             Logger.debug("""getItemFirst : ${item.id}""")
-            iArticleUseCase.loadBefore(item.id)
+            iArticleUseCase.loadBefore(item.id) {
+                dataMapper.articleModelMapper.transform(it)
+            }
         }
-    }
-
-    override fun onCleared() {
-        iArticleUseCase.unObserve(this)
     }
 }

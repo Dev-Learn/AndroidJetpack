@@ -87,36 +87,36 @@ class Resource<T>(
     companion object {
 
         @JvmStatic
-        fun <T> success(data: T?, loading: Int): Resource<T> {
+        fun <T> success(data: T?, loading: Int = Loading.LOADING_NORMAL): Resource<T> {
             return Resource(SUCCESS, data, null, loading, null)
         }
 
         @JvmStatic
-        fun <T> successPaging(data: T?, loading: Int): Resource<T> {
+        fun <T> successPaging(data: T?, loading: Int = Loading.LOADING_NORMAL): Resource<T> {
             val resource = Resource(SUCCESS, data, null, loading, null)
             resource.initial = false
             return resource
         }
 
         @JvmStatic
-        fun <T> error(msg: ErrorResource?, data: T?, loading: Int, retry: () -> Unit): Resource<T> {
+        fun <T> error(msg: ErrorResource?, data: T?, loading: Int = Loading.LOADING_NORMAL, retry: () -> Unit): Resource<T> {
             return Resource(ERROR, data, msg, loading, retry)
         }
 
         @JvmStatic
-        fun <T> errorPaging(msg: ErrorResource?, data: T?, loading: Int, retry: () -> Unit): Resource<T> {
+        fun <T> errorPaging(msg: ErrorResource?, data: T?, loading: Int = Loading.LOADING_NORMAL, retry: () -> Unit): Resource<T> {
             val resource = Resource(ERROR, data, msg, loading, retry)
             resource.initial = false
             return resource
         }
 
         @JvmStatic
-        fun <T> loading(data: T?, @Loading loading: Int): Resource<T> {
+        fun <T> loading(data: T?, @Loading loading: Int = Loading.LOADING_NORMAL): Resource<T> {
             return Resource(LOADING, data, null, loading, null)
         }
 
         @JvmStatic
-        fun <T> loadingPaging(data: T?, @Loading loading: Int): Resource<T> {
+        fun <T> loadingPaging(data: T?, @Loading loading: Int = Loading.LOADING_NORMAL): Resource<T> {
             val resource = Resource(LOADING, data, null, loading, null)
             resource.initial = false
             return resource

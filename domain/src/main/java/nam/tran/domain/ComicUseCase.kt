@@ -5,6 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.Config
+import androidx.paging.PagedList
 import androidx.paging.toLiveData
 import nam.tran.domain.entity.ComicEntity
 import nam.tran.domain.entity.LinkComicEntity
@@ -54,7 +55,7 @@ internal constructor(
         return request.asLiveData()
     }
 
-    override fun getComicPage(convert: (List<ComicEntity>) -> List<BaseItemKey>): LiveData<Listing<BaseItemKey>> {
+    override fun getComicPage(convert: (List<ComicEntity>) -> List<BaseItemKey>): LiveData<Listing<PagedList<BaseItemKey>>> {
         Logger.debug("Paging Learn Page", "Repository - getComic")
         val sourceFactory = PageDataSourceFactory(iApi, dataEntityMapper, convert)
         // We use toLiveData Kotlin extension function here, you could also use LivePagedListBuilder
@@ -64,28 +65,19 @@ internal constructor(
             // Arch Components' IO pool which is also used for disk access
             fetchExecutor = appExecutors.networkIO()
         )
-        val result = MutableLiveData<Listing<BaseItemKey>>()
+        val result = MutableLiveData<Listing<PagedList<BaseItemKey>>>()
         result.postValue(
             Listing(
                 pagedList = livePagedList,
                 networkState = Transformations.switchMap(sourceFactory.sourceLiveData) {
                     it.networkState
-                }/*,
-            retry = {
-                sourceFactory.sourceLiveData.value?.retryAllFailed()
-            },
-            refresh = {
-                sourceFactory.sourceLiveData.value?.invalidate()
-            },
-            refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
-                it.initialLoad
-            }*/
+                }
             )
         )
         return result
     }
 
-    override fun getComicItem(convert: (List<ComicEntity>) -> List<BaseItemKey>): LiveData<Listing<BaseItemKey>> {
+    override fun getComicItem(convert: (List<ComicEntity>) -> List<BaseItemKey>): LiveData<Listing<PagedList<BaseItemKey>>> {
         Logger.debug("Paging Learn Page", "Repository - getComic")
 
         val sourceFactory =
@@ -100,22 +92,13 @@ internal constructor(
             ),
             fetchExecutor = appExecutors.networkIO()
         )
-        val result = MutableLiveData<Listing<BaseItemKey>>()
+        val result = MutableLiveData<Listing<PagedList<BaseItemKey>>>()
         result.postValue(
             Listing(
-                pagedList = livePagedList,
-                networkState = Transformations.switchMap(sourceFactory.sourceLiveData) {
+                livePagedList,
+                Transformations.switchMap(sourceFactory.sourceLiveData) {
                     it.networkState
-                }/*,
-            retry = {
-                sourceFactory.sourceLiveData.value?.retryAllFailed()
-            },
-            refresh = {
-                sourceFactory.sourceLiveData.value?.invalidate()
-            },
-            refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
-                it.initialLoad
-            }*/
+                }
             )
         )
         return result
@@ -125,7 +108,7 @@ internal constructor(
         isDb: Boolean,
         idComic: Int,
         convert: (List<LinkComicEntity>) -> List<BaseItemKey>
-    ): Listing<BaseItemKey> {
+    ): Listing<PagedList<BaseItemKey>> {
         val config = Config(
             pageSize = 20,
             enablePlaceholders = false,
@@ -147,18 +130,8 @@ internal constructor(
             )
 
             return Listing(
-                pagedList = livePagedList,
-                networkState = sourceFactory.networkState
-                /*,
-            retry = {
-                sourceFactory.sourceLiveData.value?.retryAllFailed()
-            },
-            refresh = {
-                sourceFactory.sourceLiveData.value?.invalidate()
-            },
-            refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
-                it.initialLoad
-            }*/
+                livePagedList,
+                sourceFactory.networkState
             )
         } else {
             val sourceFactory =
@@ -173,16 +146,7 @@ internal constructor(
                 pagedList = livePagedList,
                 networkState = Transformations.switchMap(sourceFactory.sourceLiveData) {
                     it.networkState
-                }/*,
-            retry = {
-                sourceFactory.sourceLiveData.value?.retryAllFailed()
-            },
-            refresh = {
-                sourceFactory.sourceLiveData.value?.invalidate()
-            },
-            refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
-                it.initialLoad
-            }*/
+                }
             )
         }
     }
