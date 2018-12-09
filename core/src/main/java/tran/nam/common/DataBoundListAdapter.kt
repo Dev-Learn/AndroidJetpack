@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package tran.nam.common
+package com.android.example.github.ui.common
 
-import android.annotation.SuppressLint
-import android.os.AsyncTask
-import android.view.ViewGroup
-import androidx.annotation.MainThread
 import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.AsyncDifferConfig
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import android.view.ViewGroup
+import nam.tran.domain.executor.AppExecutors
+import tran.nam.common.DataBoundViewHolder
 
 /**
  * A generic RecyclerView adapter that uses Data Binding & DiffUtil.
@@ -30,13 +30,14 @@ import androidx.recyclerview.widget.RecyclerView
  * @param <T> Type of the items in the list
  * @param <V> The type of the ViewDataBinding
 </V></T> */
-abstract class DataBoundListAdapter<T, V : ViewDataBinding> : RecyclerView.Adapter<DataBoundViewHolder<V>>() {
-
-    protected var items: ArrayList<T>? = null
-    // each time data is set, we update this variable so that if DiffUtil calculation returns
-    // after repetitive updates, we can ignore the old calculation
-    private var dataVersion = 0
-
+abstract class DataBoundListAdapter<T, V : ViewDataBinding>(
+    appExecutors: AppExecutors,
+    diffCallback: DiffUtil.ItemCallback<T>
+) : ListAdapter<T, DataBoundViewHolder<V>>(
+    AsyncDifferConfig.Builder<T>(diffCallback)
+        .setBackgroundThreadExecutor(appExecutors.diskIO())
+        .build()
+) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBoundViewHolder<V> {
         val binding = createBinding(parent)
         return DataBoundViewHolder(binding)
@@ -45,73 +46,9 @@ abstract class DataBoundListAdapter<T, V : ViewDataBinding> : RecyclerView.Adapt
     protected abstract fun createBinding(parent: ViewGroup): V
 
     override fun onBindViewHolder(holder: DataBoundViewHolder<V>, position: Int) {
-
-        bind(holder.binding, items!![position])
+        bind(holder.binding, getItem(position))
         holder.binding.executePendingBindings()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    @MainThread
-    fun replace(update: List<T>?) {
-        dataVersion++
-        if (items == null) {
-            if (update == null) {
-                return
-            }
-            items = ArrayList(update)
-            notifyDataSetChanged()
-        } else if (update == null) {
-            val oldSize = items!!.size
-            items = null
-            notifyItemRangeRemoved(0, oldSize)
-        } else {
-            val startVersion = dataVersion
-            val oldItems = items
-            object : AsyncTask<Void, Void, DiffUtil.DiffResult>() {
-                override fun doInBackground(vararg voids: Void): DiffUtil.DiffResult {
-                    return DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-                        override fun getOldListSize(): Int {
-                            return oldItems!!.size
-                        }
-
-                        override fun getNewListSize(): Int {
-                            return update.size
-                        }
-
-                        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                            val oldItem = oldItems!![oldItemPosition]
-                            val newItem = update[newItemPosition]
-                            return this@DataBoundListAdapter.areItemsTheSame(oldItem, newItem)
-                        }
-
-                        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                            val oldItem = oldItems!![oldItemPosition]
-                            val newItem = update[newItemPosition]
-                            return this@DataBoundListAdapter.areContentsTheSame(oldItem, newItem)
-                        }
-                    })
-                }
-
-                override fun onPostExecute(diffResult: DiffUtil.DiffResult) {
-                    if (startVersion != dataVersion) {
-                        // ignore update
-                        return
-                    }
-                    items = ArrayList(update)
-                    diffResult.dispatchUpdatesTo(this@DataBoundListAdapter)
-
-                }
-            }.execute()
-        }
-    }
-
     protected abstract fun bind(binding: V, item: T)
-
-    protected abstract fun areItemsTheSame(oldItem: T, newItem: T): Boolean
-
-    protected abstract fun areContentsTheSame(oldItem: T, newItem: T): Boolean
-
-    override fun getItemCount(): Int {
-        return if (items == null) 0 else items!!.size
-    }
 }

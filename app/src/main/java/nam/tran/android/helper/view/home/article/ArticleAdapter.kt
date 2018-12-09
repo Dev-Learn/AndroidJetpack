@@ -57,7 +57,7 @@ class ArticleAdapter(
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return items.size + if (hasExtraRow()) 1 else 0
     }
 
     private fun hasExtraRow() = networkState != null && !networkState!!.isSuccess()
@@ -106,17 +106,15 @@ class ArticleAdapter(
                     notifyItemInserted(itemCount)
                 else
                     notifyItemInserted(0)
-            } else {
-                if (isAfter)
-                    notifyItemRemoved(itemCount)
-                else
+            }else{
+                if (!isAfter)
                     notifyItemRemoved(0)
             }
         } else if (hasExtraRow && previousState != newNetworkState) {
             if (isAfter)
-                notifyItemChanged(itemCount - 1)
+                notifyItemRemoved(itemCount)
             else
-                notifyItemChanged(0)
+                notifyItemRemoved(0)
         }
 
     }

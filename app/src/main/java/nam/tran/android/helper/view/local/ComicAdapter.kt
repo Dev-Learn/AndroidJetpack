@@ -7,13 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
+import com.android.example.github.ui.common.DataBoundListAdapter
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.AdapterComicItemBinding
 import nam.tran.android.helper.model.ComicModel
-import tran.nam.common.DataBoundListAdapter
+import nam.tran.domain.executor.AppExecutors
 
-class ComicAdapter(private val dataBindingComponent: DataBindingComponent) :
-    DataBoundListAdapter<ComicModel, AdapterComicItemBinding>() {
+class ComicAdapter(private val dataBindingComponent: DataBindingComponent, appExecutors: AppExecutors) :
+    DataBoundListAdapter<ComicModel, AdapterComicItemBinding>(appExecutors=appExecutors,diffCallback = object : DiffUtil.ItemCallback<ComicModel>() {
+        override fun areItemsTheSame(oldItem: ComicModel, newItem: ComicModel): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: ComicModel, newItem: ComicModel): Boolean {
+            return oldItem.title == newItem.title
+        }
+    }) {
 
     override fun createBinding(parent: ViewGroup): AdapterComicItemBinding {
         val binding : AdapterComicItemBinding = DataBindingUtil.inflate(
@@ -34,13 +44,4 @@ class ComicAdapter(private val dataBindingComponent: DataBindingComponent) :
         binding.comic = item
         binding.ckbLike.visibility = View.GONE
     }
-
-    override fun areItemsTheSame(oldItem: ComicModel, newItem: ComicModel): Boolean {
-        return true
-    }
-
-    override fun areContentsTheSame(oldItem: ComicModel, newItem: ComicModel): Boolean {
-        return true
-    }
-
 }

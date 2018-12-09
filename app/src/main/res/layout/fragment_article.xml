@@ -19,7 +19,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:id="@+id/rv_article"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layoutManager="nam.tran.android.helper.widget.LinearLayoutManagerWrapper"
                 app:visibleView="@{viewModel.resource()}"
                 tools:listitem="@layout/adapter_comic_item"/>
 

@@ -12,12 +12,17 @@ import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.FragmentComicLocalBinding
 import nam.tran.android.helper.view.local.viewmodel.ComicLocalViewModel
 import nam.tran.android.helper.view.local.viewmodel.IComicLocalView
+import nam.tran.domain.executor.AppExecutors
 import tran.nam.common.autoCleared
 import tran.nam.core.biding.FragmentDataBindingComponent
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
+import javax.inject.Inject
 
 class ComicLocalFragment : BaseFragmentMVVM<FragmentComicLocalBinding, ComicLocalViewModel>(),
     IComicLocalView {
+
+    @Inject
+    lateinit var appExecutors: AppExecutors
 
     private val dataBindingComponent = FragmentDataBindingComponent(this)
 
@@ -35,7 +40,7 @@ class ComicLocalFragment : BaseFragmentMVVM<FragmentComicLocalBinding, ComicLoca
         super.onViewCreated(view, savedInstanceState)
         mViewDataBinding?.viewModel = mViewModel
 
-        adapter = ComicAdapter(dataBindingComponent)
+        adapter = ComicAdapter(dataBindingComponent,appExecutors)
 
         binding.rvComicLocal.addItemDecoration(
             DividerItemDecoration(
@@ -47,7 +52,7 @@ class ComicLocalFragment : BaseFragmentMVVM<FragmentComicLocalBinding, ComicLoca
 
         mViewModel?.results?.observe(viewLifecycleOwner, Observer {
             if (it?.data != null && it.data!!.isNotEmpty()) {
-                adapter.replace(it.data!!)
+                adapter.submitList(it.data!!)
             }
             mViewDataBinding?.viewModel = mViewModel
             mViewDataBinding?.executePendingBindings()
