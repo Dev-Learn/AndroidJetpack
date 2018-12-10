@@ -21,7 +21,8 @@ class ArticleAdapter(
     private val dataBindingComponent: DataBindingComponent,
     private val loadAfter: () -> Unit,
     private val loadBefore: () -> Unit,
-    private val loading: () -> Unit
+    private val loading: () -> Unit,
+    private val rendered: () -> Unit
 ) :
     RecyclerView.Adapter<DataBoundViewHolder<ViewDataBinding>>() {
 
@@ -172,6 +173,7 @@ class ArticleAdapter(
                 items = ArrayList(update)
                 diffResult.dispatchUpdatesTo(this@ArticleAdapter)
                 loading.invoke()
+                rendered.invoke()
             }
         }.execute()
     }

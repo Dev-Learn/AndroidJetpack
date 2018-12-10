@@ -1,7 +1,10 @@
 package nam.tran.android.helper.view.home.article
 
+import android.app.Activity
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -38,7 +41,29 @@ class ArticleFragment : BaseFragmentMVVM<FragmentArticleBinding, ArticleViewMode
         return R.layout.fragment_article
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Logger.debug("AAAAAAAAAAA - onCreate")
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        if(savedInstanceState != null)
+            pos = savedInstanceState.getLong("StateRv")
+    }
+
+    override fun onAttachFragment(childFragment: Fragment?) {
+        super.onAttachFragment(childFragment)
+        Logger.debug("AAAAAAAAAAA - onAttachFragment")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Logger.debug("AAAAAAAAAAA - " + pos)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Logger.debug("onViewCreated - " + pos)
         mViewDataBinding?.viewModel = mViewModel
 
         val adapter = ArticleAdapter(dataBindingComponent,{
@@ -47,6 +72,12 @@ class ArticleFragment : BaseFragmentMVVM<FragmentArticleBinding, ArticleViewMode
             isLoadBefore = true
         },{
             isLoading = false
+        }, {
+            if (pos != 0L) {
+                Logger.debug("AAAAAAAAAAA - " + pos)
+                binding.rvArticle.layoutManager?.scrollToPosition(pos.toInt());
+                pos = 0L
+            }
         })
 
         binding.rvArticle.addItemDecoration(
@@ -88,6 +119,8 @@ class ArticleFragment : BaseFragmentMVVM<FragmentArticleBinding, ArticleViewMode
 
         mViewModel?.data?.observe(viewLifecycleOwner, Observer {
             @Suppress("UNCHECKED_CAST")
+            Logger.debug("AAAAAAAAAAA size - " + it.size)
+
             adapter.add(it as List<ArticleModel>, type == AFTER)
         })
 
@@ -112,15 +145,20 @@ class ArticleFragment : BaseFragmentMVVM<FragmentArticleBinding, ArticleViewMode
         })
     }
 
+    var pos: Long = 0L
+
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelable("StateRv",binding.rvArticle.layoutManager?.onSaveInstanceState())
+        Logger.debug("AAAAAAAAAAA - onSaveInstanceState")
+        pos = (binding.rvArticle.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition().toLong()
+        outState.putLong("StateRv", pos);
     }
+
+
+
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        savedInstanceState?.let {
-            binding.rvArticle.layoutManager?.onRestoreInstanceState(it.getParcelable("StateRv"))
-        }
+        Logger.debug("AAAAAAAAAAA - onViewStateRestored")
     }
 
     enum class TYPE {
