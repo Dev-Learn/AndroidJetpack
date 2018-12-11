@@ -6,13 +6,13 @@
     <data>
         <variable
                 name="viewModel"
-                type="nam.tran.android.helper.view.local.viewmodel.ComicLocalViewModel"/>
+                type="nam.tran.android.helper.view.home.local.viewmodel.ComicLocalViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="nam.tran.android.helper.view.local.ComicLocalFragment">
+            tools:context="nam.tran.android.helper.view.home.local.ComicLocalFragment">
 
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"

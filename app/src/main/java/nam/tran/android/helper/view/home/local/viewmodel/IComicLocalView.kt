@@ -1,4 +1,4 @@
-package nam.tran.android.helper.view.local.viewmodel;
+package nam.tran.android.helper.view.home.local.viewmodel;
 
 import tran.nam.core.viewmodel.IView
 

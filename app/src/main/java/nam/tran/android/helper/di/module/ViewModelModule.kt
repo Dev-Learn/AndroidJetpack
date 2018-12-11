@@ -10,7 +10,7 @@ import nam.tran.android.helper.view.forgotPassword.viewmodel.ForgotPasswordViewM
 import nam.tran.android.helper.view.home.comic.viewmodel.ComicViewModel
 import nam.tran.android.helper.view.home.article.viewmodel.ArticleViewModel
 import nam.tran.android.helper.view.home.user.viewmodel.UserViewModel
-import nam.tran.android.helper.view.local.viewmodel.ComicLocalViewModel
+import nam.tran.android.helper.view.home.local.viewmodel.ComicLocalViewModel
 import nam.tran.android.helper.view.login.viewmodel.LoginViewModel
 import nam.tran.android.helper.view.register.viewmodel.RegisterViewModel
 import nam.tran.android.helper.view.splash.viewmodel.SplashViewModel

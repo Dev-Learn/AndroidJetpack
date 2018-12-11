@@ -44,10 +44,6 @@ class ComicFragment : BaseFragmentMVVM<FragmentComicBinding, ComicViewModel>(),
             Navigation.findNavController(requireActivity().findViewById<View>(R.id.nav_host_fragment)).navigate(R.id.action_homeFragment_to_detailComicFragment,bundle)
         })
 
-        binding.fab.setOnClickListener {
-            Navigation.findNavController(requireActivity().findViewById<View>(R.id.nav_host_fragment)).navigate(R.id.action_homeFragment_to_localComicFragment)
-        }
-
         binding.rvComic.addItemDecoration(
             DividerItemDecoration(
                 context,

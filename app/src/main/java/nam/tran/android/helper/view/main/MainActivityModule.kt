@@ -11,8 +11,6 @@ import nam.tran.android.helper.view.forgotPassword.ForgotPasswordFragment
 import nam.tran.android.helper.view.forgotPassword.ForgotPasswordFragmentModule
 import nam.tran.android.helper.view.home.HomeFragment
 import nam.tran.android.helper.view.home.HomeFragmentModule
-import nam.tran.android.helper.view.local.ComicLocalFragment
-import nam.tran.android.helper.view.local.ComicLocalFragmentModule
 import nam.tran.android.helper.view.login.LoginFragment
 import nam.tran.android.helper.view.login.LoginFragmentModule
 import nam.tran.android.helper.view.register.RegisterFragment
@@ -58,13 +56,7 @@ abstract class MainActivityModule {
     @ContributesAndroidInjector(modules = [HomeFragmentModule::class])
     internal abstract fun injectorHomeFragment(): HomeFragment
 
-    /**
-     * Provides the injector for the [ComicLocalFragmentModule], which has access to the dependencies
-     * provided by this application instance (singleton scoped objects).
-     */
-    @PerFragment
-    @ContributesAndroidInjector(modules = [ComicLocalFragmentModule::class])
-    internal abstract fun injectorComicLocalFragment(): ComicLocalFragment
+
 
     /**
      * Provides the injector for the [DetailComicFragmentModule], which has access to the dependencies

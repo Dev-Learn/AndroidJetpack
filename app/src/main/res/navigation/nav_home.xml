@@ -12,6 +12,12 @@
             tools:layout="@layout/fragment_comic"/>
 
     <custom_fragment
+            android:id="@+id/localComicFragment"
+            android:name="nam.tran.android.helper.view.home.local.ComicLocalFragment"
+            android:label="LocalComicFragment"
+            tools:layout="@layout/fragment_comic_local"/>
+
+    <custom_fragment
             android:id="@+id/userFragment"
             android:name="nam.tran.android.helper.view.home.user.UserFragment"
             android:label="UserFragment"

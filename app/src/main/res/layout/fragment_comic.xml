@@ -31,16 +31,16 @@
                 android:layout_gravity="center"
                 app:resource="@{viewModel.resource()}"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:scaleType="center"
-                android:layout_marginBottom="@dimen/positive_25dp"
-                android:layout_marginEnd="@dimen/positive_10dp"
-                app:backgroundTint="@android:color/black"
-                android:src="@drawable/image_like"/>
+        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
+                <!--android:id="@+id/fab"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="end|bottom"-->
+                <!--android:scaleType="center"-->
+                <!--android:layout_marginBottom="@dimen/positive_25dp"-->
+                <!--android:layout_marginEnd="@dimen/positive_10dp"-->
+                <!--app:backgroundTint="@android:color/black"-->
+                <!--android:src="@drawable/image_like"/>-->
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

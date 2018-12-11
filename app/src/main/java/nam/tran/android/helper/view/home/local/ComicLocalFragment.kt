@@ -1,17 +1,20 @@
-package nam.tran.android.helper.view.local;
+package nam.tran.android.helper.view.home.local;
 
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import nam.tran.android.helper.R
 import nam.tran.android.helper.databinding.FragmentComicLocalBinding
-import nam.tran.android.helper.view.local.viewmodel.ComicLocalViewModel
-import nam.tran.android.helper.view.local.viewmodel.IComicLocalView
+import nam.tran.android.helper.view.home.local.viewmodel.ComicLocalViewModel
+import nam.tran.android.helper.view.home.local.viewmodel.IComicLocalView
 import nam.tran.domain.executor.AppExecutors
 import tran.nam.common.autoCleared
 import tran.nam.core.biding.FragmentDataBindingComponent
@@ -40,7 +43,10 @@ class ComicLocalFragment : BaseFragmentMVVM<FragmentComicLocalBinding, ComicLoca
         super.onViewCreated(view, savedInstanceState)
         mViewDataBinding?.viewModel = mViewModel
 
-        adapter = ComicAdapter(dataBindingComponent,appExecutors)
+        adapter = ComicAdapter(dataBindingComponent,appExecutors){
+            val bundle = bundleOf("comic" to it,"isLocal" to true)
+            Navigation.findNavController(requireActivity().findViewById<View>(R.id.nav_host_fragment)).navigate(R.id.action_homeFragment_to_detailComicFragment,bundle)
+        }
 
         binding.rvComicLocal.addItemDecoration(
             DividerItemDecoration(

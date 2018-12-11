@@ -18,6 +18,11 @@
             android:title="@string/comic"/>
 
     <item
+            android:id="@id/localComicFragment"
+            android:icon="@android:drawable/ic_lock_idle_alarm"
+            android:title="@string/local_comic"/>
+
+    <item
             android:id="@id/userFragment"
             android:icon="@android:drawable/ic_menu_mapmode"
             android:title="@string/user"/>
