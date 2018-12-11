@@ -29,7 +29,7 @@ class ComicLocalFragment : BaseFragmentMVVM<FragmentComicLocalBinding, ComicLoca
 
     private val dataBindingComponent = FragmentDataBindingComponent(this)
 
-    private var adapter by autoCleared<ComicAdapter>()
+//    private var adapter by autoCleared<ComicAdapter>()
 
     override fun initViewModel(factory: ViewModelProvider.Factory?) {
         mViewModel = ViewModelProviders.of(this, factory).get(ComicLocalViewModel::class.java)
@@ -43,7 +43,7 @@ class ComicLocalFragment : BaseFragmentMVVM<FragmentComicLocalBinding, ComicLoca
         super.onViewCreated(view, savedInstanceState)
         mViewDataBinding?.viewModel = mViewModel
 
-        adapter = ComicAdapter(dataBindingComponent,appExecutors){
+        val adapter = ComicAdapter(dataBindingComponent,appExecutors){
             val bundle = bundleOf("comic" to it,"isLocal" to true)
             Navigation.findNavController(requireActivity().findViewById<View>(R.id.nav_host_fragment)).navigate(R.id.action_homeFragment_to_detailComicFragment,bundle)
         }

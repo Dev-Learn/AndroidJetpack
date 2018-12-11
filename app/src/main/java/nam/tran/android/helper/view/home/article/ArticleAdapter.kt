@@ -105,19 +105,21 @@ class ArticleAdapter(
             if (!hadExtraRow) {
                 if (isAfter)
                     notifyItemInserted(itemCount)
-                else
+                else{
                     notifyItemInserted(0)
+                }
             }else{
-                if (!isAfter)
+                if (!isAfter){
                     notifyItemRemoved(0)
+                }
             }
         } else if (hasExtraRow && previousState != newNetworkState) {
             if (isAfter)
                 notifyItemRemoved(itemCount)
-            else
+            else{
                 notifyItemRemoved(0)
+            }
         }
-
     }
 
     fun isOverLimit(): Boolean {
@@ -179,11 +181,11 @@ class ArticleAdapter(
     }
 
     fun getItemLasted(): ArticleModel? {
-        return items[itemCount - 1]
+        return if (itemCount > 0) items[itemCount - 1] else null
     }
 
     fun getItemFirst(): ArticleModel? {
-        return items[0]
+        return if (itemCount > 0) items[0] else null
     }
 
 }

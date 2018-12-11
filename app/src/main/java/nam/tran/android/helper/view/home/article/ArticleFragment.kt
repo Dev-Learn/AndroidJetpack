@@ -1,10 +1,7 @@
 package nam.tran.android.helper.view.home.article
 
-import android.app.Activity
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -18,7 +15,6 @@ import nam.tran.android.helper.view.home.article.ArticleFragment.TYPE.AFTER
 import nam.tran.android.helper.view.home.article.ArticleFragment.TYPE.BEFORE
 import nam.tran.android.helper.view.home.article.viewmodel.ArticleViewModel
 import nam.tran.android.helper.view.home.article.viewmodel.IArticleView
-import tran.nam.common.autoCleared
 import tran.nam.core.biding.FragmentDataBindingComponent
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 import tran.nam.util.Logger
@@ -41,36 +37,18 @@ class ArticleFragment : BaseFragmentMVVM<FragmentArticleBinding, ArticleViewMode
         return R.layout.fragment_article
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Logger.debug("AAAAAAAAAAA - onCreate")
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        if(savedInstanceState != null)
-            pos = savedInstanceState.getLong("StateRv")
-    }
-
-    override fun onAttachFragment(childFragment: Fragment?) {
-        super.onAttachFragment(childFragment)
-        Logger.debug("AAAAAAAAAAA - onAttachFragment")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Logger.debug("AAAAAAAAAAA - " + pos)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Logger.debug("onViewCreated - " + pos)
         mViewDataBinding?.viewModel = mViewModel
 
-        val adapter = ArticleAdapter(dataBindingComponent,{
+        if (savedInstanceState != null)
+            pos = savedInstanceState.getLong("StateRv")
+
+        val adapter = ArticleAdapter(dataBindingComponent, {
             isLoadAfter = true
-        },{
+        }, {
             isLoadBefore = true
-        },{
+        }, {
             isLoading = false
         }, {
             if (pos != 0L) {
@@ -119,8 +97,6 @@ class ArticleFragment : BaseFragmentMVVM<FragmentArticleBinding, ArticleViewMode
 
         mViewModel?.data?.observe(viewLifecycleOwner, Observer {
             @Suppress("UNCHECKED_CAST")
-            Logger.debug("AAAAAAAAAAA size - " + it.size)
-
             adapter.add(it as List<ArticleModel>, type == AFTER)
         })
 
@@ -129,13 +105,13 @@ class ArticleFragment : BaseFragmentMVVM<FragmentArticleBinding, ArticleViewMode
                 mViewDataBinding?.viewModel = mViewModel
             } else {
                 if (it.isSuccess()) {
-                    if (it.data != null){
+                    if (it.data != null) {
                         when (it.data) {
                             1 -> isLoadAfter = false
                             2 -> isLoadBefore = false
                         }
                         isLoading = false
-                    }else{
+                    } else {
                         isLoadAfter = true
                         isLoadBefore = true
                     }
@@ -149,16 +125,10 @@ class ArticleFragment : BaseFragmentMVVM<FragmentArticleBinding, ArticleViewMode
 
     override fun onSaveInstanceState(outState: Bundle) {
         Logger.debug("AAAAAAAAAAA - onSaveInstanceState")
-        pos = (binding.rvArticle.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition().toLong()
-        outState.putLong("StateRv", pos);
-    }
-
-
-
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        Logger.debug("AAAAAAAAAAA - onViewStateRestored")
+        binding.rvArticle.layoutManager?.let {
+            pos = (it as LinearLayoutManager).findFirstCompletelyVisibleItemPosition().toLong()
+            outState.putLong("StateRv", pos);
+        }
     }
 
     enum class TYPE {
