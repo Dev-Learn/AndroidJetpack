@@ -41,21 +41,20 @@
                 android:textStyle="italic"
                 android:layout_marginStart="@dimen/positive_10dp"
                 app:layout_constraintStart_toEndOf="@+id/iv_article"
-                tools:text="Doujinshi, Historical, One shot, Drama"
-                app:layout_constraintTop_toBottomOf="@+id/tv_title"
-                app:layout_constraintBottom_toTopOf="@+id/tv_description"/>
+                tools:text="Doujinshi, Historical, One shot, Drama" app:layout_constraintTop_toBottomOf="@+id/tv_title"
+                app:layout_constraintBottom_toTopOf="@+id/tv_time"/>
 
-        <!--<androidx.appcompat.widget.AppCompatTextView-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/tv_time"-->
-                <!--android:text="@{article.day()}"-->
-                <!--android:textSize="@dimen/text_size_8sp"-->
-                <!--android:textStyle="italic"-->
-                <!--android:layout_marginStart="@dimen/positive_10dp"-->
-                <!--app:layout_constraintStart_toEndOf="@+id/iv_article"-->
-                <!--tools:text="11 giờ trước" app:layout_constraintTop_toBottomOf="@+id/tv_author"-->
-                <!--app:layout_constraintBottom_toTopOf="@+id/tv_description"/>-->
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_time"
+                android:text="@{article.time_ago}"
+                android:textSize="@dimen/text_size_8sp"
+                android:textStyle="italic"
+                android:layout_marginStart="@dimen/positive_10dp"
+                app:layout_constraintStart_toEndOf="@+id/iv_article"
+                tools:text="11 giờ trước" app:layout_constraintTop_toBottomOf="@+id/tv_author"
+                app:layout_constraintBottom_toTopOf="@+id/tv_description"/>
 
         <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="0dp"

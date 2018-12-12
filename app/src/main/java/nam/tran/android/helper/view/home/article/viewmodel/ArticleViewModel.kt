@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import nam.tran.android.helper.mapper.DataMapper
 import nam.tran.android.helper.model.ArticleModel
-import nam.tran.domain.entity.core.ItemKeyArticle
+import nam.tran.domain.entity.ItemKeyArticle
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.interactor.article.IArticleUseCase
 import tran.nam.core.viewmodel.BaseFragmentViewModel
@@ -19,6 +19,8 @@ class ArticleViewModel @Inject internal constructor(
     private val iArticleUseCase: IArticleUseCase
 ) : BaseFragmentViewModel(application),
     IProgressViewModel {
+
+    var posCurrent = -1L
 
     private val response = iArticleUseCase.loadInitial {
         dataMapper.articleModelMapper.transform(it)

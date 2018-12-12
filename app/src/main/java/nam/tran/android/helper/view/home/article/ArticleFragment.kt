@@ -15,7 +15,6 @@ import nam.tran.android.helper.view.home.article.ArticleFragment.TYPE.AFTER
 import nam.tran.android.helper.view.home.article.ArticleFragment.TYPE.BEFORE
 import nam.tran.android.helper.view.home.article.viewmodel.ArticleViewModel
 import nam.tran.android.helper.view.home.article.viewmodel.IArticleView
-import nam.tran.android.helper.widget.PinnedHeaderItemDecoration
 import tran.nam.core.biding.FragmentDataBindingComponent
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 import tran.nam.util.Logger
@@ -39,11 +38,9 @@ class ArticleFragment : BaseFragmentMVVM<FragmentArticleBinding, ArticleViewMode
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Logger.debug("onViewCreated - " + pos)
         mViewDataBinding?.viewModel = mViewModel
 
-        if (savedInstanceState != null)
-            pos = savedInstanceState.getLong("StateRv")
+        var isRender = true
 
         val adapter = ArticleAdapter(dataBindingComponent, {
             isLoadAfter = true
@@ -52,16 +49,21 @@ class ArticleFragment : BaseFragmentMVVM<FragmentArticleBinding, ArticleViewMode
         }, {
             isLoading = false
         }, {
-            if (pos != 0L) {
-                Logger.debug("AAAAAAAAAAA - " + pos)
-                binding.rvArticle.layoutManager?.scrollToPosition(pos.toInt());
-                pos = 0L
+            mViewModel?.posCurrent?.let {
+                if (isRender && it != -1L) {
+                    Logger.debug("Current Position - $it")
+                    binding.rvArticle.layoutManager?.scrollToPosition(it.toInt())
+                    isRender = false
+                }
             }
         })
 
-//        binding.rvArticle.addItemDecoration(
-//            PinnedHeaderItemDecoration()
-//        )
+        binding.rvArticle.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                LinearLayoutManager.VERTICAL
+            )
+        )
 
         binding.rvArticle.adapter = adapter
 
@@ -119,14 +121,19 @@ class ArticleFragment : BaseFragmentMVVM<FragmentArticleBinding, ArticleViewMode
         })
     }
 
-    var pos: Long = 0L
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        Logger.debug("AAAAAAAAAAA - onSaveInstanceState")
+    override fun onStop() {
+        super.onStop()
         binding.rvArticle.layoutManager?.let {
-            pos = (it as LinearLayoutManager).findFirstCompletelyVisibleItemPosition().toLong()
-            outState.putLong("StateRv", pos);
+            mViewModel?.posCurrent = (it as LinearLayoutManager).findFirstCompletelyVisibleItemPosition().toLong()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     enum class TYPE {

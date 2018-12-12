@@ -2,8 +2,7 @@ package nam.tran.domain.interactor.article
 
 import androidx.lifecycle.LiveData
 import nam.tran.domain.entity.ArticleEntity
-import nam.tran.domain.entity.core.BaseItemKey
-import nam.tran.domain.entity.core.ItemKeyArticle
+import nam.tran.domain.entity.ItemKeyArticle
 import nam.tran.domain.entity.state.Listing
 
 interface IArticleUseCase {

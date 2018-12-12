@@ -14,10 +14,10 @@ import nam.tran.android.helper.databinding.AdapterArticleHeaderBinding
 import nam.tran.android.helper.databinding.AdapterArticleItemBinding
 import nam.tran.android.helper.databinding.NetworkStateItemBinding
 import nam.tran.android.helper.model.ArticleModel
-import nam.tran.android.helper.widget.PinnedHeaderItemDecoration
 import nam.tran.domain.entity.state.Resource
 import tran.nam.common.DataBoundViewHolder
 import tran.nam.util.Constant.Companion.LIMIT
+import tran.nam.util.Logger
 
 class ArticleAdapter(
     private val dataBindingComponent: DataBindingComponent,
@@ -25,11 +25,7 @@ class ArticleAdapter(
     private val loadBefore: () -> Unit,
     private val loading: () -> Unit,
     private val rendered: () -> Unit
-) :
-    RecyclerView.Adapter<DataBoundViewHolder<ViewDataBinding>>(), PinnedHeaderItemDecoration.PinnedHeaderAdapter {
-    override fun isPinnedViewType(viewType: Int): Boolean {
-        return viewType == R.layout.adapter_article_header
-    }
+) : RecyclerView.Adapter<DataBoundViewHolder<ViewDataBinding>>() {
 
     private var items = ArrayList<ArticleModel>()
 
@@ -149,7 +145,8 @@ class ArticleAdapter(
     }
 
     fun isOverLimit(): Boolean {
-        return itemCount == LIMIT + 1
+        Logger.debug("itemCount : $itemCount")
+        return itemCount == LIMIT + 1 || itemCount == LIMIT
     }
 
     fun add(data: List<ArticleModel>, isAfter: Boolean = true) {
@@ -158,7 +155,6 @@ class ArticleAdapter(
             else loadAfter.invoke()
         }
         updateData(data)
-
     }
 
     fun areItemsTheSame(oldItem: ArticleModel, newItem: ArticleModel): Boolean {
@@ -166,7 +162,7 @@ class ArticleAdapter(
     }
 
     fun areContentsTheSame(oldItem: ArticleModel, newItem: ArticleModel): Boolean {
-        return false
+        return oldItem.title == newItem.title
     }
 
     @SuppressLint("StaticFieldLeak")

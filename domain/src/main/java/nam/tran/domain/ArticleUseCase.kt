@@ -3,8 +3,7 @@ package nam.tran.domain
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import nam.tran.domain.entity.ArticleEntity
-import nam.tran.domain.entity.core.BaseItemKey
-import nam.tran.domain.entity.core.ItemKeyArticle
+import nam.tran.domain.entity.ItemKeyArticle
 import nam.tran.domain.entity.state.Listing
 import nam.tran.domain.executor.AppExecutors
 import nam.tran.domain.interactor.ArticleBoundNetwork

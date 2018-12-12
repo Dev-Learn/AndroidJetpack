@@ -2,8 +2,8 @@ package nam.tran.domain.interactor
 
 import androidx.lifecycle.MutableLiveData
 import nam.tran.domain.entity.ArticleEntity
+import nam.tran.domain.entity.ItemKeyArticle
 import nam.tran.domain.entity.core.BaseItemKey
-import nam.tran.domain.entity.core.ItemKeyArticle
 import nam.tran.domain.entity.state.ErrorResource
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.executor.AppExecutors
@@ -108,7 +108,7 @@ class ArticleBoundNetwork constructor(
                         } else {
                             val data = result.value!!
                             val listData = dataEntityMapper.articleEntityMapper.transform(response.body())
-                            listData.forEachIndexed { index, item ->
+                            listData.forEachIndexed { _, item ->
                                 val date = item.headerValue
                                 if (!listDay.contains(date)) {
                                     data.add(
@@ -120,7 +120,6 @@ class ArticleBoundNetwork constructor(
                                 data.add(convert(item))
                             }
                             if (data.size > LIMIT) {
-
                                 val surplus = data.size - LIMIT
                                 val listItemRemove = ArrayList<BaseItemKey>()
                                 for (i in 0 until surplus) {
@@ -132,11 +131,6 @@ class ArticleBoundNetwork constructor(
                                     }
                                 }
                                 data.removeAll(listItemRemove)
-
-                                val item = data.get(0)
-                                if (!item.isHeader) {
-                                    data.add(0, convert(ArticleEntity.header(item.idKey, item.headerValue)))
-                                }
                             }
                             networkState.postValue(Resource.successPaging(null))
                             result.postValue(data)
@@ -184,9 +178,15 @@ class ArticleBoundNetwork constructor(
                         networkState.postValue(Resource.successPaging(2))
                     } else {
                         val data = result.value!!
-                        var firstItem : ItemKeyArticle<String>? = data[0]
-                        data.removeAt(0)
                         val listData = dataEntityMapper.articleEntityMapper.transform(response.body())
+                        val firstItem = data[0]
+                        if (firstItem.isHeader) {
+                            val firstItemListData = listData[listData.size - 1]
+                            if (firstItem.headerValue == firstItemListData.headerValue) {
+                                listDay.remove(firstItem.headerValue)
+                                data.removeAt(0)
+                            }
+                        }
                         var indexHeader = 0
                         listData.forEachIndexed { index, item ->
                             val date = item.headerValue
@@ -197,12 +197,6 @@ class ArticleBoundNetwork constructor(
                                 )
                                 indexHeader += 1
                                 listDay.add(date)
-                            }else{
-                                if (firstItem != null && firstItem?.isHeader!! && firstItem?.headerValue == item.headerValue){
-                                    indexHeader += 1
-                                    data.add(index + indexHeader,convert(ArticleEntity.header(firstItem!!.idKey, firstItem!!.headerValue)))
-                                    firstItem = null
-                                }
                             }
                             data.add(index + indexHeader, convert(item))
                         }
