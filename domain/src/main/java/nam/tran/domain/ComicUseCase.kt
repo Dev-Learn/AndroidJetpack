@@ -9,6 +9,7 @@ import androidx.paging.PagedList
 import androidx.paging.toLiveData
 import nam.tran.domain.entity.ComicEntity
 import nam.tran.domain.entity.LinkComicEntity
+import nam.tran.domain.entity.core.BaseItemKey
 import nam.tran.domain.entity.state.Listing
 import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Resource
@@ -22,7 +23,6 @@ import nam.tran.domain.interactor.core.DataBoundNetwork
 import nam.tran.domain.mapper.DataEntityMapper
 import nam.tran.flatform.IApi
 import nam.tran.flatform.database.DbProvider
-import nam.tran.flatform.model.response.BaseItemKey
 import nam.tran.flatform.model.response.Comic
 import retrofit2.Call
 import tran.nam.util.Logger

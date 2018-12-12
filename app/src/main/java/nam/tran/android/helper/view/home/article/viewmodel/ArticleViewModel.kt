@@ -1,14 +1,13 @@
 package nam.tran.android.helper.view.home.article.viewmodel
 
 import android.app.Application
-import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import nam.tran.android.helper.mapper.DataMapper
 import nam.tran.android.helper.model.ArticleModel
+import nam.tran.domain.entity.core.ItemKeyArticle
 import nam.tran.domain.entity.state.Resource
 import nam.tran.domain.interactor.article.IArticleUseCase
-import nam.tran.flatform.model.response.BaseItemKey
 import tran.nam.core.viewmodel.BaseFragmentViewModel
 import tran.nam.core.viewmodel.IProgressViewModel
 import tran.nam.util.Logger
@@ -25,7 +24,7 @@ class ArticleViewModel @Inject internal constructor(
         dataMapper.articleModelMapper.transform(it)
     }
 
-    val data: LiveData<ArrayList<BaseItemKey>> = Transformations.switchMap(response) {
+    val data: LiveData<ArrayList<ItemKeyArticle<String>>> = Transformations.switchMap(response) {
         it.pagedList
     }
 

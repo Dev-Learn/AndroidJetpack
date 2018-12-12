@@ -10,9 +10,11 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import nam.tran.android.helper.R
+import nam.tran.android.helper.databinding.AdapterArticleHeaderBinding
 import nam.tran.android.helper.databinding.AdapterArticleItemBinding
 import nam.tran.android.helper.databinding.NetworkStateItemBinding
 import nam.tran.android.helper.model.ArticleModel
+import nam.tran.android.helper.widget.PinnedHeaderItemDecoration
 import nam.tran.domain.entity.state.Resource
 import tran.nam.common.DataBoundViewHolder
 import tran.nam.util.Constant.Companion.LIMIT
@@ -24,7 +26,10 @@ class ArticleAdapter(
     private val loading: () -> Unit,
     private val rendered: () -> Unit
 ) :
-    RecyclerView.Adapter<DataBoundViewHolder<ViewDataBinding>>() {
+    RecyclerView.Adapter<DataBoundViewHolder<ViewDataBinding>>(), PinnedHeaderItemDecoration.PinnedHeaderAdapter {
+    override fun isPinnedViewType(viewType: Int): Boolean {
+        return viewType == R.layout.adapter_article_header
+    }
 
     private var items = ArrayList<ArticleModel>()
 
@@ -32,6 +37,10 @@ class ArticleAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBoundViewHolder<ViewDataBinding> {
         return when (viewType) {
+            R.layout.adapter_article_header -> {
+                val binding = createBindingHeader(parent)
+                DataBoundViewHolder(binding)
+            }
             R.layout.adapter_article_item -> {
                 val binding = createBinding(parent)
                 DataBoundViewHolder(binding)
@@ -47,6 +56,11 @@ class ArticleAdapter(
     override fun onBindViewHolder(holder: DataBoundViewHolder<ViewDataBinding>, position: Int) {
 
         when (getItemViewType(position)) {
+            R.layout.adapter_article_header -> {
+                if (holder.binding is AdapterArticleHeaderBinding) {
+                    (holder.binding as AdapterArticleHeaderBinding).tvDate.setText(items[position].headerValue)
+                }
+            }
             R.layout.adapter_article_item -> {
                 bind(holder.binding, items[position])
             }
@@ -66,6 +80,8 @@ class ArticleAdapter(
     override fun getItemViewType(position: Int): Int {
         return if (hasExtraRow() && position == itemCount - 1 || hasExtraRow() && position == 0) {
             R.layout.network_state_item
+        } else if (items[position].isHeader) {
+            R.layout.adapter_article_header
         } else {
             R.layout.adapter_article_item
         }
@@ -91,6 +107,16 @@ class ArticleAdapter(
         )
     }
 
+    private fun createBindingHeader(parent: ViewGroup): AdapterArticleHeaderBinding {
+        return DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            R.layout.adapter_article_header,
+            parent,
+            false,
+            dataBindingComponent
+        )
+    }
+
     fun bind(binding: ViewDataBinding, item: ArticleModel) {
         if (binding is AdapterArticleItemBinding)
             binding.article = item
@@ -105,25 +131,25 @@ class ArticleAdapter(
             if (!hadExtraRow) {
                 if (isAfter)
                     notifyItemInserted(itemCount)
-                else{
+                else {
                     notifyItemInserted(0)
                 }
-            }else{
-                if (!isAfter){
+            } else {
+                if (!isAfter) {
                     notifyItemRemoved(0)
                 }
             }
         } else if (hasExtraRow && previousState != newNetworkState) {
             if (isAfter)
                 notifyItemRemoved(itemCount)
-            else{
+            else {
                 notifyItemRemoved(0)
             }
         }
     }
 
     fun isOverLimit(): Boolean {
-        return itemCount == LIMIT
+        return itemCount == LIMIT + 1
     }
 
     fun add(data: List<ArticleModel>, isAfter: Boolean = true) {
@@ -140,7 +166,7 @@ class ArticleAdapter(
     }
 
     fun areContentsTheSame(oldItem: ArticleModel, newItem: ArticleModel): Boolean {
-        return oldItem.title == newItem.title
+        return false
     }
 
     @SuppressLint("StaticFieldLeak")

@@ -3,11 +3,10 @@ package nam.tran.domain.interactor
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import nam.tran.domain.entity.ComicEntity
+import nam.tran.domain.entity.core.BaseItemKey
 import nam.tran.domain.mapper.DataEntityMapper
 import nam.tran.flatform.IApi
-import nam.tran.flatform.model.response.BaseItemKey
 import tran.nam.util.Logger
-import java.util.concurrent.Executor
 
 class PageDataSourceFactory(
     private val iApi: IApi,
@@ -18,7 +17,7 @@ class PageDataSourceFactory(
     val sourceLiveData = MutableLiveData<PageKeyedComicDataSource>()
 
     override fun create(): DataSource<Int, BaseItemKey> {
-        Logger.debug("Paging Learn","PageDataSourceFactory - create()")
+        Logger.debug("Paging Learn", "PageDataSourceFactory - create()")
         val source = PageKeyedComicDataSource(iApi, dataEntityMapper, convert)
         sourceLiveData.postValue(source)
         return source

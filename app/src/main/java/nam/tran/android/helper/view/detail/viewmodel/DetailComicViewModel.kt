@@ -7,9 +7,9 @@ import androidx.paging.PagedList
 import nam.tran.android.helper.mapper.DataMapper
 import nam.tran.android.helper.model.ComicModel
 import nam.tran.domain.ComicUseCase
+import nam.tran.domain.entity.core.BaseItemKey
 import nam.tran.domain.entity.state.Listing
 import nam.tran.domain.entity.state.Resource
-import nam.tran.flatform.model.response.BaseItemKey
 import tran.nam.core.viewmodel.BaseFragmentViewModel
 import tran.nam.core.viewmodel.IProgressViewModel
 import javax.inject.Inject

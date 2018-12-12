@@ -2,12 +2,12 @@ package nam.tran.domain.interactor
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
+import nam.tran.domain.entity.core.BaseItemKey
 import nam.tran.domain.entity.state.ErrorResource
 import nam.tran.domain.entity.state.Loading
 import nam.tran.domain.entity.state.Resource
 import nam.tran.flatform.IApi
 import nam.tran.flatform.database.DbProvider
-import nam.tran.flatform.model.response.BaseItemKey
 import nam.tran.flatform.model.response.LinkComic
 import org.json.JSONObject
 import retrofit2.Call

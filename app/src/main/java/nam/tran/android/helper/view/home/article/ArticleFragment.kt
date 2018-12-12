@@ -15,6 +15,7 @@ import nam.tran.android.helper.view.home.article.ArticleFragment.TYPE.AFTER
 import nam.tran.android.helper.view.home.article.ArticleFragment.TYPE.BEFORE
 import nam.tran.android.helper.view.home.article.viewmodel.ArticleViewModel
 import nam.tran.android.helper.view.home.article.viewmodel.IArticleView
+import nam.tran.android.helper.widget.PinnedHeaderItemDecoration
 import tran.nam.core.biding.FragmentDataBindingComponent
 import tran.nam.core.view.mvvm.BaseFragmentMVVM
 import tran.nam.util.Logger
@@ -58,12 +59,9 @@ class ArticleFragment : BaseFragmentMVVM<FragmentArticleBinding, ArticleViewMode
             }
         })
 
-        binding.rvArticle.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                LinearLayoutManager.VERTICAL
-            )
-        )
+//        binding.rvArticle.addItemDecoration(
+//            PinnedHeaderItemDecoration()
+//        )
 
         binding.rvArticle.adapter = adapter
 

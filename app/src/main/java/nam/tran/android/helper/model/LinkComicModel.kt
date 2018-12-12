@@ -1,5 +1,5 @@
 package nam.tran.android.helper.model
 
-import nam.tran.flatform.model.response.BaseItemKey
+import nam.tran.domain.entity.core.BaseItemKey
 
 data class LinkComicModel(var id: Int, var idcomic: Int, var image: String) : BaseItemKey(id)

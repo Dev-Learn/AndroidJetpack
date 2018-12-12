@@ -2,8 +2,8 @@ package nam.tran.domain.interactor
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
-import nam.tran.flatform.model.response.BaseItemKey
 import nam.tran.domain.entity.LinkComicEntity
+import nam.tran.domain.entity.core.BaseItemKey
 import nam.tran.domain.mapper.DataEntityMapper
 import nam.tran.flatform.IApi
 import tran.nam.util.Logger

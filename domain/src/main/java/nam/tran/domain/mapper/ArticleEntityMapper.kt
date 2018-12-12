@@ -44,7 +44,8 @@ class ArticleEntityMapper @Inject constructor(
                 it.description,
                 it.time_ago,
                 it.author?.let { authorArticleEntityMapper.transform(it) },
-                it.detailArticle?.let { detailArticleEntityMapper.transform(it) }
+                it.detailArticle?.let { detailArticleEntityMapper.transform(it) },
+                headerValue = it.day()
             )
         }
     }

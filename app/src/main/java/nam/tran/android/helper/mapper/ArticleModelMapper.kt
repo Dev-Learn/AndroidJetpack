@@ -15,9 +15,7 @@
 package nam.tran.android.helper.mapper
 
 import nam.tran.android.helper.model.ArticleModel
-import nam.tran.android.helper.model.ComicModel
 import nam.tran.domain.entity.ArticleEntity
-import nam.tran.domain.entity.ComicEntity
 import nam.tran.domain.entity.state.Resource
 import java.util.*
 import javax.inject.Inject
@@ -47,7 +45,8 @@ class ArticleModelMapper @Inject constructor(
                 data.description,
                 data.time_ago,
                 it.author?.let { authorArticleModelMapper.transform(it) },
-                it.detailArticle?.let { detailArticleModelMapper.transform(it) }
+                it.detailArticle?.let { detailArticleModelMapper.transform(it) },
+                data.isHeader, data.headerValue
             )
         }
     }

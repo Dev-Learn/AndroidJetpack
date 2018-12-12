@@ -1,16 +1,22 @@
 package nam.tran.android.helper.model
 
-import nam.tran.flatform.model.response.BaseItemKey
+import nam.tran.domain.entity.core.BaseItemKey
 import java.io.Serializable
 
-data class ComicModel(var id : Int, var title : String, var description : String, var image : String, var genre : ArrayList<GenreModel>) : BaseItemKey(id),Serializable{
+data class ComicModel(
+    var id: Int,
+    var title: String,
+    var description: String,
+    var image: String,
+    var genre: ArrayList<GenreModel>
+) : BaseItemKey(id), Serializable {
 
     var isLike = false
 
     val listGenre: String
         get() {
-            var data : String = ""
-            for ((index, value) in genre.withIndex()){
+            var data: String = ""
+            for ((index, value) in genre.withIndex()) {
                 if (index == genre.size - 1)
                     data += value.genre
                 else
