@@ -52,14 +52,14 @@ class ArticleBoundNetwork constructor(
 
                         val listItem = mutableListOf<ArticleEntity>()
                         for (item in data) {
-                            val date = item.headerValue
-                            if (!listDay.contains(date)) {
-                                listItem.add(ArticleEntity.header(item.id, date))
-                                listDay.add(date)
-                                listItem.add(item)
-                            } else {
-                                listItem.add(item)
-                            }
+                            // Header ------------------
+//                            val date = item.headerValue
+//                            if (!listDay.contains(date)) {
+//                                listItem.add(ArticleEntity.header(item.id, date))
+//                                listDay.add(date)
+//                            }
+                            // -------------------------
+                            listItem.add(item)
                         }
                         networkState.postValue(Resource.success(null))
                         result.postValue(ArrayList(convert(listItem)))
@@ -109,14 +109,16 @@ class ArticleBoundNetwork constructor(
                             val data = result.value!!
                             val listData = dataEntityMapper.articleEntityMapper.transform(response.body())
                             listData.forEachIndexed { _, item ->
-                                val date = item.headerValue
-                                if (!listDay.contains(date)) {
-                                    data.add(
-                                        convert(ArticleEntity.header(item.id, date))
-                                    )
-
-                                    listDay.add(date)
-                                }
+                                // Header ------------------
+//                                val date = item.headerValue
+//                                if (!listDay.contains(date)) {
+//                                    data.add(
+//                                        convert(ArticleEntity.header(item.id, date))
+//                                    )
+//
+//                                    listDay.add(date)
+//                                }
+                                // -------------------------
                                 data.add(convert(item))
                             }
                             if (data.size > LIMIT) {
@@ -133,16 +135,18 @@ class ArticleBoundNetwork constructor(
                                 data.removeAll(listItemRemove)
                             }
 
-                            data.get(0).let {
-                                val date = it.headerValue
-                                if (!it.isHeader && !listDay.contains(date)){
-                                    data.add(0,
-                                        convert(ArticleEntity.header(it.idKey, date))
-                                    )
-
-                                    listDay.add(date)
-                                }
-                            }
+                            // Header ------------------
+//                            data.get(0).let {
+//                                val date = it.headerValue
+//                                if (!it.isHeader && !listDay.contains(date)){
+//                                    data.add(0,
+//                                        convert(ArticleEntity.header(it.idKey, date))
+//                                    )
+//
+//                                    listDay.add(date)
+//                                }
+//                            }
+                            // -------------------------
 
                             networkState.postValue(Resource.successPaging(null))
                             result.postValue(data)
@@ -192,25 +196,29 @@ class ArticleBoundNetwork constructor(
                         } else {
                             val data = result.value!!
                             val listData = dataEntityMapper.articleEntityMapper.transform(response.body())
-                            val firstItem = data[0]
-                            if (firstItem.isHeader) {
-                                val firstItemListData = listData[listData.size - 1]
-                                if (firstItem.headerValue == firstItemListData.headerValue) {
-                                    listDay.remove(firstItem.headerValue)
-                                    data.removeAt(0)
-                                }
-                            }
+                            // Header ------------------
+//                            val firstItem = data[0]
+//                            if (firstItem.isHeader) {
+//                                val firstItemListData = listData[listData.size - 1]
+//                                if (firstItem.headerValue == firstItemListData.headerValue) {
+//                                    listDay.remove(firstItem.headerValue)
+//                                    data.removeAt(0)
+//                                }
+//                            }
+                            // -------------------------
                             var indexHeader = 0
                             listData.forEachIndexed { index, item ->
-                                val date = item.headerValue
-                                if (!listDay.contains(date)) {
-                                    data.add(
-                                        index + indexHeader,
-                                        convert(ArticleEntity.header(item.id, date))
-                                    )
-                                    indexHeader += 1
-                                    listDay.add(date)
-                                }
+                                // Header ------------------
+//                                val date = item.headerValue
+//                                if (!listDay.contains(date)) {
+//                                    data.add(
+//                                        index + indexHeader,
+//                                        convert(ArticleEntity.header(item.id, date))
+//                                    )
+//                                    indexHeader += 1
+//                                    listDay.add(date)
+//                                }
+                                // -------------------------
                                 data.add(index + indexHeader, convert(item))
                             }
 
