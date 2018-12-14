@@ -84,6 +84,10 @@ class Resource<T>(
         return status == Status.SUCCESS
     }
 
+    fun isLoading(): Boolean {
+        return status == Status.LOADING
+    }
+
     companion object {
 
         @JvmStatic

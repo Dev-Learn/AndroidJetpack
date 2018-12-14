@@ -31,6 +31,8 @@ class ArticleAdapter(
 
     private var networkState: Resource<*>? = null
 
+    private var isAfter = true
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBoundViewHolder<ViewDataBinding> {
         return when (viewType) {
             R.layout.adapter_article_header -> {
@@ -58,7 +60,8 @@ class ArticleAdapter(
                 }
             }
             R.layout.adapter_article_item -> {
-                bind(holder.binding, items[position])
+                if (position < items.size)
+                    bind(holder.binding, items[position])
             }
             R.layout.network_state_item -> {
                 if (holder.binding is NetworkStateItemBinding)
@@ -68,15 +71,20 @@ class ArticleAdapter(
     }
 
     override fun getItemCount(): Int {
-        return items.size + if (hasExtraRow()) 1 else 0
+//        Logger.debug("SSSS - items.size 1:" + items.size)
+        val size = items.size + if (hasExtraRow()) 1 else 0;
+//        Logger.debug("SSSS - items.size 2:" + size)
+        return size
     }
 
     private fun hasExtraRow() = networkState != null && !networkState!!.isSuccess()
 
     override fun getItemViewType(position: Int): Int {
-        return if (hasExtraRow() && position == itemCount - 1 || hasExtraRow() && position == 0) {
+        val additional = if (hasExtraRow() && !isAfter) 1 else 0
+        val pos = position + additional
+        return if (hasExtraRow() && ((position == itemCount - 1 && isAfter)|| (position == 0 && !isAfter))) {
             R.layout.network_state_item
-        } else if (items[position].isHeader) {
+        } else if (items[position - additional].isHeader) {
             R.layout.adapter_article_header
         } else {
             R.layout.adapter_article_item
@@ -119,34 +127,43 @@ class ArticleAdapter(
     }
 
     fun setNetworkState(newNetworkState: Resource<*>?, isAfter: Boolean = true) {
+        this.isAfter = isAfter
+        Logger.debug("AA newNetworkState : " + newNetworkState.toString())
         val previousState = this.networkState
         val hadExtraRow = hasExtraRow()
         this.networkState = newNetworkState
         val hasExtraRow = hasExtraRow()
         if (hadExtraRow != hasExtraRow) {
+            Logger.debug("AA  AAA")
             if (!hadExtraRow) {
-                if (isAfter)
+                if (isAfter){
                     notifyItemInserted(itemCount)
-                else {
+                    Logger.debug("AA  1")
+                } else {
                     notifyItemInserted(0)
+                    Logger.debug("AA  2")
                 }
             } else {
                 if (!isAfter) {
                     notifyItemRemoved(0)
+                    Logger.debug("AA  3")
+                } else {
+                    Logger.debug("AA  4")
                 }
             }
         } else if (hasExtraRow && previousState != newNetworkState) {
+            Logger.debug("AA  BBB")
             if (isAfter)
-                notifyItemRemoved(itemCount)
+                notifyItemChanged(itemCount - 1)
             else {
-                notifyItemRemoved(0)
+                notifyItemChanged(0)
             }
         }
     }
 
     fun isOverLimit(): Boolean {
-        Logger.debug("itemCount : $itemCount")
-        return itemCount == LIMIT + 1 || itemCount == LIMIT
+        Logger.debug("itemCount : ${items.size}")
+        return items.size == LIMIT || items.size == LIMIT + 1
     }
 
     fun add(data: List<ArticleModel>, isAfter: Boolean = true) {
@@ -168,6 +185,7 @@ class ArticleAdapter(
     @SuppressLint("StaticFieldLeak")
     fun updateData(update: List<ArticleModel>) {
         val oldItems = items
+        Logger.debug("Debug DiffUtil : items - " + items.size)
         object : AsyncTask<Void, Void, DiffUtil.DiffResult>() {
             override fun doInBackground(vararg voids: Void): DiffUtil.DiffResult {
                 return DiffUtil.calculateDiff(object : DiffUtil.Callback() {
@@ -195,9 +213,11 @@ class ArticleAdapter(
 
             override fun onPostExecute(diffResult: DiffUtil.DiffResult) {
                 items = ArrayList(update)
+                Logger.debug("Debug DiffUtil : items - " + items.size)
                 diffResult.dispatchUpdatesTo(this@ArticleAdapter)
                 loading.invoke()
                 rendered.invoke()
+
             }
         }.execute()
     }

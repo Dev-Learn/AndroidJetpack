@@ -128,14 +128,6 @@ class ArticleFragment : BaseFragmentMVVM<FragmentArticleBinding, ArticleViewMode
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     enum class TYPE {
         AFTER, BEFORE
     }
