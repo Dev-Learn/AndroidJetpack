@@ -36,8 +36,8 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseFragmentViewModel>
     /**
      * MVVM ViewModel ViewModelProvider.Factory
      */
-    var mViewModelFactory: ViewModelProvider.Factory? = null
-        @Inject set
+    @Inject
+    lateinit var  mViewModelFactory: ViewModelProvider.Factory
 
     protected var mViewModel: VM? = null
 

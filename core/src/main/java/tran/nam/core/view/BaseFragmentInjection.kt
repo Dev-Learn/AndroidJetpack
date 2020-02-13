@@ -27,8 +27,9 @@ import javax.inject.Inject
 @Suppress("DEPRECATION", "OverridingDeprecatedMember")
 abstract class BaseFragmentInjection : BaseFragment(), HasSupportFragmentInjector {
 
-    var childFragmentInjector: DispatchingAndroidInjector<androidx.fragment.app.Fragment>? = null
-        @Inject set
+    @Inject
+    lateinit var childFragmentInjector: DispatchingAndroidInjector<androidx.fragment.app.Fragment>
+
 
     override fun onAttach(activity: Activity?) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {

@@ -31,8 +31,8 @@ import javax.inject.Inject
 
 abstract class BaseActivityMVVM<V : ViewDataBinding, VM : BaseActivityViewModel> : BaseActivityInjection(), IViewModel {
 
-    var mViewModelFactory: ViewModelProvider.Factory? = null
-        @Inject set
+    @Inject
+    lateinit var  mViewModelFactory: ViewModelProvider.Factory
 
     protected var mViewModel: VM? = null
 

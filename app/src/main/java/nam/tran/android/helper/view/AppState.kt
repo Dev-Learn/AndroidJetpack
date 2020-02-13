@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 class AppState : Application(), Application.ActivityLifecycleCallbacks, HasActivityInjector {
 
-    var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>? = null
-        @Inject set
+    @Inject
+    lateinit var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
 
     private var appComponent: AppComponent? = null
 

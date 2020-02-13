@@ -18,8 +18,8 @@ import javax.inject.Inject
  */
 abstract class BaseActivityInjection : BaseActivity(), HasSupportFragmentInjector {
 
-    var fragmentInjector: DispatchingAndroidInjector<androidx.fragment.app.Fragment>? = null
-        @Inject set
+    @Inject
+    lateinit var fragmentInjector: DispatchingAndroidInjector<androidx.fragment.app.Fragment>
 
     override fun inject() {
         AndroidInjection.inject(this)
